@@ -9,7 +9,7 @@ def hello(request):
 
 def index(request):
     articles =  models.Artivle.objects.all()
-    return render(request,'Amoeba/index.html',{'artilces':articles})
+    return render(request,'index.html',{'artilces':articles})
 
 def article_page(request,id):
     article = models.Artivle.objects.get(pk=id)
