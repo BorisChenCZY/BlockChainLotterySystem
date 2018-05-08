@@ -14,6 +14,9 @@ def index(request):
 def login(request):
     return render(request,'login.html',)
 
+def form(request):
+    return render(request,'form.html',)
+
 def article_page(request,id):
     article = models.Artivle.objects.get(pk=id)
     return  render(request,'startvote/page.html',{'article':article})
