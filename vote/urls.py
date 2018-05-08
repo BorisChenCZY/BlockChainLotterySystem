@@ -20,7 +20,8 @@ import startvote.views as v1
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    re_path(r'^$', v1.index),
+    re_path(r'^$', v1.index, name = "index"),
+    re_path(r'^login$', v1.login, name="login"),
     re_path(r'^article/(?P<id>[0-9]+)$', v1.article_page, name="article_page"),
     re_path(r'^edit/(?P<id>[0-9]+)$', v1.edit_page,name='edit_page'),
     re_path(r'^edit/action$', v1.edit_action,name='edit_action'),
