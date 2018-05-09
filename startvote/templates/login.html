@@ -70,7 +70,8 @@
 </head>
 <body >
 <div class="login-form" style="top:20%;left:37.5%;position: absolute;">
-    <form action="/examples/actions/confirmation.php" method="post">
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
         <h2 class="text-center">Login</h2>
         <div class="form-group has-error">
         	<input type="text" class="form-control" name="username" placeholder="Username" required="required">
@@ -79,9 +80,10 @@
             <input type="password" class="form-control" name="password" placeholder="Password" required="required">
         </div>
         <div class="form-group">
-            <a href="{% url 'card' %}">
-            <button type="button" class="btn btn-primary btn-lg btn-block">Sign in</button></a>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
         </div>
+{#        <div class="error btns login-form-tips" id="jsLoginTips">{{ msg }}#}
+{#        </div> #}
         <p><a href="{% url 'index' %}">Lost your Password?</a></p>
     </form>
     <p class="text-center small">Don't have an account? <a href="{% url 'index' %}">Sign up here!</a></p>
