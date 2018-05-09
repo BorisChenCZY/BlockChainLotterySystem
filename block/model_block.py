@@ -12,10 +12,8 @@ class Block(models.Model):
     block_id = models.IntegerField(blank=True, null=True)
     block_hash = models.TextField(blank=True, null=True)
     pre_hash = models.TextField(blank=True, null=True)
-
     class Meta:
         app_label = 'block'
-        managed = False
         db_table = 'block'
 
 
@@ -26,7 +24,6 @@ class BlockInfo(models.Model):
 
     class Meta:
         app_label = 'block'
-        managed = False
         db_table = 'block_info'
 
 
@@ -36,5 +33,4 @@ class VoteInfo(models.Model):
 
     class Meta:
         app_label = 'block'
-        managed = False
         db_table = 'vote_info'
