@@ -11,9 +11,14 @@
 
     <title>Basic Form</title>
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/isotope.css" media="screen" />
+  <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- skin -->
+  <link rel="stylesheet" href="/static/skin/default.css"><script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
     <!------ Include the above in your HEAD tag ---------->
 
     <style type="text/css">
@@ -68,7 +73,7 @@
         }
         .card-img-top-null {
             display: block;
-            width: 114%;
+            width: 90%;
         }
 
         .card-title {
@@ -82,7 +87,7 @@
             clear: both;
             margin-top: .5em;
             color: rgba(0, 0, 0, .68);
-            height: 60px;
+            height: 70px;
             overflow: scroll;
         }
 
@@ -183,7 +188,7 @@
         }
 
         .mycontainer{
-            border-radius: 10px;
+            border-radius: 10px 10px 10px 10px;
             margin-top: 50px;
             margin-bottom: 20px;
             background: #ffffff;
@@ -192,30 +197,51 @@
             padding-left: 90px;
             padding-right: 90px;
         }
+        .form-title-row{
+            display: inline-block;
+            box-sizing: border-box;
+            color: #4c565e;
+            font-size: 24px;
+            padding-top: 30px;
+            border-bottom: 2px solid #6caee0;
+            margin: 0;
+        }
+        .myfont{
+            font: 14px/1.5 Arial, Helvetica, sans-serif;
+            font-size: 40px; line-height: 30px;
+            font-weight: 500;
+            color: #4c565e;
+        }
     </style>
 </head>
 
 <body>
 <div class="container">
 <div class="container mycontainer">
-    <div class="row">
+    <div class="row" style="padding-left: 40%">
+        <div class="form-title-row">
+                <a href="{% url 'index' %}" ><h1 class="myfont">BlockVote</h1></a>
+            </div>
+    </div>
+
+    <div class="row" style="padding-top: 15px">
 
         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
             <div  class="card card-inverse card-info">
                 <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
                 <div class="card-block">
-                   
+
                     <h4 class="card-title">2018十佳毕业生</h4>
                     <div class="card-text">
                         2018年“十佳毕业生”候选人有16位，16进10的校级评选中，他们将通过师生投票和评委评议的方式决出。师生投票在校级评选中占比为20%。
                     </div>
                 </div>
-                <div class="card-footer unfinish">
-                    <small style="font-weight: bold;">Unfinished</small>
-                    <a href="{% url 'form' %}"><button class="btn btn-info float-right btn-sm">Vote</button></a>
-                </div>
+                <a href="{% url 'form' %}"><button type="button" class="btn btn-danger btn-lg btn-block">Unfinished</button></a>
+
             </div>
         </div>
+
+
         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
             <div class="card card-inverse card-info">
                 <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
@@ -226,10 +252,7 @@
                         Tawshif is a web designer living in Bangladesh.
                     </div>
                 </div>
-                <div class="card-footer finished">
-                    <small style="font-weight: bold;">Finished</small>
-                    <button class="btn btn-info float-right btn-sm">Check</button>
-                </div>
+                <a href="{% url 'index' %}"><button type="button" class="btn btn-success btn-lg btn-block">Finished</button></a>
             </div>
         </div>
         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
@@ -242,34 +265,17 @@
                         Tawshif is a web designer living in Bangladesh.
                     </div>
                 </div>
-                <div class="card-footer myself">
-                    <small style="font-weight: bold;">Sponsored by Myself</small>
-                    <button class="btn btn-info float-right btn-sm">Check</button>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-            <div class="card card-inverse card-info">
-                <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
-                <div class="card-block">
-
-                    <h4 class="card-title">&nbsp</h4>
-                    <div class="card-text">
-                        <br/>&nbsp
-                    </div>
-                </div>
-                <div class="card-footer myself">
-                    <small style="font-weight: bold;">&nbsp</small>
-                    <button class="btn btn-info float-right btn-sm">&nbsp</button>
-                </div>
+                <a href="{% url 'index' %}"><button type="button" class="btn btn-primary btn-lg btn-block">Sposored by Me</button></a>
             </div>
         </div>
 
 
-{#        空的card#}
+{#        加号#}
+
         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-            <div class="card card-inverse card-info card-null">
+            <div class="card card-inverse card-info ">
                 <img class="card-img-top-null" src="/static/img/null.png">
+                <a href="{% url 'form' %}"><i class="fa fa-plus-circle fa-3x " style="color: #65B0A7;margin-left: 40%"></i></a>
                 <div class="card-block card-block-null">
 
                     <h4 class="card-title">&nbsp</h4>
@@ -277,28 +283,50 @@
                         <br/>&nbsp
                     </div>
                 </div>
-                <div class="card-footer-null">
-                    <small>&nbsp</small>
-                    <button class="btn btn-info float-right btn-sm btn-null">&nbsp</button>
-                </div>
+                 <button type="button" class="btn btn-primary btn-lg btn-block invisible">Sposored by Me</button>
+
             </div>
         </div>
+
+{#        空的card 仅仅用于占位#}
         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
             <div class="card card-inverse card-info card-null">
                 <img class="card-img-top-null" src="/static/img/null.png">
+                <a href="{% url 'form' %}"><i class="fa fa-plus-circle fa-3x invisible" style="color: #65B0A7;margin-left: 40%"></i></a>
                 <div class="card-block card-block-null">
 
                     <h4 class="card-title">&nbsp</h4>
                     <div class="card-text">
-                       &nbsp
+                        <br/>&nbsp
                     </div>
                 </div>
-                <div class="card-footer-null">
-                    <small><br/>&nbsp</small>
-                    <button class="btn btn-info float-right btn-sm btn-null">&nbsp</button>
-                </div>
+                 <button type="button" class="btn btn-primary btn-lg btn-block invisible">Sposored by Me</button>
+
             </div>
         </div>
+
+
+
+{##}
+{##}
+{##}
+{##}
+{#        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">#}
+{#            <div class="card card-inverse card-info card-null">#}
+{#                <img class="card-img-top-null" src="/static/img/null.png">#}
+{#                <div class="card-block card-block-null">#}
+{##}
+{#                    <h4 class="card-title">&nbsp</h4>#}
+{#                    <div class="card-text">#}
+{#                        <br/>&nbsp#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="card-footer-null">#}
+{#                    <small>&nbsp</small>#}
+{#                    <button class="btn btn-info float-right btn-sm btn-null">&nbsp</button>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
 
 
 
@@ -307,11 +335,12 @@
 
 
 </div>
-    <div>
+    <div >
+
 {#        <a href="{% url 'index' %}">#}
 {#        <button class="btn btn-info float-right btn-sm btn-lg" style="margin-bottom: 20px">#}
 {#                  Back</button></a>#}
-        <a href="{% url 'index' %}"><button  type="button"  class="btn float-right" style="margin-bottom:30px;margin-right:5px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
+        <a href="{% url 'index' %}"><button  type="button"  class="btn float-right" style="margin-bottom:30px;margin-right:0px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
                   &nbsp&nbspBack&nbsp&nbsp</button></a>
     </div>
 
