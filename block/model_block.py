@@ -19,7 +19,6 @@ class BlockReader():
         self._getAll("select * from Block")
         return self.allResult
     
-    
     def _getOne(self, sql, params=()):
         self.cursor.execute(sql, params)
         self.oneResult = self.cursor.fetchone()
