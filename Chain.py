@@ -102,16 +102,7 @@ class Chain:
         self.__conn.commit()
 
         for voteInfo in voteInfos:
-            print(bytes(voteInfo))
-            timestamp = float(voteInfo.get_timestamp())
-            target = voteInfo.get_target().decode("utf-8")
-            pubkey = voteInfo.get_pubkey().decode("utf-8")
-            info = voteInfo.get_info().decode("utf-8")
-            sign = voteInfo.get_sign().decode("utf-8")
-            self.__c.execute("""
-                             INSERT INTO {} VALUES ({blockid}, {timestamp}, "{target}", "{pubkey}", "{info}", "{sign}")
-                             """.format(self.__name + VOTE_TABLE_OFF, blockid=id, timestamp=timestamp, target=target, pubkey=pubkey, info=info, sign=sign))
-        self.__conn.commit()
+            self.add_vote(voteInfo, id)
 
     def get_block(self, id):
         if(type(id) != int):
@@ -123,9 +114,8 @@ class Chain:
 
         self.__c.execute("SELECT * from {} where block_id={}".format(self.__name + VOTE_TABLE_OFF, id))
 
-        for id, timestamp, target, pubkey, info, sign in self.__c.fetchall():
-            vote = VoteInfo.parse_info(info)
-            voteInfo = VoteInfo(timestamp, target.encode("utf-8"), pubkey.encode("utf-8"), vote, sign.encode("utf-8"))
+        for args in self.__c.fetchall():
+            Chain.parse_voteInfo(args)
             voteBlock.add_info(voteInfo)
 
         # print(bytes(voteBlock))
@@ -134,6 +124,15 @@ class Chain:
         if not voteBlock.check():
             raise ChainError("block not valid!")
         return voteBlock
+
+    @staticmethod
+    def parse_voteInfo(args):
+        id, timestamp, target, pubkey, info, sign = args
+        vote = VoteInfo.parse_info(info)
+        voteInfo = VoteInfo(timestamp, target.encode("utf-8"), pubkey.encode("utf-8"), vote, sign.encode("utf-8"))
+        if not voteInfo.check():
+            raise ChainError("voteInfo not valid (sign check failed)")
+        return voteInfo
 
     def __verify_block(self, block):
         if(type(block) is not VoteBlock):
@@ -149,6 +148,55 @@ class Chain:
 
     def test(self):
         return self.get_last_block()
+
+    def add_vote(self, voteInfo, id):
+        """
+        thit method is to add voteInfo that has not written or comfirmed into the chain
+        :param voteInfo:
+        :return:
+        """
+        if type(voteInfo) is not VoteInfo:
+            raise ChainError("voteInfo must by VoteInfo, but not {}".format(type(voteInfo)))
+        if not voteInfo.check():
+            raise ChainError("voteInfo inside block not valid!")
+        timestamp = float(voteInfo.get_timestamp())
+        target = voteInfo.get_target().decode("utf-8")
+        pubkey = voteInfo.get_pubkey().decode("utf-8")
+        info = voteInfo.get_info().decode("utf-8")
+        sign = voteInfo.get_sign().decode("utf-8")
+        self.__c.execute("""
+                         INSERT INTO {} VALUES ({blockid}, {timestamp}, "{target}", "{pubkey}", "{info}", "{sign}")
+                         """.format(self.__name + VOTE_TABLE_OFF, blockid=id, timestamp=timestamp, target=target, pubkey=pubkey, info=info, sign=sign))
+        self.__conn.commit()
+
+    def get_uncomfirmed_votes(self):
+        self.__c.execute("""
+                        SELECT * from {} where block_id=-1 order by timestamp
+                        """.format(self.__name + VOTE_TABLE_OFF))
+        votes = []
+        for args in self.__c.fetchall():
+            voteInfo = Chain.parse_voteInfo(args)
+            if not voteInfo.check():
+                raise ChainError("voteInfo not valid (sign check failed)")
+            votes.append(voteInfo)
+        return votes
+
+    def remove_vote(self, voteInfo):
+        if type(voteInfo) is not VoteInfo:
+            raise ChainError("voteInfo must be VoteInfo")
+        block_id = -1
+        timestamp = float(voteInfo.get_timestamp())
+        target = voteInfo.get_target().decode("utf-8")
+        pubkey = voteInfo.get_pubkey().decode("utf-8")
+        info = voteInfo.get_info().decode("utf-8")
+        sign = voteInfo.get_sign().decode("utf-8")
+        self.__c.execute('DELETE FROM {} where block_id={} and timestamp={} and target="{}" and pubkey="{}" and info="{}" and sign="{}"'.
+                         format(self.__name+VOTE_TABLE_OFF, block_id, timestamp, target, pubkey, info, sign))
+        self.__conn.commit()
+        print('DELETE FROM {} where block_id={} and timestamp={} and target="{}" and pubkey="{}" and info="{}" and sign="{}"'.
+              format(self.__name+VOTE_TABLE_OFF, block_id, timestamp, target, pubkey, info, sign))
+
+
 
 if __name__ == "__main__":
     chain = Chain("test")
@@ -170,6 +218,6 @@ if __name__ == "__main__":
     print(bytes(voteBlock))
     print(voteBlock.check())
 
-    # chain.add_block(voteBlock)
+    chain.add_block(voteBlock)
 
     chain.get_block(1)

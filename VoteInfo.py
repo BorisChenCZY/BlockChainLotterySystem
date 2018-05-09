@@ -86,7 +86,8 @@ class VoteInfo():
         return self.__info
 
     def check(self):
-        pass #todo
+        # todo
+        return True
 
     def __bytes__(self):
         if (not self.__timestamp):
