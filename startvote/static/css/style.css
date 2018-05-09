@@ -608,6 +608,7 @@ About
 	margin: 0 0 20px 0;
 }
 .member-photo img {
+	width : 80%;
 	-webkit-border-radius:50%;
 		-moz-border-radius:50%;
 			border-radius:50%;	

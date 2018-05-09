@@ -1,0 +1,322 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Basic Form</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <style type="text/css">
+        body {
+		color: #fff;
+		background: #65B0A7;
+	        }
+        html {
+            font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            font-size: 14px;
+        }
+
+        h5 {
+            font-size: 1.28571429em;
+            font-weight: 700;
+            line-height: 1.2857em;
+            margin: 0;
+        }
+
+        .card {
+            margin-top: 20px;
+            font-size: 1em;
+            overflow: hidden;
+            padding: 0;
+            border: none;
+            border-radius: .28571429rem;
+            box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
+        }
+
+        .card-null{
+            box-shadow:none;
+        }
+
+        .card-block {
+            font-size: 1em;
+            position: relative;
+            margin: 0;
+            padding: 1em;
+            border: none;
+            border-top: 1px solid rgba(34, 36, 38, .1);
+            box-shadow: none;
+        }
+
+        .card-block-null{
+           border-top:none;
+        }
+
+        .card-img-top {
+            display: block;
+            width: 100%;
+            height: 50%;
+        }
+        .card-img-top-null {
+            display: block;
+            width: 114%;
+        }
+
+        .card-title {
+            font-size: 1.28571429em;
+            font-weight: 700;
+            line-height: 1.2857em;
+            color: black;
+        }
+
+        .card-text {
+            clear: both;
+            margin-top: .5em;
+            color: rgba(0, 0, 0, .68);
+            height: 60px;
+            overflow: scroll;
+        }
+
+        .card-footer {
+            font-size: 1em;
+            position: static;
+            top: 0;
+            left: 0;
+            max-width: 100%;
+            padding: .75em 1em;
+            color: rgba(0, 0, 0, .4);
+            border-top: 1px solid rgba(0, 0, 0, .05) !important;
+            background: #fff;
+        }
+
+        .unfinish{
+            color: red;
+        }
+
+        .finished{
+            color: forestgreen;
+        }
+
+        .myself{
+            color: cornflowerblue;
+        }
+
+        .card-footer-null{
+            font-size: 1em;
+            position: static;
+            top: 0;
+            left: 0;
+            max-width: 100%;
+            padding: .75em 1em;
+            color: rgba(0, 0, 0, .4);
+            border-top: none;
+            background: #fff;
+        }
+
+        .card-inverse .btn {
+            border: 1px solid rgba(0, 0, 0, .05);
+        }
+        .card-inverse .btn-null {
+            border: hidden;
+        }
+
+        .profile {
+            position: absolute;
+            top: -12px;
+            display: inline-block;
+            overflow: hidden;
+            box-sizing: border-box;
+            width: 25px;
+            height: 25px;
+            margin: 0;
+            border: 1px solid #fff;
+            border-radius: 50%;
+        }
+
+        .profile-avatar {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 50%;
+        }
+
+        .profile-inline {
+            position: relative;
+            top: 0;
+            display: inline-block;
+        }
+
+        .profile-inline ~ .card-title {
+            display: inline-block;
+            margin-left: 4px;
+            vertical-align: top;
+        }
+
+        .text-bold {
+            font-weight: 700;
+        }
+
+        .meta {
+            font-size: 1em;
+            color: rgba(0, 0, 0, .4);
+        }
+
+        .meta a {
+            text-decoration: none;
+            color: rgba(0, 0, 0, .4);
+        }
+
+        .meta a:hover {
+            color: rgba(0, 0, 0, .87);
+        }
+        .btn-null{
+            background-color: inherit;
+        }
+
+        .mycontainer{
+            border-radius: 10px;
+            margin-top: 50px;
+            margin-bottom: 20px;
+            background: #ffffff;
+            box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
+            padding-bottom: 30px;
+            padding-left: 90px;
+            padding-right: 90px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+<div class="container mycontainer">
+    <div class="row">
+
+        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+            <div  class="card card-inverse card-info">
+                <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
+                <div class="card-block">
+                   
+                    <h4 class="card-title">2018十佳毕业生</h4>
+                    <div class="card-text">
+                        2018年“十佳毕业生”候选人有16位，16进10的校级评选中，他们将通过师生投票和评委评议的方式决出。师生投票在校级评选中占比为20%。
+                    </div>
+                </div>
+                <div class="card-footer unfinish">
+                    <small style="font-weight: bold;">Unfinished</small>
+                    <a href="{% url 'form' %}"><button class="btn btn-info float-right btn-sm">Vote</button></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+            <div class="card card-inverse card-info">
+                <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
+                <div class="card-block">
+                   
+                    <h4 class="card-title">学生食堂人气投票</h4>
+                    <div class="card-text">
+                        Tawshif is a web designer living in Bangladesh.
+                    </div>
+                </div>
+                <div class="card-footer finished">
+                    <small style="font-weight: bold;">Finished</small>
+                    <button class="btn btn-info float-right btn-sm">Check</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+            <div class="card card-inverse card-info">
+                <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
+                <div class="card-block">
+                   
+                    <h4 class="card-title">周末聚餐时间</h4>
+                    <div class="card-text">
+                        Tawshif is a web designer living in Bangladesh.
+                    </div>
+                </div>
+                <div class="card-footer myself">
+                    <small style="font-weight: bold;">Sponsored by Myself</small>
+                    <button class="btn btn-info float-right btn-sm">Check</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+            <div class="card card-inverse card-info">
+                <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
+                <div class="card-block">
+
+                    <h4 class="card-title">&nbsp</h4>
+                    <div class="card-text">
+                        <br/>&nbsp
+                    </div>
+                </div>
+                <div class="card-footer myself">
+                    <small style="font-weight: bold;">&nbsp</small>
+                    <button class="btn btn-info float-right btn-sm">&nbsp</button>
+                </div>
+            </div>
+        </div>
+
+
+{#        空的card#}
+        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+            <div class="card card-inverse card-info card-null">
+                <img class="card-img-top-null" src="/static/img/null.png">
+                <div class="card-block card-block-null">
+
+                    <h4 class="card-title">&nbsp</h4>
+                    <div class="card-text">
+                        <br/>&nbsp
+                    </div>
+                </div>
+                <div class="card-footer-null">
+                    <small>&nbsp</small>
+                    <button class="btn btn-info float-right btn-sm btn-null">&nbsp</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+            <div class="card card-inverse card-info card-null">
+                <img class="card-img-top-null" src="/static/img/null.png">
+                <div class="card-block card-block-null">
+
+                    <h4 class="card-title">&nbsp</h4>
+                    <div class="card-text">
+                       &nbsp
+                    </div>
+                </div>
+                <div class="card-footer-null">
+                    <small><br/>&nbsp</small>
+                    <button class="btn btn-info float-right btn-sm btn-null">&nbsp</button>
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+</div>
+    <div>
+{#        <a href="{% url 'index' %}">#}
+{#        <button class="btn btn-info float-right btn-sm btn-lg" style="margin-bottom: 20px">#}
+{#                  Back</button></a>#}
+        <a href="{% url 'index' %}"><button  type="button"  class="btn float-right" style="margin-bottom:30px;margin-right:5px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
+                  &nbsp&nbspBack&nbsp&nbsp</button></a>
+    </div>
+
+
+</div>
+
+</div>
+</body>

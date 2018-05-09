@@ -38,6 +38,7 @@
         <!-- You only need this form and the form-basic.css -->
 
         <form class="form-basic" method="post" action="#">
+            {% csrf_token %}
 
             <div class="form-title-row">
                 <h1>Form Example</h1>
@@ -112,11 +113,13 @@
             </div>
 
             <div class="form-row">
-                <button type="submit">Submit Form</button>
+                <a href="{% url 'card' %}">
+                <button type="button">Submit Form</button>
+                </a>
             </div>
 
             </form>
-       
+
 
     </div>
 <div class="card" style="width: 20rem;margin-top: 300px">

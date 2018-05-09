@@ -20,6 +20,9 @@
   <link rel="stylesheet" href="/static/css/style.css">
   <!-- skin -->
   <link rel="stylesheet" href="/static/skin/default.css">
+    <style type="text/css">
+    body {font-family:Arial;}
+    </style>
   <!-- =======================================================
     Theme Name: Amoeba
     Theme URL: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/
@@ -41,7 +44,7 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav" data-0="margin-top:20px;" data-300="margin-top:5px;">
-          <li class="active"><a href="">Home</a></li>
+          <li class="active"><a href="#header">Home</a></li>
           <li><a href="#section-about">About</a></li>
           <li><a href="{% url 'login' %}">Sign in&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>
 
@@ -59,12 +62,11 @@
           <div class="align-center">
 {#            <i class="fa fa-tasks fa-5x mar-bot20"></i>#}
 {#              <i class="fa fa-file-text-o fa-5x mar-bot20"></i>#}
-              <i class="fa fa-bar-chart-o fa-5x mar-bot20"></i>
+              <i class="fa fa- fa-5x mar-bot20"></i>
 {#              <i class="fa fa-chain fa-5x mar-bot20"></i>#}
             <h2 class="slogan">Welcome to BlockVote</h2>
             <p>
-              Lorem ipsum dolor sit amet, natum bonorum expetendis usu ut. Eum impetus offendit disputationi eu, at vim aliquip lucilius praesent. Alia laudem antiopam te ius, sed ad munere integre, ubique facete sapientem nam ut.
-
+            BlockVote is a voting system based on block chain. Providing anonymous and trustworthy voting result for you.
             </p>
               <a href="{% url 'form' %}"><button  type="button"  class="btn btn-primary btn-lg" style="margin-top:20px;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
                   Start a Vote!</button></a>
@@ -83,27 +85,27 @@
       <div class="row mar-bot40">
         <div class="col-lg-4">
           <div class="align-center">
-            <i class="fa fa-plus-square-o fa-5x mar-bot20"></i>
-            <h4 class="text-bold">Start Vote</h4>
-            <p>Lorem ipsum dolor sit amet, mutat graeco volumus ad eam, singulis patrioque comprehensam nam no. Mei cu dicat voluptaria volumus.
+            <i class="fa fa-user fa-5x mar-bot20"></i>
+            <h4 class="text-bold">Anonymous</h4>
+            <p>Voting in blockvote can be absolutely anonymous.
             </p>
           </div>
         </div>
 
         <div class="col-lg-4">
           <div class="align-center">
-            <i class="fa fa-check-square-o fa-5x mar-bot20"></i>
-            <h4 class="text-bold">Go To Vote</h4>
-            <p>Lorem ipsum dolor sit amet, mutat graeco volumus ad eam, singulis patrioque comprehensam nam no. Mei cu dicat voluptaria volumus.
+            <i class="fa fa-spinner fa-5x mar-bot20"></i>
+            <h4 class="text-bold">Decentralized</h4>
+            <p>Decentralized network allow anybody participate in.
             </p>
           </div>
         </div>
 
         <div class="col-lg-4">
           <div class="align-center">
-            <i class="fa fa-adjust fa-5x mar-bot20"></i>
-            <h4 class="text-bold">Check Result</h4>
-            <p>Lorem ipsum dolor sit amet, mutat graeco volumus ad eam, singulis patrioque comprehensam nam no. Mei cu dicat voluptaria volumus.
+            <i class="fa fa-thumbs-o-up fa-5x mar-bot20"></i>
+            <h4 class="text-bold">Trustworthiness </h4>
+            <p>Bad guys have no way to tamper the voting result.
             </p>
           </div>
         </div>
@@ -142,45 +144,54 @@
         <div class="col-md-offset-3 col-md-6">
           <div class="section-header">
             <h2 class="section-heading animated" data-animation="bounceInUp">Our Team</h2>
-            <p>Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet consectetur, adipisci velit, sed quia non numquam.</p>
+            <p>We are from DBgroup@CES of SUSTech </p>
           </div>
         </div>
       </div>
 
       <div class="row align-center mar-bot40">
-        <div class="col-md-3">
+        <div class="col-md-xinxun-2">
           <div class="team-member">
-            <figure class="member-photo"><img src="/static/img/team/member1.jpg" alt="" /></figure>
+            <figure class="member-photo" ><img src="/static/img/team/member1.jpg" alt="" /></figure>
             <div class="team-detail">
-              <h4>Jason Doe</h4>
-              <span>User experiences</span>
+              <h4>Boris Chen</h4>
+              <span>Product Manager</span>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-xinxun-2">
           <div class="team-member">
             <figure class="member-photo"><img src="/static/img/team/member2.jpg" alt="" /></figure>
             <div class="team-detail">
-              <h4>Timothy Clark</h4>
-              <span>Web developer</span>
+              <h4>Jeremy Zhang</h4>
+              <span>Background developer</span>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-xinxun-2">
           <div class="team-member">
             <figure class="member-photo"><img src="/static/img/team/member3.jpg" alt="" /></figure>
             <div class="team-detail">
-              <h4>Vicky Tan</h4>
+              <h4>Yue Leng</h4>
               <span>Web designer</span>
             </div>
           </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-xinxun-2">
           <div class="team-member">
             <figure class="member-photo"><img src="/static/img/team/member4.jpg" alt="" /></figure>
             <div class="team-detail">
-              <h4>Kevin Peterson</h4>
-              <span>UI designer</span>
+              <h4>Chuang Yang</h4>
+              <span>Web developer</span>
+            </div>
+          </div>
+        </div>
+          <div class="col-md-xinxun-2">
+          <div class="team-member">
+            <figure class="member-photo"><img src="/static/img/team/member5.jpg" alt="" /></figure>
+            <div class="team-detail">
+              <h4>Mark Zeng</h4>
+              <span>Requirement developer</span>
             </div>
           </div>
         </div>

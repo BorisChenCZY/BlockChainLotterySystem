@@ -17,6 +17,9 @@ def login(request):
 def form(request):
     return render(request,'form.html',)
 
+def card(request):
+    return render(request,'card.html',)
+
 def article_page(request,id):
     article = models.Artivle.objects.get(pk=id)
     return  render(request,'startvote/page.html',{'article':article})
