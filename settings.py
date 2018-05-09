@@ -74,10 +74,13 @@ WSGI_APPLICATION = 'vote.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
+#block database dir
+BLOCK_DATABASE_DIR = os.path.join(BASE_DIR, 'BlockChainVoteSystem/blockdb.sqlite3')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'BlockChainVoteSystem/db.sqlite3'),
     }
 }
 
@@ -120,4 +123,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT =os.path.join(BASE_DIR,'collectstatic')
-STATICFILES_DIRS=(os.path.join(BASE_DIR,'startvote/static'),)
+STATICFILES_DIRS=(os.path.join(BASE_DIR, 'startvote/startvote/static'),)
