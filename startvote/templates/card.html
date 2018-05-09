@@ -223,51 +223,25 @@
                 <a href="{% url 'index' %}" ><h1 class="myfont">BlockVote</h1></a>
             </div>
     </div>
-
     <div class="row" style="padding-top: 15px">
+    {%for vote in votes %}
+            <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                <div  class="card card-inverse card-info">
+                    <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
+                    <div class="card-block">
 
-        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-            <div  class="card card-inverse card-info">
-                <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
-                <div class="card-block">
-
-                    <h4 class="card-title">2018十佳毕业生</h4>
-                    <div class="card-text">
-                        2018年“十佳毕业生”候选人有16位，16进10的校级评选中，他们将通过师生投票和评委评议的方式决出。师生投票在校级评选中占比为20%。
+                        <h4 class="card-title">{{ vote.vote_name }}</h4>
+                        <div class="card-text">
+                            {{ vote.vote_description }}
+                        </div>
                     </div>
-                </div>
-                <a href="{% url 'form' %}"><button type="button" class="btn btn-danger btn-lg btn-block">Unfinished</button></a>
+                    <a href="{% url 'form' %}"><button type="button" class="btn btn-danger btn-lg btn-block">{{ vote.state }}</button></a>
 
+                </div>
             </div>
-        </div>
+    {% endfor %}
 
 
-        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-            <div class="card card-inverse card-info">
-                <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
-                <div class="card-block">
-                   
-                    <h4 class="card-title">学生食堂人气投票</h4>
-                    <div class="card-text">
-                        Tawshif is a web designer living in Bangladesh.
-                    </div>
-                </div>
-                <a href="{% url 'index' %}"><button type="button" class="btn btn-success btn-lg btn-block">Finished</button></a>
-            </div>
-        </div>
-        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-            <div class="card card-inverse card-info">
-                <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
-                <div class="card-block">
-                   
-                    <h4 class="card-title">周末聚餐时间</h4>
-                    <div class="card-text">
-                        Tawshif is a web designer living in Bangladesh.
-                    </div>
-                </div>
-                <a href="{% url 'index' %}"><button type="button" class="btn btn-primary btn-lg btn-block">Sposored by Me</button></a>
-            </div>
-        </div>
 
 
 {#        加号#}
@@ -288,7 +262,7 @@
             </div>
         </div>
 
-{#        空的card 仅仅用于占位#}
+        空的card 仅仅用于占位
         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
             <div class="card card-inverse card-info card-null">
                 <img class="card-img-top-null" src="/static/img/null.png">
