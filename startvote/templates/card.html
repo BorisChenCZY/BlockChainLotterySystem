@@ -11,9 +11,13 @@
 
     <title>Basic Form</title>
 
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/isotope.css" media="screen" />
+  <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <!-- skin -->
+  <link rel="stylesheet" href="/static/skin/default.css"><script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <!------ Include the above in your HEAD tag ---------->
 
     <style type="text/css">
@@ -68,7 +72,7 @@
         }
         .card-img-top-null {
             display: block;
-            width: 114%;
+            width: 90%;
         }
 
         .card-title {
@@ -82,7 +86,7 @@
             clear: both;
             margin-top: .5em;
             color: rgba(0, 0, 0, .68);
-            height: 60px;
+            height: 70px;
             overflow: scroll;
         }
 
@@ -248,22 +252,31 @@
                 </div>
             </div>
         </div>
+
+
+
         <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-            <div class="card card-inverse card-info">
-                <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
-                <div class="card-block">
+            <div class="card card-inverse card-info ">
+                <img class="card-img-top-null" src="/static/img/null.png">
+                <a href="{% url 'form' %}"><i class="fa fa-plus-circle fa-3x " style="color: #65B0A7;margin-left: 40%"></i></a>
+                <div class="card-block card-block-null">
 
                     <h4 class="card-title">&nbsp</h4>
                     <div class="card-text">
                         <br/>&nbsp
                     </div>
                 </div>
-                <div class="card-footer myself">
-                    <small style="font-weight: bold;">&nbsp</small>
-                    <button class="btn btn-info float-right btn-sm">&nbsp</button>
+                 <div class="card-footer-null">
+                    <small>&nbsp</small>
+                    <button class="btn btn-info float-right btn-sm btn-null">&nbsp</button>
                 </div>
             </div>
         </div>
+
+
+
+
+
 
 
 {#        空的card#}
@@ -283,22 +296,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-            <div class="card card-inverse card-info card-null">
-                <img class="card-img-top-null" src="/static/img/null.png">
-                <div class="card-block card-block-null">
-
-                    <h4 class="card-title">&nbsp</h4>
-                    <div class="card-text">
-                       &nbsp
-                    </div>
-                </div>
-                <div class="card-footer-null">
-                    <small><br/>&nbsp</small>
-                    <button class="btn btn-info float-right btn-sm btn-null">&nbsp</button>
-                </div>
-            </div>
-        </div>
 
 
 
@@ -308,6 +305,7 @@
 
 </div>
     <div>
+
 {#        <a href="{% url 'index' %}">#}
 {#        <button class="btn btn-info float-right btn-sm btn-lg" style="margin-bottom: 20px">#}
 {#                  Back</button></a>#}
