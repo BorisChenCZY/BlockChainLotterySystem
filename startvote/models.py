@@ -16,6 +16,7 @@ class User(models.Model):
     user_id = models.IntegerField()
     username = models.CharField(max_length=50)
     password = models.CharField(max_length=50)
+    #vfdhf
 
 
 # class Vote(models.Model):
