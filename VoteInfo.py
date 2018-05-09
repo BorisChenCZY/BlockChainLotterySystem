@@ -13,6 +13,8 @@ class VoteInfo():
     __pubkey = None
     __sign = None
     __info = None
+    __prob_id = None
+    __selections = None
 
     def __init__(self, timestamp=None, target=None, pubkey=None, vote=None, sign = None):
         if (timestamp):
@@ -68,6 +70,8 @@ class VoteInfo():
             raise VoteInfoError("The first element of vote(vote[0]) must be int.")
         if (type(vote[1]) != int and type(vote[1]) != list):
             raise VoteInfoError("The second element of vote(vote[1]) must by int or list of int")
+        self.__prob_id = vote[0]
+        self.__selections = vote[1]
         sel = "[{}:".format(vote[0])
         selects = vote[1]
         if type(selects) == list:
@@ -84,6 +88,12 @@ class VoteInfo():
 
     def get_info(self):
         return self.__info
+
+    def get_prob_id(self):
+        return self.__prob_id
+
+    def get_selection(self):
+        return self.__selections
 
     def check(self):
         # todo

@@ -48,6 +48,9 @@ class Miner:
         voteInfo = VoteInfo.load(voteInfo)
         self.__chain.add_vote(voteInfo, -1)
 
+    def check_vote(self, voteInfo):
+        pass
+
     def pack_block(self):
         lid, lhash, lprehash = self.__chain.get_last_block()
         voteBlock = VoteBlock(lid + 1, lhash.encode("utf-8"))
@@ -68,6 +71,11 @@ class Miner:
 
 if __name__ == '__main__':
     miner = Miner("test", 0)
-    # voteInfo = VoteInfo(datetime.datetime.now().timestamp(), b'target', b'pubkey', (1, [3]), b'sign')
+    # voteInfo = VoteInfo(datetime.datetime.now().timestamp(), b'target', b'pubkey', (2, [3]), b'sign')
     # miner.add_vote(bytes(voteInfo))
-    miner.pack_block()
+    # voteInfo = VoteInfo(datetime.datetime.now().timestamp(), b'target', b'pubkey', (3, [3]), b'sign')
+    # miner.add_vote(bytes(voteInfo))
+    # voteInfo = VoteInfo(datetime.datetime.now().timestamp(), b'target', b'pubkey', (4, [1]), b'sign')
+    # miner.add_vote(bytes(voteInfo))
+    block = miner.pack_block()
+    # bytes(block)

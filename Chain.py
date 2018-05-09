@@ -6,6 +6,7 @@ class ChainError(Exception):
 DATABASE_PATH = "./test.sqlite"
 BLOCK_TABLE_OFF = "Block"
 VOTE_TABLE_OFF = "Vote"
+RESULT_TABLE_OFF = "Result"
 
 #temporarily
 def get_timestamp():
@@ -68,6 +69,16 @@ class Chain:
                                     , info VARCHAR 
                                     , sign BLOB);
                 """.format(name = self.__name + VOTE_TABLE_OFF)
+            )
+
+            self.__c.execute(
+                """
+                CREATE TABLE {name} (target BLOB
+                                    , pubkey BLOB
+                                    , prob_id int
+                                    , selection int
+                                    );
+                """.format(name = self.__name + RESULT_TABLE_OFF)
             )
 
             self.__c.execute(
@@ -168,6 +179,18 @@ class Chain:
                          INSERT INTO {} VALUES ({blockid}, {timestamp}, "{target}", "{pubkey}", "{info}", "{sign}")
                          """.format(self.__name + VOTE_TABLE_OFF, blockid=id, timestamp=timestamp, target=target, pubkey=pubkey, info=info, sign=sign))
         self.__conn.commit()
+
+        if(id != -1):
+            prob_id = voteInfo.get_prob_id()
+            selections = voteInfo.get_selection()
+            self.__c.execute('DELETE FROM {} WHERE target="{target}" and pubkey = "{pubkey}" and prob_id = {prob_id}'.format(self.__name+RESULT_TABLE_OFF, target=target, pubkey=  pubkey, prob_id = prob_id))
+            self.__conn.commit()
+            for selection in selections:
+                self.__c.execute("""
+                                 INSERT INTO {} VALUES ("{target}", "{pubkey}", {prob_id}, {selection})
+                                 """.format(self.__name+RESULT_TABLE_OFF, target=target, pubkey=pubkey, prob_id=prob_id, selection=selection))
+            self.__conn.commit()
+        # self.__c.execute()
 
     def get_uncomfirmed_votes(self):
         self.__c.execute("""
