@@ -74,17 +74,10 @@ WSGI_APPLICATION = 'vote.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
-DATABASE_ROUTERS = ['manager.router.DatabaseRouter']
-DATABASE_APPS_MAPPING = {'default': 'default',
-                         'block': 'block'}
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    },
-    'block': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'blockdb.sqlite3'),
     }
 }
 

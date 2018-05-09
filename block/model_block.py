@@ -9,7 +9,7 @@ from django.db import models
 
 
 class Block(models.Model):
-    block_id = models.IntegerField(blank=True, null=True)
+    id = models.IntegerField(blank=True, null=True)
     block_hash = models.TextField(blank=True, null=True)
     pre_hash = models.TextField(blank=True, null=True)
     class Meta:
