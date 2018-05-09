@@ -117,7 +117,7 @@ a:hover {
 }
 
 .content,.container {
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 
 .trans {
