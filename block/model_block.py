@@ -1,36 +1,37 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
-from django.db import models
+import sqlite3
+import settings
+from block.block_hashfunc import hash
 
+class BlockReader():
+    def __init__(self):
+        self.conn = sqlite3.connect(settings.BLOCK_DATABASE_DIR)
+        self.cursor = self.conn.cursor()
+    
+    def getVoteResult(self, target):
+        self._getAll("select * from Result where target=?", (target,))
+        return self.allResult
 
-class Block(models.Model):
-    id = models.IntegerField(blank=True, null=True)
-    block_hash = models.TextField(blank=True, null=True)
-    pre_hash = models.TextField(blank=True, null=True)
-    class Meta:
-        app_label = 'block'
-        db_table = 'block'
+    def getBlock(self, block_id):
+        self._getOne("select * from Block where id=?", (block_id,))
+        return self.oneResult
+        
+    def getBlocks(self):
+        self._getAll("select * from Block")
+        return self.allResult
+    
+    
+    def _getOne(self, sql, params=()):
+        self.cursor.execute(sql, params)
+        self.oneResult = self.cursor.fetchone()
 
-
-class BlockInfo(models.Model):
-    block_id = models.IntegerField(blank=True, null=True)
-    vote_id = models.IntegerField(blank=True, null=True)
-    public_key = models.TextField(blank=True, null=True)
-
-    class Meta:
-        app_label = 'block'
-        db_table = 'block_info'
-
-
-class VoteInfo(models.Model):
-    vote_id = models.IntegerField(blank=True, null=True)
-    void_content = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        app_label = 'block'
-        db_table = 'vote_info'
+    def _getMany (self, size, sql, params=()):
+        self.cursor.execute(sql, params)
+        self.manyResult = self.cursor.fetchmany(size)
+        
+    def _getAll(self, sql, params=()):
+        self.cursor.execute(sql, params)
+        self.allResult = self.cursor.fetchall()
+    
+    def __del__(self):
+        self.cursor.close()
+        self.conn.close()
