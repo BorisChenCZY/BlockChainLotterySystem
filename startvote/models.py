@@ -67,4 +67,4 @@ admin.site.register(Vote)
 admin.site.register(Entry)
 admin.site.register(Selection)
 #
-#
+#  fd
