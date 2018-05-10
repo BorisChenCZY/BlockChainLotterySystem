@@ -433,14 +433,11 @@
             "pubkey": toPKCS8(pair.pubKeyObj),
             "prob_num": 1,
             "selection": id,
-            {#"privkey": toPCK1(pair.privkey)//DANGER!!!#}
         };
-        s_d = JSON.stringify(d);
+        var s_d = JSON.stringify(d);
         console.log(typeof s_d)
         console.log(s_d);
-        {#var s = pair.prvKeyObj.signPSS(s_d, "SHA256", -2);#}
-        var s = sign(s_d)
-        console.log(s);
+        var s = sign(s_d);
         var msg = {
             "data": d,
             "sign": s,

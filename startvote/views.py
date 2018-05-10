@@ -6,7 +6,6 @@ from . import models
 from .models import User,Vote,Entry,Selection
 from block import block_hashfunc
 import dateutil.parser
-from .models import Vote
 import block.model_block as bm
 import datetime
 from django.contrib import auth
@@ -150,13 +149,17 @@ def vote(request):
     # return render(request, 'vote.html')
 
 def card(request):
+    result_list =[]
     user = auth.get_user(request)
-    votes = []
     e = Entry.objects.filter(user_id=user)
     for item in e:
-
-        votes.append(item.vote_id)
-    return render_to_response('card.html',{"votes":votes})
+        if item.condition:
+            vote_condition = {'condition':'已投', 'vote':item.vote_id }
+            result_list.append(vote_condition)
+        else:
+            vote_condition = {'condition': '未投','vote':item.vote_id }
+            result_list.append(vote_condition)
+    return render_to_response('card.html',{"result_list":result_list})
 # def creat_vote(request):
 
 def article_page(request,id):
@@ -184,6 +187,12 @@ def edit_action(request):
 
     articles = models.Artivle.objects.all()
     return render(request, 'startvote/index.html', {'artilces': articles})
+
+def fold_demo(request):
+    candidate = []
+    candidate.append({"id":1, "title": "Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。\n"*3})
+    candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*3})
+    return render(request, 'fold_demo.html', {'candidate': candidate})
 
 #获得单个block内的信息
 def single_block_info(request):
