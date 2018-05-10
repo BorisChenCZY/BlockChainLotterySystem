@@ -48,7 +48,7 @@ class Selection(models.Model):
 
     selection_id = models.IntegerField(primary_key=True)  # 自增主键
     vote_id = models.ForeignKey(Vote, on_delete=models.CASCADE,null=True,blank=True,default=None)  # 外键
-    title = models.TextField(null=True)  #候选人标题
+    title = models.CharField(max_length=50,null=True)  #候选人标题
     simple_detail = models.TextField(null=True)   #候选人简单描述
     detail = models.TextField(null=True)   #候选人详细描述
     img = models.ImageField(null=True)
