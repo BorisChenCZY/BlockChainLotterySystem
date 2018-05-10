@@ -56,3 +56,4 @@ class Entry(models.Model):  # 公钥,投票活动id,将人和投票连接起来,
 
 # admin.site.register(User)
 #
+#
