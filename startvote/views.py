@@ -128,6 +128,7 @@ def card(request):
     votes = []
     e = Entry.objects.filter(user_id=user)
     for item in e:
+
         votes.append(item.vote_id)
     return render_to_response('card.html',{"votes":votes})
 # def creat_vote(request):

@@ -12,14 +12,6 @@ class Artivle(models.Model):
         return self.title
 
 
-
-# Create your models here.
-# class User(models.Model):
-#     user_id = models.IntegerField(primary_key=True)
-#     username = models.CharField(max_length=50)
-#     password = models.CharField(max_length=50)
-
-
 class Vote(models.Model):
     vote_id = models.IntegerField(primary_key=True)  # 自增主键
     vote_name = models.CharField(max_length=50)
@@ -52,16 +44,15 @@ class Entry(models.Model):  # 公钥,投票活动id,将人和投票连接起来,
 #     user_id = models.ForeignKey(User, to_field=User.user_id,on_delete=models.CASCADE)  # 用户id
 #     public_key = models.CharField(max_length=300)
 
-class Vote_selection(models.Model):
-    vote_id = models.ForeignKey('Vote', on_delete=models.CASCADE)  # 外键
-    selection_id =  models.ForeignKey('Selection', on_delete=models.CASCADE)  # 外键
-#class Result(models.Model):
 class Selection(models.Model):
+
     selection_id = models.IntegerField(primary_key=True)  # 自增主键
+    vote_id = models.ForeignKey(Vote, on_delete=models.CASCADE,null=True,blank=True,default=None)  # 外键
     title = models.TextField(null=True)  #候选人标题
     simple_detail = models.TextField(null=True)   #候选人简单描述
     detail = models.TextField(null=True)   #候选人详细描述
     img = models.ImageField(null=True)
+
 
 class local_Key_pool(models.Model):  # 公私钥池
     key_id = models.IntegerField(primary_key=True)
@@ -70,9 +61,10 @@ class local_Key_pool(models.Model):  # 公私钥池
     statue = models.BooleanField(default=False) # 是否被使用 0：未被使用 1： 使用中
 
 
-# admin.site.register(User)
+
 admin.site.register(Vote)
 admin.site.register(Entry)
 admin.site.register(Selection)
+admin.site.register(local_Key_pool)
 #
 #  fd
