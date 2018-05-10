@@ -4,6 +4,7 @@ from django import forms
 from django.contrib import sessions
 from . import models
 from .models import User,Vote
+import block.model_block as bm
 # Create your views here.
 class UserForm(forms.Form):
     username = forms.CharField(label='username',max_length=50)
@@ -96,3 +97,14 @@ def fold_demo(request):
     candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*3})
     return render(request, 'fold_demo.html', {'candidate': candidate})
 
+def block_info(request):
+    br = bm.BlockReader()
+    blocks = br.getBlockInfos()
+    title = ["Id","hash","prehash","vote_num","generator"]
+    format_blocks = []
+    for b in blocks:
+        b = list(b)
+        b[1] = b[1][:32]   #截取哈希的前32位
+        b[2] = b[2][:32]
+        format_blocks.append(b)
+    return render(request, 'block_info.html', {'blocks': format_blocks, 'title': title})
