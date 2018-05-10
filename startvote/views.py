@@ -5,6 +5,7 @@ from django.contrib import sessions
 from . import models
 from .models import User,Vote
 import block.model_block as bm
+import datetime
 # Create your views here.
 class UserForm(forms.Form):
     username = forms.CharField(label='username',max_length=50)
@@ -97,6 +98,23 @@ def fold_demo(request):
     candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*3})
     return render(request, 'fold_demo.html', {'candidate': candidate})
 
+#获得单个block内的信息
+def single_block_info(request):
+    block_id = request.POST.get("id", 0)
+    br = bm.BlockReader()
+    infos = br.getSingleBlockInfo(block_id)
+    title = ["target", "pubkey", "selection", "timestamp"]
+    format_infos = []
+    for i in infos:
+        i = list(i)
+        i[0] = i[0][:16]
+        i[1] = i[1][:16]
+        dateArray = datetime.datetime.utcfromtimestamp(i[3])
+        i[3] = dateArray.strftime("%Y-%m-%d %H:%M:%S")
+        format_infos.append(i)
+    return render(request, 'single_block_info.html', {'infos': format_infos, 'title': title})
+
+#获得block chain的信息
 def block_info(request):
     br = bm.BlockReader()
     blocks = br.getBlockInfos()

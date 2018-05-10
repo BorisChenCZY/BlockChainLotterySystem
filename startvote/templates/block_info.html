@@ -1,48 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Bootstrap Simple Login Form with Blue Background</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<style type="text/css">
-    .block_info_card {
-		color: #7a7a7a;
-		border-radius: 3px;
-        background: #fff;
-        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-        padding: 30px;
-        width: 80%;
-        margin: 10% auto auto auto;
-    }
-</style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap Simple Login Form with Blue Background</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .block_info_card {
+            color: #7a7a7a;
+            border-radius: 3px;
+            background: #fff;
+            box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+            width: 80%;
+            margin: 10% auto auto auto;
+        }
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("tr").click(function () {
+                $(".modal-body").load("{% url 'single_block_info' %}", {"id": $(this).attr("id")}, function (response, status) {
+                        $(".modal-body").html($(response).find(".single_block_info").val());
+                });
+            });
+        });
+    </script>
+
 </head>
-{% include "header.html"%}
-<body >
+{% include "header.html" %}
+<body>
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" tabindex="-1"   aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center" id="exampleModalCenterTitle">Block info</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="block_info_card">
     <h2 class="text-center">Block Info</h2>
     <table class="table table-hover">
-		<thead>
-			<tr>
-                {%for t in title %}
-				<th>{{ t }}</th>
+        <thead>
+        <tr>
+            {% for t in title %}
+                <th>{{ t }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for b in blocks %}
+            <tr data-toggle="modal" data-target=".modal" id={{ b.0 }}>
+                {% for v in b %}
+                    <td>
+                        {{ v }}
+                    </td>
                 {% endfor %}
-			</tr>
-		</thead>
-		<tbody>
-         {%for b in blocks %}
-			<tr>
-                {%for v in b %}
-				    <td>{{ v }}</td>
-                {% endfor %}
-			</tr>
-         {% endfor %}
-		</tbody>
-	</table>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </div>
 </body>
 </html>
