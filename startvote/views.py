@@ -33,6 +33,9 @@ def login(request):
 def form(request):
     return render(request,'form.html')
 
+def vote(request):
+    return render(request, 'vote.html')
+
 def card(request):
     #
     # votes = Vote.objects.get(id = )   #获取数据库内容

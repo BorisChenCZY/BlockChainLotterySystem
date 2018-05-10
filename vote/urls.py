@@ -24,6 +24,7 @@ urlpatterns = [
     re_path(r'^login$', v1.login, name="login"),
     re_path(r'^form$', v1.form, name="form"),
     re_path(r'^card$', v1.card, name="card"),
+    re_path("^vote$", v1.vote, name="vote"),
 
 
     re_path(r'^article/(?P<id>[0-9]+)$', v1.article_page, name="article_page"),
