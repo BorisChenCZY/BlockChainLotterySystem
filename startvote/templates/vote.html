@@ -277,6 +277,23 @@
                 </div>
             <button type="button" class="btn btn-info"> Details</button>
             </div>
+            <div class="row" style="padding-top: 15px">
+                {%for vote in votes %}
+                    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+                        <div  class="card card-inverse card-info">
+                            <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
+                            <div class="card-block">
+
+                                <h4 class="card-title">{{ vote.vote_name }}</h4>
+                                <div class="card-text">
+                                    {{ vote.vote_description }}
+                                </div>
+                            </div>
+                            <a href="{% url 'form' %}"><button type="button" class="btn btn-danger btn-lg btn-block">{{ vote.state }}</button></a>
+
+                        </div>
+                    </div>
+                {% endfor %}
         </div>
 
 

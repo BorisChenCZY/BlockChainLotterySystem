@@ -47,7 +47,11 @@ def form(request):
     return render(request,'form.html')
 
 def vote(request):
-    return render(request, 'vote.html')
+    candidate = []
+    candidate.append({"id":1, "title": "Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。/n\n<br>"*3})
+    candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。<br/>"*3})
+    return render(request, 'fold_demo.html', {'candidate': candidate})
+    # return render(request, 'vote.html')
 
 def card(request):
     #
