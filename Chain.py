@@ -57,17 +57,21 @@ class Chain:
               CREATE TABLE {name} (id INTEGER PRIMARY KEY AUTOINCREMENT
                                   , hash BLOB
                                   , prehash BLOB
+                                  , generator VARCHAR 
+                                  , timestamp FLOAT 
                                   );
               """.format(name = self.__name + BLOCK_TABLE_OFF))
 
             self.__c.execute(
                 """
-                CREATE TABLE {name} (block_id int
+                CREATE TABLE {name} (vote_id INTEGER PRIMARY KEY AUTOINCREMENT
+                                    , block_id int
                                     , timestamp float
                                     , target BLOB
                                     , pubkey BLOB
                                     , info VARCHAR 
-                                    , sign BLOB);
+                                    , sign BLOB
+                                    , status int);
                 """.format(name = self.__name + VOTE_TABLE_OFF)
             )
 
@@ -75,7 +79,7 @@ class Chain:
                 """
                 CREATE TABLE {name} (target BLOB
                                     , pubkey BLOB
-                                    , prob_id int
+                                    , prob_id int 
                                     , selection int
                                     );
                 """.format(name = self.__name + RESULT_TABLE_OFF)
@@ -83,7 +87,7 @@ class Chain:
 
             self.__c.execute(
                 """
-                INSERT INTO {name} VALUES (0, "0", "不存在的");
+                INSERT INTO {name} VALUES (0, "0", "不存在的", "创世链", "牛逼");
                 """
             .format(name=self.__name + BLOCK_TABLE_OFF))
             self.__conn.commit()
@@ -108,8 +112,8 @@ class Chain:
         voteInfos = block.get_vote_infos()
 
         self.__c.execute("""
-                        INSERT INTO {} VALUES ({id}, "{hash}", "{prehash}")
-                        """.format(self.__name + BLOCK_TABLE_OFF, id=id, hash=hash, prehash=prehash))
+                        INSERT INTO {} VALUES ({id}, "{hash}", "{prehash}", "localMachine", {timestamp})
+                        """.format(self.__name + BLOCK_TABLE_OFF, id=id, hash=hash, prehash=prehash, timestamp =get_timestamp()))
         self.__conn.commit()
 
         for voteInfo in voteInfos:
@@ -119,7 +123,7 @@ class Chain:
         if(type(id) != int):
             raise ChainError("id must be int, not {}".format(type(id)))
 
-        self.__c.execute("SELECT * from {} where id={}".format(self.__name + BLOCK_TABLE_OFF, id))
+        self.__c.execute("SELECT id, hash, prehash from {} where id={}".format(self.__name + BLOCK_TABLE_OFF, id))
         id, hash, prehash = self.__c.fetchone()
         voteBlock = VoteBlock(id, prehash.encode('utf-8'), hash.encode('utf-8'))
 
@@ -138,7 +142,7 @@ class Chain:
 
     @staticmethod
     def parse_voteInfo(args):
-        id, timestamp, target, pubkey, info, sign = args
+        vote_id, id, timestamp, target, pubkey, info, sign, status = args
         vote = VoteInfo.parse_info(info)
         voteInfo = VoteInfo(timestamp, target.encode("utf-8"), pubkey.encode("utf-8"), vote, sign.encode("utf-8"))
         if not voteInfo.check():
@@ -175,9 +179,14 @@ class Chain:
         pubkey = voteInfo.get_pubkey().decode("utf-8")
         info = voteInfo.get_info().decode("utf-8")
         sign = voteInfo.get_sign().decode("utf-8")
+        if id == -1:
+            status = 0
+            id = "NULL"
+        else:
+            status = 1
         self.__c.execute("""
-                         INSERT INTO {} VALUES ({blockid}, {timestamp}, "{target}", "{pubkey}", "{info}", "{sign}")
-                         """.format(self.__name + VOTE_TABLE_OFF, blockid=id, timestamp=timestamp, target=target, pubkey=pubkey, info=info, sign=sign))
+                         INSERT INTO {} VALUES (NULL, {blockid}, {timestamp}, "{target}", "{pubkey}", "{info}", "{sign}", {status})
+                         """.format(self.__name + VOTE_TABLE_OFF, blockid=id, timestamp=timestamp, target=target, pubkey=pubkey, info=info, sign=sign, status = status))
         self.__conn.commit()
 
         if(id != -1):
@@ -194,7 +203,7 @@ class Chain:
 
     def get_uncomfirmed_votes(self):
         self.__c.execute("""
-                        SELECT * from {} where block_id=-1 order by timestamp
+                        SELECT * from {} where block_id is null order by timestamp
                         """.format(self.__name + VOTE_TABLE_OFF))
         votes = []
         for args in self.__c.fetchall():
@@ -222,9 +231,9 @@ class Chain:
 
 
 if __name__ == "__main__":
-    chain = Chain("test")
-    # chain.create()
-    chain.load()
+    chain = Chain("")
+    chain.create()
+    # chain.load()
     print(chain.test())
 
     timestamp = datetime.datetime.now().timestamp() # current time

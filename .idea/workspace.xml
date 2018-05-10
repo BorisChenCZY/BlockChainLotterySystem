@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="0015b0ea-2594-425a-8563-dde02e610612" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Miner.py" beforeDir="false" afterPath="$PROJECT_DIR$/Miner.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Chain.py" beforeDir="false" afterPath="$PROJECT_DIR$/Chain.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.sqlite" beforeDir="false" afterPath="$PROJECT_DIR$/test.sqlite" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testRSA.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -14,8 +16,8 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/BlockVOTE$VoteBlock.coverage" NAME="VoteBlock Coverage Results" MODIFIED="1525791314181" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/BlockVOTE$Chain.coverage" NAME="Chain Coverage Results" MODIFIED="1525863985200" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BlockVOTE$Miner.coverage" NAME="Miner Coverage Results" MODIFIED="1525972021712" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/BlockVOTE$Chain.coverage" NAME="Chain Coverage Results" MODIFIED="1525976359726" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BlockVOTE$SocketHandler.coverage" NAME="SocketHandler Coverage Results" MODIFIED="1525958250844" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BlockVOTE$RSA.coverage" NAME="RSA Coverage Results" MODIFIED="1525966177959" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/BlockVOTE$Block.coverage" NAME="Block Coverage Results" MODIFIED="1525790267906" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -77,10 +79,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Miner.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Miner.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Miner.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
+            <state relative-caret-position="-162">
               <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
@@ -98,11 +100,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Chain.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Chain.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Chain.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+            <state relative-caret-position="352">
+              <caret line="202" lean-forward="true" selection-start-line="202" selection-end-line="202" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -139,12 +141,12 @@
         <option value="$PROJECT_DIR$/Block.py" />
         <option value="$PROJECT_DIR$/VoteBlock.py" />
         <option value="$PROJECT_DIR$/VoteInfo.py" />
-        <option value="$PROJECT_DIR$/Chain.py" />
         <option value="$PROJECT_DIR$/SocketHandler.py" />
         <option value="$PROJECT_DIR$/pub.pem" />
         <option value="$PROJECT_DIR$/testRSA.py" />
         <option value="$PROJECT_DIR$/RSA.py" />
         <option value="$PROJECT_DIR$/Miner.py" />
+        <option value="$PROJECT_DIR$/Chain.py" />
       </list>
     </option>
   </component>
@@ -206,7 +208,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.Miner">
+  <component name="RunManager" selected="Python.Chain">
     <configuration name="Chain" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="BlockVOTE" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -311,11 +313,11 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.Chain" />
         <item itemvalue="Python.Miner" />
         <item itemvalue="Python.RSA" />
         <item itemvalue="Python.testRSA" />
         <item itemvalue="Python.SocketHandler" />
-        <item itemvalue="Python.Chain" />
       </list>
     </recent_temporary>
   </component>
@@ -339,11 +341,11 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32655138" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32655138" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" weight="0.32960325" />
-      <window_info anchor="bottom" id="Terminal" order="7" visible="true" weight="0.32655138" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.26943558" />
+      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32655138" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.26943558" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="right" id="SciView" order="3" />
@@ -358,6 +360,29 @@
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32892805" />
     </layout>
+    <layout-to-restore>
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26943558" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="8" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Database Changes" order="9" show_stripe_button="false" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32655138" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32892805" />
+      <window_info anchor="bottom" id="Python Console" order="10" weight="0.32960325" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39979655" />
+      <window_info anchor="right" id="Database" order="4" />
+      <window_info anchor="bottom" id="Terminal" order="11" weight="0.32655138" />
+      <window_info anchor="bottom" id="Event Log" order="12" side_tool="true" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+    </layout-to-restore>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
@@ -710,16 +735,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Chain.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pub.pem">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="45">
@@ -736,10 +751,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Miner.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
+        <state relative-caret-position="-162">
           <caret line="61" lean-forward="true" selection-start-line="61" selection-end-line="61" />
           <folding>
             <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Chain.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="352">
+          <caret line="202" lean-forward="true" selection-start-line="202" selection-end-line="202" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
           </folding>
         </state>
       </provider>
