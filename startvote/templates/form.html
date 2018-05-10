@@ -6,6 +6,12 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+{#    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>#}
+{#    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>#}
+{#    <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>#}
 
 	<title>Basic Form</title>
 
@@ -20,108 +26,172 @@
             background-size:100% 100%;
         }
     </style>
+{#    <style type="text/css">#}
+{#        myform {#}
+{#            margin:60%;#}
+{#        }#}
+{#    </style>#}
+     <style type="text/css">
+       .entry:not(:first-of-type)
+        {
+            margin-top: 10px;
+        }
+
+        .glyphicon
+        {
+            font-size: 12px;
+        }
+    </style>
+    <script>
+    $(function()
+    {
+        $(document).on('click', '.btn-add', function(e)
+        {
+            e.preventDefault();
+
+            var controlForm = $('.controls form:first'),
+                currentEntry = $(this).parents('.entry:first'),
+                newEntry = $(currentEntry.clone()).appendTo(controlForm);
+
+            newEntry.find('input').val('');
+            controlForm.find('.entry:not(:last) .btn-add')
+                .removeClass('btn-add').addClass('btn-remove')
+                .removeClass('btn-success').addClass('btn-danger')
+                .html('<span class="glyphicon glyphicon-minus"></span>');
+        }).on('click', '.btn-remove', function(e)
+        {
+		    $(this).parents('.entry:first').remove();
+
+		    e.preventDefault();
+		    return false;
+	    });
+    });
+    </script>
+
+
+
 </head>
 
 
 
 <body>
-<div class="card" style="width: 20rem;margin-bottom: 70px">
-  <div class="card-body">
-    <h4 class="card-title"></h4>
-    <p class="card-text">&nbsp</p>
+{#<div class="card" style="width: 20rem;margin-bottom: 70px">#}
+{#  <div class="card-body">#}
+{#    <h4 class="card-title"></h4>#}
+{#    <p class="card-text">&nbsp</p>#}
+{##}
+{#  </div>#}
+{#</div>#}
 
-  </div>
-</div>
-</div>
-    <div class="main-content">
+    <div style="margin-left: 65%">
 
         <!-- You only need this form and the form-basic.css -->
 
-        <form class="form-basic" method="post" action="#">
+        <form class="form-basic" method="post", position = "left", action="{% url 'form' %}">
             {% csrf_token %}
 
             <div class="form-title-row">
-                <h1>Form Example</h1>
+                <h1>创建我的投票</h1>
             </div>
 
             <div class="form-row">
                 <label>
-                    <span>Full name</span>
-                    <input type="text" name="name">
+                    <span>投票名称</span>
+                    <input type="text" name="vote_name">
+                </label>
+            </div>
+            <div class="form-row">
+                <label>
+                    <span>投票介绍</span>
+                    <textarea name="vote_description"></textarea>
                 </label>
             </div>
 
             <div class="form-row">
                 <label>
-                    <span>Email</span>
-                    <input type="email" name="email">
+                    <span>开始时间</span>
+                    <input type="datetime-local" name="start_time">
                 </label>
             </div>
-
             <div class="form-row">
                 <label>
-                    <span>Dropdown</span>
-                    <select name="dropdown">
-                        <option>Option One</option>
-                        <option>Option Two</option>
-                        <option>Option Three</option>
-                        <option>Option Four</option>
+                    <span>结束时间</span>
+                    <input type="datetime-local" name="end_time">
+                </label>
+            </div>
+             <div class="form-row">
+                <label><span>投票类型</span></label>
+                <select name="vote_type">
+                        <option>单选</option>
+                        <option>多选</option>
+
+                    </select>
+            </div>
+            <div class="form-row">
+                <label>
+                    <span>投票权限</span>
+                    <select name="is_checkable">
+                        <option>任何人</option>
+                        <option>须权限认证</option>
+
                     </select>
                 </label>
             </div>
 
+
             <div class="form-row">
-                <label>
-                    <span>Textarea</span>
-                    <textarea name="textarea"></textarea>
-                </label>
+                <label><span>是否公开投票结果</span></label>
+                 <select name="is_opened">
+                        <option>yes</option>
+                        <option>no</option>
+                    </select>
             </div>
 
             <div class="form-row">
                 <label>
-                    <span>Checkbox</span>
+                    <span>确认无误</span>
                     <input type="checkbox" name="checkbox" checked>
                 </label>
             </div>
 
-            <div class="form-row">
-                <label><span>Radio</span></label>
-                <div class="form-radio-buttons">
 
-                    <div>
-                        <label>
-                            <input type="radio" name="radio">
-                            <span>Radio option 1</span>
-                        </label>
-                    </div>
-
-                    <div>
-                        <label>
-                            <input type="radio" name="radio">
-                            <span>Radio option 2</span>
-                        </label>
-                    </div>
-
-                    <div>
-                        <label>
-                            <input type="radio" name="radio">
-                            <span>Radio option 3</span>
-                        </label>
-                    </div>
-
-                </div>
-            </div>
 
             <div class="form-row">
-                <a href="{% url 'card' %}">
-                <button type="button">Submit Form</button>
-                </a>
+                <button type="submit">发起投票</button>
             </div>
 
-            </form>
+
+        </form>
+
+
+
+
 
 
     </div>
+<div style="margin-right: 65%; margin-top: 10%">
+<div class="container">
+	<div class="row">
+        <div class="control-group" id="fields">
+            <label class="control-label" for="field1">Nice Multiple Form Fields</label>
+            <div class="controls">
+                <form role="form" autocomplete="off">
+                    <div class="entry input-group col-xs-3">
+                        <input class="form-control" name="fields[]" type="text" placeholder="Type something" />
+                    	<span class="input-group-btn">
+                            <button class="btn btn-success btn-add" type="button">
+                                <span class="glyphicon glyphicon-plus"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            <br>
+            <small>Press <span class="glyphicon glyphicon-plus gs"></span> to add another form field :)</small>
+            </div>
+        </div>
+	</div>
+</div>
+ </div>
 <div class="card" style="width: 20rem;margin-top: 300px">
   <div class="card-body">
     <h4 class="card-title"></h4>

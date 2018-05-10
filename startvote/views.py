@@ -3,7 +3,9 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django import forms
 from django.contrib import sessions
 from . import models
-from .models import User,Vote
+from .models import User,Vote,Entry
+from block import block_hashfunc
+import datetime
 # Create your views here.
 class UserForm(forms.Form):
     username = forms.CharField(label='username',max_length=50)
@@ -43,8 +45,41 @@ def login(request):
                 return render(request, "login.html", {"msg": u"用户名或密码错误"})
 
 def form(request):
+    if request.method == 'GET':
+        return render(request, 'form.html')
+    else:
+        vote = Vote()
+        vote.creat_time = datetime.datetime.now()
+        vote.vote_name = request.POST.get("vote_name")
+        vote.vote_description = request.POST.get("vote_description")
+        vote.start_time = request.POST.get("start_time")
+        vote.end_time = request.POST.get("end_time")
+
+        vote.vote_state = 1  # 默认是进行中，实际通过时间计算，need more coding
+
+        if request.POST.get("is_opened") == "yes": # 是否是公开投票
+            vote.is_opened = True
+        else:
+            vote.is_opened = False
+        if request.POST.get("is_checkable") == "须权限认证":  # 是否展示投票结果给参与者
+            vote.is_checkable = True
+        else:
+            vote.is_checkable = False
+
+        if request.POST.get("vote_type") == "单选":
+            vote.vote_type = 1
+        else:
+            vote.vote_type = 2
+
+        vote.vote_target =block_hashfunc.hash(str(vote.vote_name).encode())
+
+        vote.save()
+    # forms.cleaned_data(result)
+    #     print(str(result))
+        return render(request, 'card.html')
     # request.POST.
-    return render(request,'form.html')
+
+
 
 def vote(request):
     candidate = []
@@ -67,20 +102,11 @@ def vote(request):
     # return render(request, 'vote.html')
 
 def card(request):
-    #
-    # votes = Vote.objects.get(id = )   #获取数据库内容
-    vote1 ={'vote_name':"2018十佳毕业生",
-            'vote_description':'2018年“十佳毕业生”候选人有16位，16进10的校级评选中，他们将通过师生投票和评委评议的方式决出。师生投票在校级评选中占比为20%。',
-            'state':'Unfinished'}
-    vote2 = {'vote_name': "学生食堂人气投票",
-             'vote_description': '荔园餐厅？湖畔餐厅？欣园食堂？',
-             'state': 'Finished'}
-    vote3 = {'vote_name': "周末聚餐时间",
-             'vote_description': '这个周末去哪里吃？',
-             'state': 'Unfinished'}
-    votes = [vote1, vote2, vote3]
-    user_id = request.session['user_id'] # 获取当前user_id
-    print("here!")
+    u_id = request.session['user_id']  # 获取当前user_id
+    votes = []
+    e = Entry.objects.filter(user_id=u_id)
+    for item in e:
+        votes.append(item.vote_id)
     return render_to_response('card.html',{"votes":votes})
 # def creat_vote(request):
 

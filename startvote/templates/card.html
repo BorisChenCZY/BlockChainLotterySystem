@@ -235,7 +235,15 @@
                             {{ vote.vote_description }}
                         </div>
                     </div>
-                    <a href="{% url 'form' %}"><button type="button" class="btn btn-danger btn-lg btn-block">{{ vote.state }}</button></a>
+                    <a href="{% url 'form' %}"><button type="button" class="btn btn-danger btn-lg btn-block">
+                        {% if vote.vote_state  == 1 %}
+                        进行中
+                        {% elif vote.vote_state  == 2 %}
+                        已结束
+                        {% else %}
+                        未开始
+                        {% endif %}
+                    </button> </a>
 
                 </div>
             </div>
