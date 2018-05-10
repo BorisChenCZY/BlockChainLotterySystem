@@ -46,6 +46,7 @@ def login(request):
                 return render(request, "login.html", {"msg": u"用户名或密码错误"})
 
 def form(request):
+    # 先检验登录状态
     if request.method == 'GET':
         return render(request, 'form.html')
     else:
@@ -90,7 +91,7 @@ def form(request):
             entry.identity = 2  # 表示发起人
             entry.condition = False
             entry.save()
-            return render(request, 'card.html')
+            return card(request)
 
 
 

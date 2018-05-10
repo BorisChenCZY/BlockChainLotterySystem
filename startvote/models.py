@@ -43,7 +43,7 @@ class Entry(models.Model):  # 公钥,投票活动id,将人和投票连接起来,
     user_id = models.ForeignKey('User',on_delete=models.CASCADE)  # 用户id
     vote_id = models.ForeignKey('Vote',on_delete=models.CASCADE)  # 外键
     condition = models.BooleanField(default=False)  # 投票状态，状态编码，true：已投 false：未投
-    identity = models.IntegerField(default=1) # 身份，可能是参与者(1)，也可能是发起者对应我参与的，我发起的(2)
+    identity = models.IntegerField(default=1)  # 身份，可能是参与者(1)，也可能是发起者对应我参与的，我发起的(2)
     # option = models.IntegerField()
 #
 #
@@ -61,6 +61,12 @@ class Selection(models.Model):
     simple_detail = models.TextField(null=True)   #候选人简单描述
     detail = models.TextField(null=True)   #候选人详细描述
     img = models.ImageField(null=True)
+
+class local_Key_pool(models.Model):  # 公私钥池
+    key_id = models.IntegerField(primary_key=True)
+    public_key = models.CharField(max_length=300,null=False)
+    private_key = models.CharField(max_length=300, null=False)
+    statue = models.BooleanField(default=False) # 是否被使用 0：未被使用 1： 使用中
 
 admin.site.register(User)
 admin.site.register(Vote)
