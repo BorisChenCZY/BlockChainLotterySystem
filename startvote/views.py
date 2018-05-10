@@ -3,10 +3,9 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django import forms
 from django.contrib import sessions
 from . import models
-from .models import User,Vote,Entry
+from .models import Vote,Entry
 from block import block_hashfunc
 import dateutil.parser
-from .models import Vote
 import block.model_block as bm
 import datetime
 from django.contrib import auth
@@ -125,13 +124,17 @@ def vote(request):
     # return render(request, 'vote.html')
 
 def card(request):
+    result_list =[]
     user = auth.get_user(request)
-    votes = []
     e = Entry.objects.filter(user_id=user)
     for item in e:
-
-        votes.append(item.vote_id)
-    return render_to_response('card.html',{"votes":votes})
+        if item.condition:
+            vote_condition = {'condition':'已投', 'vote':item.vote_id }
+            result_list.append(vote_condition)
+        else:
+            vote_condition = {'condition': '未投','vote':item.vote_id }
+            result_list.append(vote_condition)
+    return render_to_response('card.html',{"result_list":result_list})
 # def creat_vote(request):
 
 def article_page(request,id):
