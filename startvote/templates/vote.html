@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/skin/default.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.dev.js"></script>
 
     <!------ Include the above in your HEAD tag ---------->
 
@@ -303,7 +304,7 @@
         {% for vote in votes %}
             <div class="row">
                 <div class="progress" style="position: relative;">
-                    <button type="button" class="btn btn-info" data-toggle="collapse"
+                    <button type="button" class="btn btn-success" data-toggle="collapse"
                             data-target="#{{ vote.id }}"> Details
                     </button>
                     <div class="progress" onclick="clicked(this)">
@@ -333,7 +334,8 @@
 
 
         <div class="row">
-            <button type="button" class="btn btn-info center-block btn-lg btn-warning"> Submit
+            <button type="button" class="btn btn-info center-block btn-lg btn-warning" id="Submit"
+                    data-loading="<i class='fa fa-circle-o-notch fa-spin'></i> Processing Order"> Submit
             </button>
         </div>
 
@@ -387,19 +389,72 @@
     var pair = generate_pair()
     $("#pubkey").text(toPKCS8(pair.pubKeyObj))
     $("#privkey").text(toPCK1(pair.prvKeyObj))
+    init((toPCK1(pair.prvKeyObj)))
 </script>
 <script>
     var thisobj;
     var voteLimit = {{ voteLimit }};
-    var max_id = {{ max_id }}
-        function clicked(obj) {
-            if (voteLimit === 1) {
-                for (var i = 1; i <= max_id; i++) {
-                    $("#prog" + i)[0].style.width = "0%";
-                    {#console.log(i)#}
-                }
+    var max_id = {{ max_id }};
+    var miner_list = {{ miner_list|safe }};
+    console.log(miner_list)
+
+    function clicked(obj) {
+        if (voteLimit === 1) {
+            for (var i = 1; i <= max_id; i++) {
+                $("#prog" + i)[0].style.width = "0%";
+                {#console.log(i)#}
             }
-            obj.children[1].style.width = "100%";
         }
+        obj.children[1].style.width = "100%";
+    }
+
+
+    $("#Submit").on('click', function () {
+        var id;
+        for (var i = 1; i <= max_id; i++) {
+            if ($("#prog" + i)[0].style.width === "100%") {
+                id = i;
+                break;
+            }
+        }
+        console.log(id);
+        if (id === undefined) {
+            alert("You need to select at least one option.");
+            return;
+        }
+
+        var target = "{{ target }}";
+        console.log(target);
+        {#$(this).button("loading");#}
+        $(this).html("<i class='fa fa-circle-o-notch fa-spin'></i> Submitting...")
+        {#$(this).disable = true;#}
+        var d = {
+            "target": target,
+            "pubkey": toPKCS8(pair.pubKeyObj),
+            "prob_num": 1,
+            "selection": id,
+            {#"privkey": toPCK1(pair.privkey)//DANGER!!!#}
+        };
+        s_d = JSON.stringify(d);
+        console.log(typeof s_d)
+        console.log(s_d);
+        {#var s = pair.prvKeyObj.signPSS(s_d, "SHA256", -2);#}
+        var s = sign(s_d)
+        console.log(s);
+        var msg = {
+            "data": d,
+            "sign": s,
+        }
+        console.log(msg);
+        for (var i = 0; i < miner_list.length; i++) {
+            var address = miner_list[i];
+            console.log(address);
+            var socket = io(address);
+
+            socket.emit("Vote", JSON.stringify(msg));
+        }
+
+        $(this).html("Done")
+    })
 </script>
 </body>
