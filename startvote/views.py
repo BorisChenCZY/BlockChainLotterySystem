@@ -81,6 +81,13 @@ def form(request):
 
 
 
+def vote(request):
+    candidate = []
+    candidate.append({"id":1, "title": "Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。/n\n<br>"*3})
+    candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。<br/>"*3})
+    return render(request, 'fold_demo.html', {'candidate': candidate})
+    # return render(request, 'vote.html')
+
 def card(request):
     u_id = request.session['user_id']  # 获取当前user_id
     votes = []
@@ -108,11 +115,17 @@ def edit_action(request):
         models.Artivle.objects.create(title=title,content=content)
 
     else:
-        article =models.Artivle.objects.get(pk=id)
+        article = models.Artivle.objects.get(pk=id)
         article.title=title
-        article.content=content
+        article.content = content
         article.save()
 
     articles = models.Artivle.objects.all()
     return render(request, 'startvote/index.html', {'artilces': articles})
+
+def fold_demo(request):
+    candidate = []
+    candidate.append({"id":1, "title": "Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。\n"*3})
+    candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*3})
+    return render(request, 'fold_demo.html', {'candidate': candidate})
 

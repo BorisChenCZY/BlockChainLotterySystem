@@ -24,10 +24,12 @@ urlpatterns = [
     re_path(r'^login$', v1.login, name="login"),
     re_path(r'^form$', v1.form, name="form"),
     re_path(r'^card$', v1.card, name="card"),
+    re_path("^vote$", v1.vote, name="vote"),
 
 
     re_path(r'^article/(?P<id>[0-9]+)$', v1.article_page, name="article_page"),
     re_path(r'^edit/(?P<id>[0-9]+)$', v1.edit_page,name='edit_page'),
     re_path(r'^edit/action$', v1.edit_action,name='edit_action'),
-    re_path(r'hello', v1.hello)
+    re_path(r'hello', v1.hello),
+    re_path(r'^fold_demo$', v1.fold_demo, name="fold_demo"),
 ]
