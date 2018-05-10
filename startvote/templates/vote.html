@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 
@@ -11,13 +9,22 @@
 
     <title>Basic Form</title>
 
-    <link rel="stylesheet" type="text/css" href="/static/css/isotope.css" media="screen" />
-    <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/static/css/isotope.css" media="screen"/>
+    <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen"/>
+    <!-- skin -->
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"
+            integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"
+            crossorigin="anonymous"></script>
+    <script src="/static/js/jsrsasign-all-min.js"></script>
+    <script src="/static/js/encryption.js"></script>
     <link rel="stylesheet" href="/static/css/bootstrap.css">
     <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
     <link rel="stylesheet" href="/static/css/style.css">
-    <!-- skin -->
-    <link rel="stylesheet" href="/static/skin/default.css"><script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="/static/skin/default.css">
 
     <!------ Include the above in your HEAD tag ---------->
 
@@ -26,6 +33,7 @@
             color: #fff;
             background: #65B0A7;
         }
+
         html {
             font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
             font-size: 14px;
@@ -48,8 +56,8 @@
             box-shadow: 0 1px 3px 0 #d4d4d5, 0 0 0 1px #d4d4d5;
         }
 
-        .card-null{
-            box-shadow:none;
+        .card-null {
+            box-shadow: none;
         }
 
         .card-block {
@@ -62,8 +70,8 @@
             box-shadow: none;
         }
 
-        .card-block-null{
-            border-top:none;
+        .card-block-null {
+            border-top: none;
         }
 
         .card-img-top {
@@ -71,6 +79,7 @@
             width: 100%;
             height: 50%;
         }
+
         .card-img-top-null {
             display: block;
             width: 90%;
@@ -103,19 +112,19 @@
             background: #fff;
         }
 
-        .unfinish{
+        .unfinish {
             color: red;
         }
 
-        .finished{
+        .finished {
             color: forestgreen;
         }
 
-        .myself{
+        .myself {
             color: cornflowerblue;
         }
 
-        .card-footer-null{
+        .card-footer-null {
             font-size: 1em;
             position: static;
             top: 0;
@@ -130,6 +139,7 @@
         .card-inverse .btn {
             border: 1px solid rgba(0, 0, 0, .05);
         }
+
         .card-inverse .btn-null {
             border: hidden;
         }
@@ -183,21 +193,23 @@
         .meta a:hover {
             color: rgba(0, 0, 0, .87);
         }
-        .btn-null{
+
+        .btn-null {
             background-color: inherit;
         }
 
-        .mycontainer{
+        .mycontainer {
             border-radius: 10px 10px 10px 10px;
             margin-top: 50px;
-            margin-bottom: 20px;
+            margin-bottom: 0px;
             background: #ffffff;
             box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3);
             padding-bottom: 30px;
             padding-left: 90px;
             padding-right: 90px;
         }
-        .form-title-row{
+
+        .form-title-row {
             display: inline-block;
             box-sizing: border-box;
             color: #4c565e;
@@ -206,156 +218,188 @@
             border-bottom: 2px solid #6caee0;
             margin: 0;
         }
-        .myfont{
+
+        .myfont {
             font: 14px/1.5 Arial, Helvetica, sans-serif;
-            font-size: 40px; line-height: 30px;
+            font-size: 40px;
+            line-height: 30px;
             font-weight: 500;
             color: #4c565e;
         }
-        .list-group-item{
+
+        .list-group-item {
             color: #000000;
         }
-        .active{
+
+        .active {
             color: #ffffff;
         }
 
-        .progress{
+        .row {
             margin-top: 20px;
-            height: 40px;
+            margin-bottom: 20px;
+        }
+
+        .progress {
+        {#margin-top: 20px;#} height: 40px;
             line-height: 40px;
+            margin-bottom: 0px;
             position: relative;
         }
 
-        .progress-bar{
-            {#position: relative;#}
-            line-height: 40px;
+        .progress-bar {
+        {#position: relative;#} line-height: 40px;
             font-size: 18px;
             text-align: left;
-            {#padding-left: 15px;#}
+        {#padding-left: 15px;#}
         }
-        .progress span{
+
+        .progress span {
             margin-left: 15px;
             position: absolute;
         }
-        .progress button{
-            float:right;
-            height:100%;
-            width:10%;
+
+        .progress button {
+            float: right;
+            height: 100%;
+            width: 10%;
             text-align: center;
             padding-left: 0px;
             padding-right: 0px;
         }
+
+        .vote_img {
+            max-width: 100px;
+            float: left;
+            margin-right: 3px;
+        }
     </style>
+
 </head>
 
 <body>
 <div class="container">
     <div class="container mycontainer">
 
-        <div class="row" style="padding-left: 40%">
+        <div class="row" style="color: #000;">
             <div class="form-title-row">
-                <a href="{% url 'index' %}" ><h1 class="myfont">BlockVote</h1></a>
+                <a><h1 class="myfont">{{ votename }}</h1></a>
             </div>
+            <div style="margin: 10px"> {{ type }}</div>
+            <div style="margin: 10px"> {{ description }}</div>
         </div>
 
-{#        <div class="w-0 p-3" style="background-color: #eee;">Width 25%</div>#}
-{#        <div class="row">#}
-{#            <div class="progress">#}
-{#                <div class="progress-bar  progress-bar-info" role="progressbar" aria-valuenow="10"#}
-{#                     aria-valuemin="0" aria-valuemax="100" style="width: 20%;">#}
-{#                </div>#}
-{#                <span style="color:#000000; position:relative">A. 张诗奇牛逼</span>#}
-{#            </div>#}
-{#            <button type="button" class="btn btn-info">Info</button>#}
-{#        </div>#}
+        {#        <div class="w-0 p-3" style="background-color: #eee;">Width 25%</div>#}
+        {#        <div class="row">#}
+        {#            <div class="progress">#}
+        {#                <div class="progress-bar  progress-bar-info" role="progressbar" aria-valuenow="10"#}
+        {#                     aria-valuemin="0" aria-valuemax="100" style="width: 20%;">#}
+        {#                </div>#}
+        {#                <span style="color:#000000; position:relative">A. 张诗奇牛逼</span>#}
+        {#            </div>#}
+        {#            <button type="button" class="btn btn-info">Info</button>#}
+        {#        </div>#}
 
-        <div class="row">
-            <div class="progress" style="position: relative;">
-                <span style="color:#000000; position:absolute;">A. 张诗奇牛逼</span>
-                <div class="progress-bar  progress-bar-info" role="progressbar" aria-valuenow="10"
-                     aria-valuemin="0" aria-valuemax="100" style="width: 20%;">
-                </div>
-            <button type="button" class="btn btn-info"> Details</button>
-            </div>
-            <div class="row" style="padding-top: 15px">
-                {%for vote in votes %}
-                    <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-                        <div  class="card card-inverse card-info">
-                            <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
-                            <div class="card-block">
-
-                                <h4 class="card-title">{{ vote.vote_name }}</h4>
-                                <div class="card-text">
-                                    {{ vote.vote_description }}
-                                </div>
-                            </div>
-                            <a href="{% url 'form' %}"><button type="button" class="btn btn-danger btn-lg btn-block">{{ vote.state }}</button></a>
-
+        {% for vote in votes %}
+            <div class="row">
+                <div class="progress" style="position: relative;">
+                    <button type="button" class="btn btn-info" data-toggle="collapse"
+                            data-target="#{{ vote.id }}"> Details
+                    </button>
+                    <div class="progress" onclick="clicked(this)">
+                        <span style="color:#000000; position:absolute;">{{ vote.option }}</span>
+                        <div class="progress-bar  progress-bar-info" role="progressbar" aria-valuenow="10"
+                             aria-valuemin="0" aria-valuemax="100" style="width: 0%;" onclick="clicked()"
+                             id="prog{{ vote.id }}">
                         </div>
                     </div>
-                {% endfor %}
+                </div>
+
+                <div class="panel panel-default collapse" id="{{ vote.id }}">
+                    <div class="panel-collapse collapse in">
+                        <div class="panel-body">
+                            <div class="media">
+                                <img class="align-self-end mr-3 img-thumbnail vote_img" src="{{ vote.img }}" alt="媒体对象">
+                                <div class="media-body">
+                                    {#                                <h4 class="media-heading" style="margin-top: 10px; margin-bottom: 10px">牛逼牛逼</h4>#}
+                                    <pre>{{ vote.content }}</pre>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+
+        <div class="row">
+            <button type="button" class="btn btn-info center-block btn-lg btn-warning"> Submit
+            </button>
         </div>
 
 
-
-{#            空的card 仅仅用于占位#}
-{#            <div class="col-sm-6 col-md-4 col-lg-3 mt-4">#}
-{#                <div class="card card-inverse card-info card-null">#}
-{#                    <img class="card-img-top-null" src="/static/img/null.png">#}
-{#                    <a href="{% url 'form' %}"><i class="fa fa-plus-circle fa-3x invisible" style="color: #65B0A7;margin-left: 40%"></i></a>#}
-{#                    <div class="card-block card-block-null">#}
-{##}
-{#                        <h4 class="card-title">&nbsp</h4>#}
-{#                        <div class="card-text">#}
-{#                            <br/>&nbsp#}
-{#                        </div>#}
-{#                    </div>#}
-{#                    <button type="button" class="btn btn-primary btn-lg btn-block invisible">Sposored by Me</button>#}
-{##}
-{#                </div>#}
-{#            </div>#}
-
-
-
-            {##}
-            {##}
-            {##}
-            {##}
-            {#        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">#}
-            {#            <div class="card card-inverse card-info card-null">#}
-            {#                <img class="card-img-top-null" src="/static/img/null.png">#}
-            {#                <div class="card-block card-block-null">#}
-            {##}
-            {#                    <h4 class="card-title">&nbsp</h4>#}
-            {#                    <div class="card-text">#}
-            {#                        <br/>&nbsp#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#                <div class="card-footer-null">#}
-            {#                    <small>&nbsp</small>#}
-            {#                    <button class="btn btn-info float-right btn-sm btn-null">&nbsp</button>#}
-            {#                </div>#}
-            {#            </div>#}
-            {#        </div>#}
-
-
-
-
+        <div class="row center-block" style="">
+            <p class="center-block">
+                <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button"
+                   aria-expanded="false" aria-controls="multiCollapseExample1">Public Key</a>
+                <button class="btn btn-primary" type="button" data-toggle="collapse"
+                        data-target="#multiCollapseExample2" aria-expanded="false"
+                        aria-controls="multiCollapseExample2">Private Key
+                </button>
+            </p>
+            <div class="col" style="color: #000000">
+                <div class="collapse multi-collapse" id="multiCollapseExample1">
+                    <div class="card card-body">
+                        <span id="pubkey">Generating...</span> <br>
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="color: #000;">
+                <div class="collapse multi-collapse" id="multiCollapseExample2">
+                    <div class="card card-body">
+                        <span id="privkey">Generating...</span>
+                    </div>
+                </div>
+            </div>
         </div>
 
 
     </div>
-    <div >
+    <div>
 
         {#        <a href="{% url 'index' %}">#}
         {#        <button class="btn btn-info float-right btn-sm btn-lg" style="margin-bottom: 20px">#}
         {#                  Back</button></a>#}
-        <a href="{% url 'index' %}"><button  type="button"  class="btn float-right" style="margin-bottom:30px;margin-right:0px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
-            &nbsp&nbspBack&nbsp&nbsp</button></a>
+        <a href="{% url 'index' %}">
+            <button type="button" class="btn float-right"
+                    style="margin-bottom:30px;margin-right:0px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
+                &nbsp&nbspBack&nbsp&nbsp
+            </button>
+        </a>
     </div>
 
 
 </div>
 
 </div>
+
+<script>
+    var pair = generate_pair()
+    $("#pubkey").text(toPKCS8(pair.pubKeyObj))
+    $("#privkey").text(toPCK1(pair.prvKeyObj))
+</script>
+<script>
+    var thisobj;
+    var voteLimit = {{ voteLimit }};
+    var max_id = {{ max_id }}
+        function clicked(obj) {
+            if (voteLimit === 1) {
+                for (var i = 1; i <= max_id; i++) {
+                    $("#prog" + i)[0].style.width = "0%";
+                    {#console.log(i)#}
+                }
+            }
+            obj.children[1].style.width = "100%";
+        }
+</script>
 </body>

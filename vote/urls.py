@@ -30,6 +30,4 @@ urlpatterns = [
     re_path(r'^article/(?P<id>[0-9]+)$', v1.article_page, name="article_page"),
     re_path(r'^edit/(?P<id>[0-9]+)$', v1.edit_page,name='edit_page'),
     re_path(r'^edit/action$', v1.edit_action,name='edit_action'),
-    re_path(r'hello', v1.hello),
-    re_path(r'^fold_demo$', v1.fold_demo, name="fold_demo"),
 ]

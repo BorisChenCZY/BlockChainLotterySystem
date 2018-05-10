@@ -48,9 +48,22 @@ def form(request):
 
 def vote(request):
     candidate = []
-    candidate.append({"id":1, "title": "Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。/n\n<br>"*3})
-    candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。<br/>"*3})
-    return render(request, 'fold_demo.html', {'candidate': candidate})
+    candidate.append({"id":1, "option": "A. Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。\n"*4})
+    candidate.append({"id":2, "option": "B. Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*4})
+    candidate.append({"id":3, "option": "B. Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*4})
+    candidate.append({"id":4, "option": "B. Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*4})
+    votename = "VoteName"
+    voteLimit = 1
+    max_id = len(candidate)
+    t = "单选题"
+    description = "这里是描述"
+    return render(request, 'vote.html', {'votes': candidate
+                                         , "votename": votename
+                                         , "voteLimit":voteLimit
+                                         , "max_id":max_id
+                                         , "type": t
+                                         , "description": description
+                                         ,})
     # return render(request, 'vote.html')
 
 def card(request):
@@ -96,10 +109,4 @@ def edit_action(request):
 
     articles = models.Artivle.objects.all()
     return render(request, 'startvote/index.html', {'artilces': articles})
-
-def fold_demo(request):
-    candidate = []
-    candidate.append({"id":1, "title": "Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。\n"*3})
-    candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*3})
-    return render(request, 'fold_demo.html', {'candidate': candidate})
 
