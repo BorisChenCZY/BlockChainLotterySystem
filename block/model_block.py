@@ -12,7 +12,7 @@ class BlockReader():
         return self.allResult
     
     def getVoteResult(self, target):
-        self._getAll("select selection, selection_text, count(*) from Result where target=? group by selection", (target,))
+        self._getAll("select selection, count(selection) from Result where target=? group by selection", (target,))
         return self.allResult
 
     def getBlock(self, block_id):
@@ -24,7 +24,7 @@ class BlockReader():
         return self.allResult
     
     def getSingleBlockInfo(self, block_id):
-        self._getAll("select v.target,v.pubkey,r.selection_text,v.timestamp from Vote v join Result r on r.vote_id = v.vote_id where v.block_id=?", (block_id,))
+        self._getAll("select v.target,v.pubkey,r.selection,v.timestamp from Vote v join Result r on r.target = v.target where v.block_id=?", (block_id,))
         return self.allResult
     
     def getBlockInfos(self):

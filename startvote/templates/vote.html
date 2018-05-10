@@ -284,10 +284,13 @@
 
         <div class="row" style="color: #000;">
             <div class="form-title-row">
-                <a><h1 class="myfont">{{ votename }}</h1></a>
+                <a><h1 class="myfont">{{ vote.vote_name }}</h1></a>
             </div>
             <div style="margin: 10px"> {{ type }}</div>
-            <div style="margin: 10px"> {{ description }}</div>
+            <div style="margin: 10px"> {{ vote.vote_description }}</div>
+        </div>
+        <div class="row" >
+            <button style="float: right" type="button" class="btn btn-success" data-toggle="collapse" data-target=".candidates">Open All</button>
         </div>
 
         {#        <div class="w-0 p-3" style="background-color: #eee;">Width 25%</div>#}
@@ -301,29 +304,29 @@
         {#            <button type="button" class="btn btn-info">Info</button>#}
         {#        </div>#}
 
-        {% for vote in votes %}
+        {% for c in candidate %}
             <div class="row">
                 <div class="progress" style="position: relative;">
                     <button type="button" class="btn btn-success" data-toggle="collapse"
-                            data-target="#{{ vote.id }}"> Details
+                            data-target="#{{ c.id }}"> Details
                     </button>
                     <div class="progress" onclick="clicked(this)">
-                        <span style="color:#000000; position:absolute;">{{ vote.option }}</span>
+                        <span style="color:#000000; position:absolute;">{{ c.title}} {{ c.voteNum }}票</span>
                         <div class="progress-bar  progress-bar-info" role="progressbar" aria-valuenow="10"
-                             aria-valuemin="0" aria-valuemax="100" style="width: 0%;" onclick="clicked()"
-                             id="prog{{ vote.id }}">
+                             aria-valuemin="0" aria-valuemax="100" style="width: {{ c.width }}%" onclick="clicked(this)"
+                             id="prog{{ c.id }}">
                         </div>
                     </div>
                 </div>
 
-                <div class="panel panel-default collapse" id="{{ vote.id }}">
+                <div class="panel panel-default collapse candidates" id="{{ c.id }}">
                     <div class="panel-collapse collapse in">
                         <div class="panel-body">
                             <div class="media">
-                                <img class="align-self-end mr-3 img-thumbnail vote_img" src="{{ vote.img }}" alt="媒体对象">
+                                <img class="align-self-end mr-3 img-thumbnail vote_img" src="{{ c.img }}" alt="媒体对象">
                                 <div class="media-body">
-                                    {#                                <h4 class="media-heading" style="margin-top: 10px; margin-bottom: 10px">牛逼牛逼</h4>#}
-                                    <pre>{{ vote.content }}</pre>
+                                    <h4 class="media-heading">{{c.simple}}</h4>
+                                    <pre>{{ c.detail }}</pre>
                                 </div>
                             </div>
                         </div>
@@ -383,12 +386,10 @@
 
 </div>
 
-</div>
-
 <script>
-    var pair = generate_pair()
-    $("#pubkey").text(toPKCS8(pair.pubKeyObj))
-    $("#privkey").text(toPCK1(pair.prvKeyObj))
+    var pair = generate_pair();
+    $("#pubkey").text(toPKCS8(pair.pubKeyObj));
+    $("#privkey").text(toPCK1(pair.prvKeyObj));
     init((toPCK1(pair.prvKeyObj)))
 </script>
 <script>
@@ -396,25 +397,29 @@
     var voteLimit = {{ voteLimit }};
     var max_id = {{ max_id }};
     var miner_list = {{ miner_list|safe }};
-    console.log(miner_list)
+    console.log(miner_list);
 
     function clicked(obj) {
         if (voteLimit === 1) {
             for (var i = 1; i <= max_id; i++) {
-                $("#prog" + i)[0].style.width = "0%";
+                {#$("#prog" + i)[0].style.width = "0%";#}
                 {#console.log(i)#}
             }
         }
-        obj.children[1].style.width = "100%";
+        if (obj.children[1].style.width === "100%"){
+            obj.children[1].style.width = "0%";
+        }else {
+            obj.children[1].style.width = "100%";
+        }
     }
 
 
     $("#Submit").on('click', function () {
-        var id;
+        var id = [];
+        var cnt = 0;
         for (var i = 1; i <= max_id; i++) {
             if ($("#prog" + i)[0].style.width === "100%") {
-                id = i;
-                break;
+                id[cnt++] = i;
             }
         }
         console.log(id);
@@ -423,35 +428,37 @@
             return;
         }
 
-        var target = "{{ target }}";
+        var target = "{{ target|safe }}";
         console.log(target);
         {#$(this).button("loading");#}
-        $(this).html("<i class='fa fa-circle-o-notch fa-spin'></i> Submitting...")
+        $(this).html("<i class='fa fa-circle-o-notch fa-spin'></i> Submitting...");
         {#$(this).disable = true;#}
         var d = {
             "target": target,
             "pubkey": toPKCS8(pair.pubKeyObj),
             "prob_num": 1,
             "selection": id,
+            {#"privkey": toPCK1(pair.privkey)//DANGER!!!#}
         };
-        var s_d = JSON.stringify(d);
-        console.log(typeof s_d)
-        console.log(s_d);
-        var s = sign(s_d);
+        {#var s_d = JSON.stringify(d);#}
+        {#console.log(typeof s_d)#}
+        {#console.log(s_d);#}
+        s = 'sign';
         var msg = {
             "data": d,
-            "sign": s,
-        }
+            "sign": s
+        };
         console.log(msg);
         for (var i = 0; i < miner_list.length; i++) {
             var address = miner_list[i];
             console.log(address);
             var socket = io(address);
-
+            console.log("hello");
             socket.emit("Vote", JSON.stringify(msg));
+            console.log("good");
         }
 
-        $(this).html("Done")
+        $(this).html("Done");
     })
 </script>
 </body>

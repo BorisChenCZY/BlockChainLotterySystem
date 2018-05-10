@@ -52,7 +52,7 @@ def login(request):
             if user:
                 auth.login(request,user)
                 request.session['username'] = user.username
-
+                
                 return render(request, 'index.html')
             else:
                 return render(request, "login.html")
@@ -63,6 +63,9 @@ def logout(request):
     return render(request, "login.html")
 
 def form(request):
+    print(request.session['username'])
+    if request.session['username'] != "blockchain":
+        return HttpResponse("No authority")
     # 先检验登录状态
     if request.method == 'GET':
         if request.user.is_authenticated:
@@ -116,49 +119,60 @@ def form(request):
 
 
 
-def vote(request):
-    target = request.GET.get("target")
-    vote = Vote.objects.filter(vote_target=target)
+def vote(request, target):
+    vote = Vote.objects.filter(vote_target=target).get()
     if vote is None:
         return HttpResponse("Wrong vote target!")
-    select = Selection.objects.filter(vote_id=vote.vo)
     br = bm.BlockReader()
     on_chain_result = br.getVoteResult(target)
-    # on_web_list = vote.
     print(vote.vote_name)
-    candidate = list()
-    candidate.append({"id":1, "option": "A. Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。\n"*4})
-    candidate.append({"id":2, "option": "B. Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*4})
-    candidate.append({"id":3, "option": "B. Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*4})
-    candidate.append({"id":4, "option": "B. Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*4})
-    votename = "VoteName"
+    on_web_list = Selection.objects.filter(vote_id=vote)
+    candidate = []
+    for option in on_web_list:
+        id = option.selection_id
+        new_dict = {}
+        new_dict["id"] = option.selection_id
+        new_dict["title"] = option.title
+        new_dict["simple"] = option.simple_detail
+        new_dict["detail"] = option.detail
+        new_dict["img"] = option.img
+        new_dict["voteNum"] = 0
+        candidate.append(new_dict)
+        
+    Max = max([result[1] for result in on_chain_result])
+    for result in on_chain_result:
+        candidate[result[0]-1]["voteNum"] = result[1]
+        candidate[result[0]-1]["width"] = result[1]*80/float(Max)
+    votename = vote.vote_name
     voteLimit = 1
     max_id = len(candidate)
-    t = "单选题"
+    t = "多选题"
     description = "这里是描述"
-    target = "target"
     miner_list = br.getMinerList()
-    return render(request, 'vote.html', {'votes': candidate
-                                         , "votename": votename
+    format_miner_list =[ m[0] for m in miner_list]
+    print(format_miner_list)
+    return render(request, 'vote.html', {'candidate': candidate
+                                         , "vote": vote
                                          , "voteLimit":voteLimit
                                          , "max_id":max_id
                                          , "type": t
                                          , "description": description
                                          , "target": target
-                                         , "miner_list": miner_list})
-    # return render(request, 'vote.html')
+                                         , "miner_list": format_miner_list})
 
 def card(request):
     result_list =[]
     user = auth.get_user(request)
     e = Entry.objects.filter(user_id=user)
     for item in e:
+        vote_condition = {}
         if item.condition:
-            vote_condition = {'condition':'已投', 'vote':item.vote_id }
-            result_list.append(vote_condition)
+            vote_condition["condition"] = "已投"
         else:
-            vote_condition = {'condition': '未投','vote':item.vote_id }
-            result_list.append(vote_condition)
+            vote_condition["condition"] = "未投"
+        vote_condition["vote"] = item.vote_id
+        vote_condition["target"] = item.vote_id.vote_target
+        result_list.append(vote_condition)
     return render_to_response('card.html',{"result_list":result_list})
 # def creat_vote(request):
 

@@ -23,5 +23,5 @@ function toPCK1(key){
 }
 
 function toPKCS8(key){
-	return KEYUTIL.getPEM(key, "PKCS1PUB");
+	return KEYUTIL.getPEM(key);
 }

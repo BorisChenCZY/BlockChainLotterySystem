@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'vote.wsgi.application'
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
 #block database dir
-BLOCK_DATABASE_DIR = os.path.join(BASE_DIR, 'BlockChainVoteSystem/blockdb.sqlite3')
+BLOCK_DATABASE_DIR = os.path.join(BASE_DIR, 'BlockChainVoteSystem/BlockVOTE/test.sqlite')
 
 DATABASES = {
     'default': {

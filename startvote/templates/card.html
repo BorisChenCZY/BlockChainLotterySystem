@@ -235,7 +235,7 @@
                             {{ result.vote.vote_description }}
                         </div>
                     </div>
-                    <a href="{% url 'vote' %}"><button type="button" class="btn btn-danger btn-lg btn-block">
+                    <a href="{% url 'vote' target=result.target %}"><button type="button" class="btn btn-danger btn-lg btn-block">
                         {% if result.vote.vote_state  == 1 %}
                         未开始({{ result.condition }})
                         {% elif result.vote.vote_state  == 2 %}
