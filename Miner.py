@@ -18,6 +18,7 @@ class MinerError(Exception):
 class Miner:
     __chain = None
     __sio = None
+    __cnt = 0
     def __init__(self, chain, t):
         """
         :str chain: the name of the chain
@@ -61,7 +62,12 @@ class Miner:
             vote = "{}:{}".format(data['prob_num'], data['selection'])
 
             voteInfo = VoteInfo(get_timestamp(), target=target.encode("utf-8"), pubkey=key_info, vote=(prob_num, selection), sign = sig.encode("utf-8"))
-            print(bytes(voteInfo))
+            self.__chain.add_vote(voteInfo)
+            self.__cnt += 1
+            if self.__cnt >= 5:
+                self.__cnt = 0
+                self.pack_block()
+
 
             return "OK", 123
 
