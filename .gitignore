@@ -1,2 +1,5 @@
 .idea
 .DS_store
+__pycache__
+venv
+venv1

@@ -3,7 +3,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django import forms
 from django.contrib import sessions
 from . import models
-from .models import User,Vote,Entry
+from .models import User,Vote,Entry,Selection
 from block import block_hashfunc
 import dateutil.parser
 from .models import User,Vote
@@ -98,7 +98,16 @@ def form(request):
 
 
 def vote(request):
-    candidate = []
+    target = request.GET.get("target")
+    vote = Vote.objects.filter(vote_target=target)
+    if vote is None:
+        return HttpResponse("Wrong vote target!")
+    select = Selection.objects.filter(vote_id=vote.vo)
+    br = bm.BlockReader()
+    on_chain_result = br.getVoteResult(target)
+    # on_web_list = vote.
+    print(vote.vote_name)
+    candidate = list()
     candidate.append({"id":1, "option": "A. Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。\n"*4})
     candidate.append({"id":2, "option": "B. Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*4})
     candidate.append({"id":3, "option": "B. Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*4})
@@ -108,8 +117,8 @@ def vote(request):
     max_id = len(candidate)
     t = "单选题"
     description = "这里是描述"
-    target = "target";
-    miner_list = ["localhost:8080"]
+    target = "target"
+    miner_list = br.getMinerList()
     return render(request, 'vote.html', {'votes': candidate
                                          , "votename": votename
                                          , "voteLimit":voteLimit

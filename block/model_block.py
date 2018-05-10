@@ -6,9 +6,13 @@ class BlockReader():
     def __init__(self):
         self.conn = sqlite3.connect(settings.BLOCK_DATABASE_DIR)
         self.cursor = self.conn.cursor()
+
+    def getMinerList (self):
+        self._getAll("select * from miner_list")
+        return self.allResult
     
     def getVoteResult(self, target):
-        self._getAll("select * from Result where target=?", (target,))
+        self._getAll("select selection, selection_text, count(*) from Result where target=? group by selection", (target,))
         return self.allResult
 
     def getBlock(self, block_id):
