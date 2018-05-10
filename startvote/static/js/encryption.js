@@ -4,6 +4,7 @@ var rsaPrivateKey;
 function init(privateKey){
     rsaPrivateKey = new RSAKey();
     rsaPrivateKey.readPrivateKeyFromPEMString(privateKey);
+    console.log("inited");
 }
 
 function sign(msg){
@@ -22,5 +23,5 @@ function toPCK1(key){
 }
 
 function toPKCS8(key){
-	return KEYUTIL.getPEM(key);
+	return KEYUTIL.getPEM(key, "PKCS1PUB");
 }

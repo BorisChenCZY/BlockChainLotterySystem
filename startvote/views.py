@@ -92,13 +92,16 @@ def vote(request):
     max_id = len(candidate)
     t = "单选题"
     description = "这里是描述"
+    target = "target";
+    miner_list = ["localhost:8080"]
     return render(request, 'vote.html', {'votes': candidate
                                          , "votename": votename
                                          , "voteLimit":voteLimit
                                          , "max_id":max_id
                                          , "type": t
                                          , "description": description
-                                         ,})
+                                         , "target": target
+                                         , "miner_list": miner_list})
     # return render(request, 'vote.html')
 
 def card(request):

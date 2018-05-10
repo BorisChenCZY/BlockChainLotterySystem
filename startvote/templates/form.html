@@ -3,20 +3,24 @@
 
 <head>
 
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-{#    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>#}
-{#    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>#}
-{#    <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>#}
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-	<title>Basic Form</title>
+    {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>#}
+    {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>#}
+    {#    <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>#}
 
-	<link rel="stylesheet" href="/static/assets/demo.css">
-	<link rel="stylesheet" href="/static/assets/form-basic.css">
+    <title>Basic Form</title>
+
+    <link rel="stylesheet" href="/static/assets/demo.css">
+    <link rel="stylesheet" href="/static/assets/form-basic.css">
 
     <style type="text/css">
         body {
@@ -26,13 +30,13 @@
             background-size:100% 100%;
         }
     </style>
-{#    <style type="text/css">#}
-{#        myform {#}
-{#            margin:60%;#}
-{#        }#}
-{#    </style>#}
-     <style type="text/css">
-       .entry:not(:first-of-type)
+    {#    <style type="text/css">#}
+    {#        myform {#}
+    {#            margin:60%;#}
+    {#        }#}
+    {#    </style>#}
+    <style type="text/css">
+        .entry:not(:first-of-type)
         {
             margin-top: 10px;
         }
@@ -41,31 +45,33 @@
         {
             font-size: 12px;
         }
+
     </style>
     <script>
-    $(function()
-    {
-        $(document).on('click', '.btn-add', function(e)
-        {
-            e.preventDefault();
 
-            var controlForm = $('.controls form:first'),
-                currentEntry = $(this).parents('.entry:first'),
-                newEntry = $(currentEntry.clone()).appendTo(controlForm);
+        var room = 1;
+        function education_fields() {
 
-            newEntry.find('input').val('');
-            controlForm.find('.entry:not(:last) .btn-add')
-                .removeClass('btn-add').addClass('btn-remove')
-                .removeClass('btn-success').addClass('btn-danger')
-                .html('<span class="glyphicon glyphicon-minus"></span>');
-        }).on('click', '.btn-remove', function(e)
-        {
-		    $(this).parents('.entry:first').remove();
+            room++;
+            var objTo = document.getElementById('education_fields')
+            var divtest = document.createElement("div");
+            divtest.setAttribute("class", "form-group removeclass"+room);
+            var rdiv = 'removeclass'+room;
+            divtest.innerHTML = '<div class="nopadding"><div class="form-group"><div class="input-group" style="padding-left:33.5%;"> ' +
+                ' <input style="width: 150px;"  type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="">' +
+                '<button style="margin: 0 0 0 0;padding: 6.9px 10px;font-weight: 400;" type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapse"'+room+'> Details</button>' +
+               '<button style="margin: 0 0 0 0;padding: 6.9px 10px;background: #d9534f;" class="btn btn-danger" type="button" onclick="remove_education_fields('+ room +');"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> </button></div></div></div></div><div class="clear"></div>'+
+                 '<div style="margin-left: 33.5%;" class="panel panel-default collapse" id="collapse"'+room+'>'+
+                 'div class="panel-body" style="color: black" >'+
+                 'lallalalaa'+
+                 '</div>';
 
-		    e.preventDefault();
-		    return false;
-	    });
-    });
+
+            objTo.appendChild(divtest)
+        }
+        function remove_education_fields(rid) {
+            $('.removeclass'+rid).remove();
+        }
     </script>
 
 
@@ -75,131 +81,167 @@
 
 
 <body>
-{#<div class="card" style="width: 20rem;margin-bottom: 70px">#}
-{#  <div class="card-body">#}
-{#    <h4 class="card-title"></h4>#}
-{#    <p class="card-text">&nbsp</p>#}
-{##}
-{#  </div>#}
-{#</div>#}
-
-    <div style="margin-left: 65%">
-
-        <!-- You only need this form and the form-basic.css -->
-
-        <form class="form-basic" method="post", position = "left", action="{% url 'form' %}">
-            {% csrf_token %}
-
-            <div class="form-title-row">
-                <h1>创建我的投票</h1>
-            </div>
-
-            <div class="form-row">
-                <label>
-                    <span>投票名称</span>
-                    <input type="text" name="vote_name">
-                </label>
-            </div>
-            <div class="form-row">
-                <label>
-                    <span>投票介绍</span>
-                    <textarea name="vote_description"></textarea>
-                </label>
-            </div>
-
-            <div class="form-row">
-                <label>
-                    <span>开始时间</span>
-                    <input type="datetime-local" name="start_time">
-                </label>
-            </div>
-            <div class="form-row">
-                <label>
-                    <span>结束时间</span>
-                    <input type="datetime-local" name="end_time">
-                </label>
-            </div>
-             <div class="form-row">
-                <label><span>投票类型</span></label>
-                <select name="vote_type">
-                        <option>单选</option>
-                        <option>多选</option>
-
-                    </select>
-            </div>
-            <div class="form-row">
-                <label>
-                    <span>投票权限</span>
-                    <select name="is_checkable">
-                        <option>任何人</option>
-                        <option>须权限认证</option>
-
-                    </select>
-                </label>
-            </div>
-
-
-            <div class="form-row">
-                <label><span>是否公开投票结果</span></label>
-                 <select name="is_opened">
-                        <option>yes</option>
-                        <option>no</option>
-                    </select>
-            </div>
-
-            <div class="form-row">
-                <label>
-                    <span>确认无误</span>
-                    <input type="checkbox" name="checkbox" checked>
-                </label>
-            </div>
-
-
-
-            <div class="form-row">
-                <button type="submit">发起投票</button>
-            </div>
-
-
-        </form>
-
-
-
-
-
+<div class="card" style="width: 20rem;margin-bottom: 50px">
+    <div class="card-body">
+        <h4 class="card-title"></h4>
+        <p class="card-text">&nbsp</p>
 
     </div>
-<div style="margin-right: 65%; margin-top: 10%">
-<div class="container">
-	<div class="row">
-        <div class="control-group" id="fields">
-            <label class="control-label" for="field1">Nice Multiple Form Fields</label>
-            <div class="controls">
-                <form role="form" autocomplete="off">
-                    <div class="entry input-group col-xs-3">
-                        <input class="form-control" name="fields[]" type="text" placeholder="Type something" />
-                    	<span class="input-group-btn">
-                            <button class="btn btn-success btn-add" type="button">
-                                <span class="glyphicon glyphicon-plus"></span>
-                            </button>
-                        </span>
+</div>
+
+<div class="main-content">
+
+    <!-- You only need this form and the form-basic.css -->
+
+    <form class="form-basic" method="post", position = "left", action="{% url 'form' %}">
+        {% csrf_token %}
+
+        <div class="form-title-row">
+            <h1>创建投票</h1>
+        </div>
+
+        <div class="form-row">
+            <label>
+                <span>投票名称</span>
+                <input type="text" name="vote_name">
+            </label>
+        </div>
+        <div class="form-row">
+            <label>
+                <span>投票介绍</span>
+                <textarea name="vote_description"></textarea>
+            </label>
+        </div>
+
+        <div class="form-row">
+        <div class="" style="border:0px;">
+            <h6 style="margin-left: 18.5%;margin-top:4.5%;font-size:14px;font-weight: 600;color: #5F5F5F;float: left;">投票选项</h6>
+            <div class="panel-body " style="border:0px;">
+
+
+
+
+                <div class="nopadding">
+                    <div class="form-group" >
+                        <div class="input-group" style="padding-left: 6%;">
+                             <input style="width: 150px;" type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" >
+
+
+{#                            <div style="width: auto; height: 30px"class="input-group-btn">#}
+                                <button style="margin: 0 0 0 0;padding: 6.9px 10px;font-weight: 400;" type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseOne"> Details</button>
+
+                                <button style="margin: 0 0 0 0;padding: 6.9px 10px;  background: lightseagreen" class="btn btn-success" type="button"  onclick="education_fields();"> <span style="padding-bottom: 2px" class="glyphicon glyphicon-plus" aria-hidden="true"></span> </button>
+
+{#                            </div>#}
+                        </div>
+
                     </div>
-                </form>
-            <br>
-            <small>Press <span class="glyphicon glyphicon-plus gs"></span> to add another form field :)</small>
+                </div>
+                <div style="margin-left: 33.5%;" class="panel panel-default collapse" id="collapseOne">
+
+                    <div class="panel-body" style="color: black" >
+                        Nihil anim keffiyeh helvetica, craft beer labore wes anderson
+                        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+                        vice lomo.
+                    </div>
+
+                    {#                 这两行不能删#}
+
+                </div>
+                 <div id="education_fields">
+                </div>
+
             </div>
         </div>
-	</div>
-</div>
- </div>
-<div class="card" style="width: 20rem;margin-top: 300px">
-  <div class="card-body">
-    <h4 class="card-title"></h4>
-    <p class="card-text">&nbsp</p>
 
-  </div>
+        </div>
+
+
+{#        <div class="form-row">#}
+{#            <div class="panel-group" id="accordion">#}
+{#                <div class="panel panel-default">#}
+{#                    <div class="panel-heading">#}
+{#                        <h4 class="panel-title">#}
+
+
+{#                        </h4>#}
+{#                    </div>#}
+
+{#                </div>#}
+
+{#            </div>#}
+
+{#        </div>#}
+
+
+
+
+        <div class="form-row">
+            <label>
+                <span>开始时间</span>
+                <input type="datetime-local" name="start_time">
+            </label>
+        </div>
+        <div class="form-row">
+            <label>
+                <span>结束时间</span>
+                <input type="datetime-local" name="end_time">
+            </label>
+        </div>
+
+        <div class="form-row">
+            <label>
+                <span>投票类型</span>
+                <select name="vote_type" style="margin-top: 12px">
+                    <option>单选</option>
+                    <option>多选</option>
+
+                </select>
+            </label>
+        </div>
+        <div class="form-row">
+            <label>
+                <span>投票权限</span>
+                <select name="is_checkable" style="margin-top: 12px">
+                    <option>任何人</option>
+                    <option>须权限认证</option>
+
+                </select>
+            </label>
+        </div>
+        <div class="form-row">
+            <label>
+                <span>公开结果</span>
+                <select name="is_opened" style="margin-top: 12px">
+                    <option>yes</option>
+                    <option>no</option>
+
+                </select>
+            </label>
+        </div>
+
+
+        <div class="form-row">
+            <button class="button" type="submit">发起投票</button>
+        </div>
+
+
+
+    </form>
+
+</div>
+
+
+
+<div class="card" style="width: 20rem;margin-top: 300px">
+    <div class="card-body">
+        <h4 class="card-title"></h4>
+        <p class="card-text">&nbsp</p>
+
+    </div>
 </div>
 
 </body>
 
 </html>
+
