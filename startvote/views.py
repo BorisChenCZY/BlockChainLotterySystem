@@ -6,9 +6,16 @@ from . import models
 from .models import User,Vote,Entry,Selection
 from block import block_hashfunc
 import dateutil.parser
-from .models import User,Vote
+from .models import Vote
 import block.model_block as bm
 import datetime
+from django.contrib import auth
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
+
+
+# context = {'isLogin': True,'username':''}
 # Create your views here.
 class UserForm(forms.Form):
     username = forms.CharField(label='username',max_length=50)
@@ -33,6 +40,7 @@ def index(request):
     return render(request,'index.html',{'artilces':articles})
 
 def login(request):
+
     if request.method == 'GET':
         return render(request, 'login.html')
     else:
@@ -40,17 +48,28 @@ def login(request):
         if userform.is_valid():
             username = userform.cleaned_data['username']
             password = userform.cleaned_data['password']
-            user = User.objects.filter(username__exact=username, password__exact=password)
+            user = auth.authenticate(username=username, password=password)
+
             if user:
-                request.session['user_id'] = user.first().user_id
-                return HttpResponseRedirect('/card')
+                auth.login(request,user)
+                request.session['username'] = user.username
+
+                return render(request, 'index.html')
             else:
-                return render(request, "login.html", {"msg": u"用户名或密码错误"})
+                return render(request, "login.html")
+#登出
+def logout(request):
+    #清理cookie里保存username
+    auth.logout(request)
+    return render(request, "login.html")
 
 def form(request):
     # 先检验登录状态
     if request.method == 'GET':
-        return render(request, 'form.html')
+        if request.user.is_authenticated:
+            return render(request, 'form.html')
+        else:
+            return render(request, 'login.html')
     else:
         # hash 校验
         if Vote.objects.filter(vote_target=block_hashfunc.hash(str(request.POST.get("vote_name")).encode())):
@@ -88,7 +107,7 @@ def form(request):
             vote_target = block_hashfunc.hash(str(vote.vote_name).encode())
             vote.vote_target = vote_target
             vote.save()
-            entry.user_id = User.objects.filter(user_id=request.session['user_id']).first()
+            entry.user_id = auth.get_user(request)
             entry.vote_id = Vote.objects.get(vote_target=vote_target)
             entry.identity = 2  # 表示发起人
             entry.condition = False
@@ -130,10 +149,11 @@ def vote(request):
     # return render(request, 'vote.html')
 
 def card(request):
-    u_id = request.session['user_id']  # 获取当前user_id
+    user = auth.get_user(request)
     votes = []
-    e = Entry.objects.filter(user_id=u_id)
+    e = Entry.objects.filter(user_id=user)
     for item in e:
+
         votes.append(item.vote_id)
     return render_to_response('card.html',{"votes":votes})
 # def creat_vote(request):
