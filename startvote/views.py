@@ -72,7 +72,9 @@ def form(request):
             return render(request, 'login.html')
     else:
         # hash 校验
-        if Vote.objects.filter(vote_target=block_hashfunc.hash(str(request.POST.get("vote_name")).encode())):
+        d = datetime.datetime.now()
+
+        if Vote.objects.filter(vote_target=block_hashfunc.hash(str(request.POST.get("vote_name")+str(d)).encode())):
             return HttpResponse(" this vote has been exist!")
         else:
             vote = Vote()
@@ -83,7 +85,6 @@ def form(request):
             vote.start_time = request.POST.get("start_time")
             vote.end_time = request.POST.get("end_time")
 
-            d =  datetime.datetime.now()
             if dateutil.parser.parse(request.POST.get("start_time")) > d : # 未开始
                 vote.vote_state = 1
             elif dateutil.parser.parse(request.POST.get("end_time")) > d : # 进行中
@@ -104,7 +105,7 @@ def form(request):
                 vote.vote_type = 1
             else:
                 vote.vote_type = 2
-            vote_target = block_hashfunc.hash(str(vote.vote_name).encode())
+            vote_target = block_hashfunc.hash((str(vote.vote_name)+str(d)).encode())
             vote.vote_target = vote_target
             vote.save()
             entry.user_id = auth.get_user(request)
