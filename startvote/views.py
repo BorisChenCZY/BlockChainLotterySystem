@@ -6,6 +6,7 @@ from . import models
 from .models import User,Vote,Entry
 from block import block_hashfunc
 import datetime
+import dateutil.parser
 # Create your views here.
 class UserForm(forms.Form):
     username = forms.CharField(label='username',max_length=50)
@@ -48,36 +49,48 @@ def form(request):
     if request.method == 'GET':
         return render(request, 'form.html')
     else:
-        vote = Vote()
-        vote.creat_time = datetime.datetime.now()
-        vote.vote_name = request.POST.get("vote_name")
-        vote.vote_description = request.POST.get("vote_description")
-        vote.start_time = request.POST.get("start_time")
-        vote.end_time = request.POST.get("end_time")
-
-        vote.vote_state = 1  # 默认是进行中，实际通过时间计算，need more coding
-
-        if request.POST.get("is_opened") == "yes": # 是否是公开投票
-            vote.is_opened = True
+        # hash 校验
+        if Vote.objects.filter(vote_target=block_hashfunc.hash(str(request.POST.get("vote_name")).encode())):
+            return HttpResponse(" this vote has been exist!")
         else:
-            vote.is_opened = False
-        if request.POST.get("is_checkable") == "须权限认证":  # 是否展示投票结果给参与者
-            vote.is_checkable = True
-        else:
-            vote.is_checkable = False
+            vote = Vote()
+            entry = Entry()
+            vote.creat_time = datetime.datetime.now()
+            vote.vote_name = request.POST.get("vote_name")
+            vote.vote_description = request.POST.get("vote_description")
+            vote.start_time = request.POST.get("start_time")
+            vote.end_time = request.POST.get("end_time")
 
-        if request.POST.get("vote_type") == "单选":
-            vote.vote_type = 1
-        else:
-            vote.vote_type = 2
+            d =  datetime.datetime.now()
+            if dateutil.parser.parse(request.POST.get("start_time")) > d : # 未开始
+                vote.vote_state = 1
+            elif dateutil.parser.parse(request.POST.get("end_time")) > d : # 进行中
+                vote.vote_state = 2
+            else: # 已结束
+                vote.vote_state = 3
 
-        vote.vote_target =block_hashfunc.hash(str(vote.vote_name).encode())
+            if request.POST.get("is_opened") == "yes":  # 是否是公开投票
+                vote.is_opened = True
+            else:
+                vote.is_opened = False
+            if request.POST.get("is_checkable") == "须权限认证":  # 是否展示投票结果给参与者
+                vote.is_checkable = True
+            else:
+                vote.is_checkable = False
 
-        vote.save()
-    # forms.cleaned_data(result)
-    #     print(str(result))
-        return render(request, 'card.html')
-    # request.POST.
+            if request.POST.get("vote_type") == "单选":
+                vote.vote_type = 1
+            else:
+                vote.vote_type = 2
+            vote_target = block_hashfunc.hash(str(vote.vote_name).encode())
+            vote.vote_target = vote_target
+            vote.save()
+            entry.user_id = User.objects.filter(user_id=request.session['user_id']).first()
+            entry.vote_id = Vote.objects.get(vote_target=vote_target)
+            entry.identity = 2  # 表示发起人
+            entry.condition = False
+            entry.save()
+            return render(request, 'card.html')
 
 
 
@@ -116,7 +129,7 @@ def edit_action(request):
 
     else:
         article = models.Artivle.objects.get(pk=id)
-        article.title=title
+        article.title = title
         article.content = content
         article.save()
 
