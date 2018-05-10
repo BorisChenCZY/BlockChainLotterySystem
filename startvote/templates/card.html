@@ -224,24 +224,24 @@
             </div>
     </div>
     <div class="row" style="padding-top: 15px">
-    {%for vote in votes %}
+    {%for result in result_list %}
             <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
                 <div  class="card card-inverse card-info">
                     <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
                     <div class="card-block">
 
-                        <h4 class="card-title">{{ vote.vote_name }}</h4>
+                        <h4 class="card-title">{{ result.vote.vote_name }}</h4>
                         <div class="card-text">
-                            {{ vote.vote_description }}
+                            {{ result.vote.vote_description }}
                         </div>
                     </div>
-                    <a href="{% url 'form' %}"><button type="button" class="btn btn-danger btn-lg btn-block">
-                        {% if vote.vote_state  == 1 %}
-                        进行中
-                        {% elif vote.vote_state  == 2 %}
-                        已结束
+                    <a href="{% url 'vote' %}"><button type="button" class="btn btn-danger btn-lg btn-block">
+                        {% if result.vote.vote_state  == 1 %}
+                        未开始({{ result.condition }})
+                        {% elif result.vote.vote_state  == 2 %}
+                        进行中({{ result.condition }})
                         {% else %}
-                        未开始
+                        已结束({{ result.condition }})
                         {% endif %}
                     </button> </a>
 
@@ -271,21 +271,21 @@
         </div>
 
 {#        空的card 仅仅用于占位#}
-        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
-            <div class="card card-inverse card-info card-null">
-                <img class="card-img-top-null" src="/static/img/null.png">
-                <a href="{% url 'form' %}"><i class="fa fa-plus-circle fa-3x invisible" style="color: #65B0A7;margin-left: 40%"></i></a>
-                <div class="card-block card-block-null">
-
-                    <h4 class="card-title">&nbsp</h4>
-                    <div class="card-text">
-                        <br/>&nbsp
-                    </div>
-                </div>
-                 <button type="button" class="btn btn-primary btn-lg btn-block invisible">Sposored by Me</button>
-
-            </div>
-        </div>
+{#        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">#}
+{#            <div class="card card-inverse card-info card-null">#}
+{#                <img class="card-img-top-null" src="/static/img/null.png">#}
+{#                <a href="{% url 'form' %}"><i class="fa fa-plus-circle fa-3x invisible" style="color: #65B0A7;margin-left: 40%"></i></a>#}
+{#                <div class="card-block card-block-null">#}
+{##}
+{#                    <h4 class="card-title">&nbsp</h4>#}
+{#                    <div class="card-text">#}
+{#                        <br/>&nbsp#}
+{#                    </div>#}
+{#                </div>#}
+{#                 <button type="button" class="btn btn-primary btn-lg btn-block invisible">Sposored by Me</button>#}
+{##}
+{#            </div>#}
+{#        </div>#}
 
 
 
