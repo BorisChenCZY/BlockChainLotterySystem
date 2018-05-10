@@ -1,46 +1,58 @@
-import rsa
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.asymmetric import rsa,padding
+from cryptography.hazmat.primitives.serialization import load_pem_private_key, load_pem_public_key
+from cryptography.hazmat.primitives import hashes
+import binascii
 
-KEY_SIZE = 512
-SIGN_HASH = 'SHA-1'
+PUB_KEY = 0
+PRIV_KEY = 1
 
-def get_keys():
-    """
-    :return: (pubkey, privkey)
-    """
-    return rsa.newkeys(KEY_SIZE)
 
-def sign(message, private):
-    return rsa.sign(message, private, SIGN_HASH)
+class RSAError(Exception):
+    pass
 
-def verify(message, signiture, publickey):
-    return rsa.verify(message, signiture, publickey)
 
-def save(key, filepath):
-    content = key.save_pkcs1()
-    with open(filepath, 'wb') as f:
-        f.write(content)
-
-def load(filepath, type):
-    """
-    :str filepath: the path of loading file
-    :int type: 0 for public key, 1 for priviate key
-    :return: corresponding key to type
-    """
-    with open(filepath, 'rb') as f:
-        content = f.read()
-    if(type == 0):
-        return rsa.PublicKey.load_pkcs1(content)
+def load(content, t):
+    if type(content) != bytes:
+        raise RSAError("content must be bytes")
+    if t == PUB_KEY:
+        key = load_pem_public_key(content, default_backend())
+        if not isinstance(key, rsa.RSAPublicKey):
+            raise RSAError("Type not right.")
+    elif t == PRIV_KEY:
+        key = load_pem_private_key(content, default_backend())
+        if not isinstance(key, rsa.RSAPrivateKey):
+            raise RSAError("Type not right")
     else:
-        return rsa.PrivateKey.load_pkcs1(content)
+        raise RSAError("Type not found")
+
+    return key
+
+def verify(msg, pubkey, sig):
+    if not isinstance(pubkey, rsa.RSAPublicKey):
+        raise RSAError("pubkey must be RSA public key!")
+    pubkey.verify(sig, msg, padding=padding.PSS(mgf=padding.MGF1(hashes.SHA256()), salt_length=0), algorithm=hashes.SHA1())
+    return True
+
+def sign(msg, privkey):
+    if type(msg) is not bytes:
+        raise RSAError("msg must be bytes")
+    if not isinstance(privkey, rsa.RSAPrivateKey):
+        raise RSAError("privkey must be RSA privite key!")
+    # print(isinstance(hashes.SHA1, hashes.HashAlgorithm))
+    return privkey.sign(msg, padding=padding.PSS(mgf=padding.MGF1(hashes.SHA256()), salt_length=0), algorithm=hashes.SHA1())
+
+def get_pair():
+    priv = rsa.generate_private_key(65537, 512, default_backend())
+    pub = priv.public_key()
+    return pub, priv
+
 
 if __name__ == '__main__':
-    # pubkey, privkey = get_keys()
-    # save(pubkey, 'pub.pem')
-    # save(privkey, 'priv.pem')
-    pubkey = load("pub.pem", 0)
-    privkey = load("priv.pem", 1)
-    # print(sign("Hello".encode("utf-8"), privkey))
-    # print(bytes(bytearray.fromhex("0d92b2f4c8a0e1313762e0894cd0e7d907b136baf252eb2964771e83be1367ec8a2df9c9cf730ab418b28d92c6a49c264bfc412df51f1e236cb2f6312cc6e256")))
-    sign = "3b8581f6325adccfbde005d1996b5b866e9ed76b9ecbc24c5fac50e2ef1bf32934e554f4c7917219178628549d824506ab2e30b4308d36d7ada2c5d4fc2053ed"
-    print(verify("hello".encode('utf-8'), bytes(bytearray.fromhex(sign)), pubkey))
+    pub, priv = get_pair()
+    # help(padding)
+    sig = sign("Hello".encode('utf-8'), priv)
+    by = binascii.hexlify(sig)
+    sig = bytes(bytearray.fromhex(by.decode('utf-8')))
+    print(verify("Hello".encode('utf-8'), pub, sig))
 

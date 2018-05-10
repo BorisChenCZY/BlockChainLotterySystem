@@ -38,3 +38,4 @@ def vote(sid, data):
     return "OK", 123
 
 web.run_app(app)
+print("hello world")

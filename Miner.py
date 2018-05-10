@@ -1,7 +1,13 @@
 from Chain import *
 import datetime
 import sqlite3
+import socketserver
+import socketio
+import json
+from aiohttp import web
+from RSA import *
 
+PORT = 3080
 MINOR_DB = "Miner.sqlite"
 MINOR_TABLE_OFF = "Miner"
 VOTES_IN_A_BLOCK = 10
@@ -11,6 +17,7 @@ class MinerError(Exception):
 
 class Miner:
     __chain = None
+    __sio = None
     def __init__(self, chain, t):
         """
         :str chain: the name of the chain
@@ -27,6 +34,50 @@ class Miner:
             self.__load_chain()
         else:
             self.__chain.create()
+
+        self.__sio = socketio.AsyncServer()
+        app = web.Application()
+        self.__sio.attach(app)
+
+
+        @self.__sio.on('connect')
+        def connect(sid, environ):
+            print('connect', sid)
+
+        @self.__sio.on("Vote")
+        def vote(sid, data):
+            d = json.loads(data)
+            data = d["data"]
+
+            sig = d["sign"]
+            key_info = data['pubkey']
+            target = data['target']
+            prob_num = data['prob_num']
+            selection = data['selection']
+
+
+            key_info = key_info.encode("utf-8")
+
+            vote = "{}:{}".format(data['prob_num'], data['selection'])
+            # print(vote)
+
+            # hash = hashlib.sha1()
+            # hash.update(vote.encode('utf-8'))
+            # print(hash.hexdigest())
+            #
+            # pubkey = load(key_info, PUB_KEY)
+            # print(str(data))
+            # sign(str(data).encode('utf-8'), )
+
+
+
+            # print(verify(str(data).encode('utf-8'), pubkey, sig.encode("utf-8")))
+
+            voteInfo = VoteInfo(get_timestamp(), target=target, pubkey=key_info, vote=(prob_num, selection), sign = sig)
+
+            return "OK", 123
+
+        web.run_app(app)
 
     def __load_chain(self):
         # todo load chain
@@ -71,6 +122,11 @@ class Miner:
         self.__chain.add_block(voteBlock)
         return voteBlock
 
+    def get_timestamp(self):
+        #todo zhang
+        pass
+
+
 
 if __name__ == '__main__':
     miner = Miner("test", 0)
@@ -80,5 +136,5 @@ if __name__ == '__main__':
     # miner.add_vote(bytes(voteInfo))
     # voteInfo = VoteInfo(datetime.datetime.now().timestamp(), b'target', b'pubkey', (4, [1]), b'sign')
     # miner.add_vote(bytes(voteInfo))
-    block = miner.pack_block()
+    # block = miner.pack_block()
     # bytes(block)
