@@ -1,4 +1,4 @@
 import hashlib
 
 def hash(info):
-    return hashlib.sha3_512(info).hexdigest()
+    return bytes(hashlib.sha3_256(info).hexdigest().encode("utf-8"))
