@@ -51,6 +51,9 @@ class Miner:
     def check_vote(self, voteInfo):
         pass
 
+    def check_block(self, blockInfo):
+        pass
+
     def pack_block(self):
         lid, lhash, lprehash = self.__chain.get_last_block()
         voteBlock = VoteBlock(lid + 1, lhash.encode("utf-8"))
