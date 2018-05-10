@@ -19,11 +19,15 @@ class BlockReader():
         self._getAll("select * from Block")
         return self.allResult
     
+    def getBlockInfos(self):
+        self._getAll("select id,hash,prehash,count(*),generator from Vote LEFT join Block b on b.id = block_id group by block_id",())
+        return self.allResult
+    
     def _getOne(self, sql, params=()):
         self.cursor.execute(sql, params)
         self.oneResult = self.cursor.fetchone()
 
-    def _getMany (self, size, sql, params=()):
+    def _getMany(self, size, sql, params=()):
         self.cursor.execute(sql, params)
         self.manyResult = self.cursor.fetchmany(size)
         

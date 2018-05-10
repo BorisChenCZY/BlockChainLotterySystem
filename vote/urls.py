@@ -31,4 +31,5 @@ urlpatterns = [
     re_path(r'^edit/action$', v1.edit_action,name='edit_action'),
     re_path(r'hello', v1.hello),
     re_path(r'^fold_demo$', v1.fold_demo, name="fold_demo"),
+    re_path(r'^block_info$', v1.block_info, name="block_info"),
 ]

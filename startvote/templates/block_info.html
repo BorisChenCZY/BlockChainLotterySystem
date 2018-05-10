@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bootstrap Simple Login Form with Blue Background</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style type="text/css">
+    .block_info_card {
+		color: #7a7a7a;
+		border-radius: 3px;
+        background: #fff;
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+        width: 80%;
+        margin: 10% auto auto auto;
+    }
+</style>
+</head>
+{% include "header.html"%}
+<body >
+<div class="block_info_card">
+    <h2 class="text-center">Block Info</h2>
+    <table class="table table-hover">
+		<thead>
+			<tr>
+                {%for t in title %}
+				<th>{{ t }}</th>
+                {% endfor %}
+			</tr>
+		</thead>
+		<tbody>
+         {%for b in blocks %}
+			<tr>
+                {%for v in b %}
+				    <td>{{ v }}</td>
+                {% endfor %}
+			</tr>
+         {% endfor %}
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
