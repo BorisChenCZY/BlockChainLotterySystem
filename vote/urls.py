@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^$', v1.index, name="index"),
     re_path(r'^login$', v1.login, name="login"),
+    re_path(r'^logout$', v1.logout, name="logout"),
     re_path(r'^form$', v1.form, name="form"),
     re_path(r'^card$', v1.card, name="card"),
     re_path(r'^vote$', v1.vote, name="vote"),

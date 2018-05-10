@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib import admin
+from django.contrib.auth.models import User
 
 
 class Artivle(models.Model):
@@ -13,10 +14,10 @@ class Artivle(models.Model):
 
 
 # Create your models here.
-class User(models.Model):
-    user_id = models.IntegerField(primary_key=True)
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
+# class User(models.Model):
+#     user_id = models.IntegerField(primary_key=True)
+#     username = models.CharField(max_length=50)
+#     password = models.CharField(max_length=50)
 
 
 class Vote(models.Model):
@@ -40,7 +41,7 @@ class Vote(models.Model):
 class Entry(models.Model):  # 公钥,投票活动id,将人和投票连接起来,并保持user_id的匿名性
 
     # public_key = models.CharField(max_length=300)  # 不能连接到 user_id,单向性保证了安全性
-    user_id = models.ForeignKey('User',on_delete=models.CASCADE)  # 用户id
+    user_id = models.ForeignKey(User,on_delete=models.CASCADE)  # 用户id
     vote_id = models.ForeignKey('Vote',on_delete=models.CASCADE)  # 外键
     condition = models.BooleanField(default=False)  # 投票状态，状态编码，true：已投 false：未投
     identity = models.IntegerField(default=1)  # 身份，可能是参与者(1)，也可能是发起者对应我参与的，我发起的(2)
@@ -68,7 +69,8 @@ class local_Key_pool(models.Model):  # 公私钥池
     private_key = models.CharField(max_length=300, null=False)
     statue = models.BooleanField(default=False) # 是否被使用 0：未被使用 1： 使用中
 
-admin.site.register(User)
+
+# admin.site.register(User)
 admin.site.register(Vote)
 admin.site.register(Entry)
 admin.site.register(Selection)
