@@ -59,21 +59,9 @@ class Miner:
             key_info = key_info.encode("utf-8")
 
             vote = "{}:{}".format(data['prob_num'], data['selection'])
-            # print(vote)
 
-            # hash = hashlib.sha1()
-            # hash.update(vote.encode('utf-8'))
-            # print(hash.hexdigest())
-            #
-            # pubkey = load(key_info, PUB_KEY)
-            # print(str(data))
-            # sign(str(data).encode('utf-8'), )
-
-
-
-            # print(verify(str(data).encode('utf-8'), pubkey, sig.encode("utf-8")))
-
-            voteInfo = VoteInfo(get_timestamp(), target=target, pubkey=key_info, vote=(prob_num, selection), sign = sig)
+            voteInfo = VoteInfo(get_timestamp(), target=target.encode("utf-8"), pubkey=key_info, vote=(prob_num, selection), sign = sig.encode("utf-8"))
+            print(bytes(voteInfo))
 
             return "OK", 123
 
