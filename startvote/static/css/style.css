@@ -410,6 +410,18 @@ h1 a.navbar-brand {
 	text-shadow: none;
 }
 
+@media (max-width: 767px) {
+
+
+	h1 a.navbar-brand {
+		font-size: 22px;
+		color: #fff;
+		font-weight: 900;
+		text-shadow: none;
+		margin-left: 5%;
+	}
+}
+
 .navbar-brand {
 	padding: 0;
 	display: table-cell;
@@ -447,6 +459,14 @@ section.featured h2.slogan {
 	color: #fff;
 	font-size: 48px;
 	font-weight: 900;
+}
+@media (max-width: 767px) {
+	section.featured {
+	padding: 200px 0 150px;
+	background: #70B9B0;
+	color: #fdfdfd;
+
+}
 }
   
  /* inner heading */
@@ -613,6 +633,16 @@ About
 	-webkit-border-radius:50%;
 		-moz-border-radius:50%;
 			border-radius:50%;	
+}
+@media (max-width: 767px) {
+
+
+	.member-photo img {
+    width : 60%;
+	-webkit-border-radius:50%;
+		-moz-border-radius:50%;
+			border-radius:50%;
+}
 }
 
 .team-detail h4 {
@@ -1079,7 +1109,8 @@ Media queries
 @media (max-width: 767px) {
 
 	.navbar.navbar-fixed-top {
-		background-color:rgba(0,0,0,1);
+		background-color:rgba(0,0,0,0.3);
+		height: 80px;
 	}
 	.navbar .navbar-collapse ul.nav {
 		background-color: #444;
@@ -1094,6 +1125,7 @@ Media queries
 	section.featured {
 		padding-top: 80px;
 	}
+
 	
 	.team-member,.col-lg-4 {
 		margin-bottom: 30px;

@@ -68,8 +68,19 @@
 	}
 </style>
 </head>
+<style>
+    .adjustsize {
+		top:20%;left:37.5%;
+	}
+    @media (max-width: 767px) {
+
+	.adjustsize {
+		top:10%;left:1%;
+	}
+    }
+</style>
 <body >
-<div class="login-form" style="top:20%;left:37.5%;position: absolute;">
+<div class="login-form adjustsize" style="position: absolute;">
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
         <h2 class="text-center">Login</h2>

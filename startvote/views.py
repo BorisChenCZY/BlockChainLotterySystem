@@ -63,9 +63,9 @@ def logout(request):
     return render(request, "login.html")
 
 def form(request):
-    print(request.session['username'])
-    if request.session['username'] != "blockchain":
-        return HttpResponse("No authority")
+   # print(request.session['username'])
+    # if request.session['username'] != "blockchain":
+    #     return HttpResponse("No authority")
     # 先检验登录状态
     if request.method == 'GET':
         if request.user.is_authenticated:
