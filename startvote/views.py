@@ -56,7 +56,11 @@ def login(request):
                 return render(request, 'index.html')
             else:
                 return render(request, "login.html")
-#登出
+
+#注册
+def signup(request):
+    return render(request, 'signup.html')
+
 def logout(request):
     #清理cookie里保存username
     auth.logout(request)

@@ -44,13 +44,15 @@
       </div>
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav" data-0="margin-top:20px;" data-300="margin-top:5px;">
-            <li><a href="{% url 'block_info' %}">block_info</a></li>
-            <li><a href="{% url 'fold_demo' %}">fold_demo</a></li>
+
+{#            <li><a href="{% url 'fold_demo' %}">fold_demo</a></li>#}
             <li class="active"><a href="#header">Home</a></li>
             <li><a href="#section-about">About</a></li>
+            <li><a href="{% url 'block_info' %}">block_info</a></li>
 
              {% if request.user.is_authenticated %}
-                 <li><a href="{% url 'card' %}">Hello! {{ request.user.username }}&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>
+{#                 <li><a href="{% url 'card' %}">Hello! {{ request.user.username }}&nbsp&nbsp</a></li>#}
+                 <li><a href="{% url 'card' %}">My Votes</a></li>
                  <li><a href="{% url 'logout' %}">Log out&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>
              {% else %}
                  <li><a href="{% url 'login' %}">Sign in&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>

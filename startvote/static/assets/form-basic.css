@@ -14,6 +14,11 @@ html{
     font: bold 14px sans-serif;
     text-align: center;
 }
+ @media (max-width: 767px) {
+            .form-basic{
+                width: 340px;
+            }
+        }
 
 .form-basic .form-row{
     text-align: left;
@@ -72,7 +77,7 @@ html{
     box-sizing: border-box;
     max-width: 240px;
     box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
-    padding: 12px 8px;
+    /*padding: 12px 8px;*/
     border: 1px solid #dbdbdb;
 }
 
@@ -116,7 +121,7 @@ html{
     box-shadow: 1px 2px 4px 0 rgba(0, 0, 0, 0.08);
     padding: 14px 22px;
     border: 0;
-    margin: 40px 183px 0;
+    margin: 5% 40% 0;
 }
 
 /*	Making the form responsive. Remove this media query
@@ -126,6 +131,7 @@ html{
 
     .form-basic{
         padding: 30px;
+        padding-left: 50px;
         max-width: 480px;
     }
 
@@ -146,6 +152,7 @@ html{
     }
 
     .form-basic select{
+        padding:0 0 2px 0 ;
         width: 240px;
     }
 
@@ -158,7 +165,11 @@ html{
     }
 
     .form-basic button{
-        margin: 0;
+        margin: 5% 30% 0;
     }
+    .form-basic .form-row > label span{
+    padding:0 0 0 0 ;
+}
+
 
 }

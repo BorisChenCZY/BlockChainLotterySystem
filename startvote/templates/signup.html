@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Login BlockVote</title>
+<title>Signup BlockVote</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -75,7 +75,7 @@
     @media (max-width: 767px) {
 
 	.adjustsize {
-		top:10%;left:1%;
+		top:3%;left:1%;
 	}
     }
 </style>
@@ -83,21 +83,27 @@
 <div class="login-form adjustsize" style="position: absolute;">
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
-        <h2 class="text-center">Login</h2>
+        <h2 class="text-center">Sign up</h2>
         <div class="form-group has-error">
         	<input type="text" class="form-control" name="username" placeholder="Username" required="required">
+        </div>
+        <div class="form-group has-error">
+        	<input type="text" class="form-control" name="email" placeholder="Email" required="required">
         </div>
 		<div class="form-group">
             <input type="password" class="form-control" name="password" placeholder="Password" required="required">
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary btn-lg btn-block">Sign in</button>
+            <input type="password" class="form-control" name="password2" placeholder="Password Confirm" required="required">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Create an Account</button>
         </div>
 {#        <div class="error btns login-form-tips" id="jsLoginTips">{{ msg }}#}
 {#        </div> #}
 {#        <p><a href="{% url 'index' %}">Lost your Password?</a></p>#}
     </form>
-    <p class="text-center small">Don't have an account? <a href="{% url 'signup' %}">Sign up here!</a></p>
+    <p class="text-center small">Already have an account? <a href="{% url 'login' %}">Login here!</a></p>
 </div>
 </body>
 </html>

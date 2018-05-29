@@ -10,8 +10,8 @@
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>#}
     {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>#}
@@ -29,6 +29,7 @@
             height: 100%;
             background-size:100% 100%;
         }
+
     </style>
     {#    <style type="text/css">#}
     {#        myform {#}
@@ -45,6 +46,19 @@
         {
             font-size: 12px;
         }
+        .nomarginb{
+            margin-bottom: 0px;
+        }
+
+        .adjust{
+            margin-left:4px;
+
+        }
+        @media (max-width: 767px) {
+            .adjust{
+                margin-left: 0px;
+            }
+        }
 
     </style>
     <script>
@@ -55,17 +69,29 @@
             room++;
             var objTo = document.getElementById('education_fields')
             var divtest = document.createElement("div");
-            divtest.setAttribute("class", "form-group removeclass"+room);
+            divtest.setAttribute("class", "form-group nomarginb removeclass"+room);
             var rdiv = 'removeclass'+room;
-            divtest.innerHTML = '<div class="nopadding"><div class="form-group"><div class="input-group" style="padding-left:33.5%;"> ' +
-                ' <input style="width: 150px;"  type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="">' +
-                '<button style="margin: 0 0 0 0;padding: 6.9px 10px;font-weight: 400;" type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapse"'+room+'> Details</button>' +
-               '<button style="margin: 0 0 0 0;padding: 6.9px 10px;background: #d9534f;" class="btn btn-danger" type="button" onclick="remove_education_fields('+ room +');"> <span class="glyphicon glyphicon-minus" aria-hidden="true"></span> </button></div></div></div></div><div class="clear"></div>'+
-                 '<div style="margin-left: 33.5%;" class="panel panel-default collapse" id="collapse"'+room+'>'+
-                 'div class="panel-body" style="color: black" >'+
-                 'lallalalaa'+
-                 '</div>';
 
+
+             divtest.innerHTML =
+                 '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
+                '                    <div class="form-group" >\n' +
+                '                        <div class="input-group" >\n' +
+                '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" >\n' +
+                '\n' +
+                '                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapse'+room+'"> Details</button>\n' +
+                '\n' +
+                '                            <button style="margin: 0 0 0 0;padding: 0 0 0 0;display:inline-block;background: #d9534f;" class="btn btn-danger" type="button"  onclick="remove_education_fields('+room+');"> <span style="width: auto;padding:  11px 8px 11px 8px;" class="glyphicon glyphicon-minus" aria-hidden="true"></span> </button>\n' +
+                '\n' +
+                '                        </div>\n' +
+                '\n' +
+                '                    </div>' +
+                '                    <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapse'+room+'">' +
+                '\n' +'<textarea name="vote_description"></textarea>'
+                '\n' +
+                '\n' +
+                '                    </div>\n' +
+                '                </div>';
 
             objTo.appendChild(divtest)
         }
@@ -81,12 +107,8 @@
 
 
 <body>
-<div class="card" style="width: 20rem;margin-bottom: 50px">
-    <div class="card-body">
-        <h4 class="card-title"></h4>
-        <p class="card-text">&nbsp</p>
+<div class="card adjust3" style="width: 20rem;">
 
-    </div>
 </div>
 
 <div class="main-content">
@@ -114,64 +136,41 @@
         </div>
 
         <div class="form-row">
-        <div class="" style="border:0px;">
-            <h6 style="margin-left: 18.5%;margin-top:4.5%;font-size:14px;font-weight: 600;color: #5F5F5F;float: left;">投票选项</h6>
-            <div class="panel-body " style="border:0px;">
+            <label>
+                <span >投票选项</span>
 
 
-
-
-                <div class="nopadding">
+                <div class="nopadding"style="width: 240px;display: inline-block">
                     <div class="form-group" >
-                        <div class="input-group" style="padding-left: 6%;">
-                             <input style="width: 150px;" type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" >
+                        <div class="input-group" >
+                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" >
 
+                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne"> Details</button>
 
-{#                            <div style="width: auto; height: 30px"class="input-group-btn">#}
-                                <button style="margin: 0 0 0 0;padding: 6.9px 10px;font-weight: 400;" type="button" class="btn btn-success" data-toggle="collapse" data-target="#collapseOne"> Details</button>
+                            <button style="margin: 0 0 0 0;padding: 0 0 0 0;display:inline-block;background: lightseagreen" class="btn btn-primary" type="button"  onclick="education_fields();"> <span style="width: auto;padding:  11px 8px 11px 8px;" class="glyphicon glyphicon-plus" aria-hidden="true"></span> </button>
 
-                                <button style="margin: 0 0 0 0;padding: 6.9px 10px;  background: lightseagreen" class="btn btn-success" type="button"  onclick="education_fields();"> <span style="padding-bottom: 2px" class="glyphicon glyphicon-plus" aria-hidden="true"></span> </button>
-
-{#                            </div>#}
                         </div>
 
                     </div>
-                </div>
-                <div style="margin-left: 33.5%;" class="panel panel-default collapse" id="collapseOne">
+                    <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapseOne">
 
-                    <div class="panel-body" style="color: black" >
-                        Nihil anim keffiyeh helvetica, craft beer labore wes anderson
-                        cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
-                        vice lomo.
+{#                        <div class="panel-body" style="color: black" >#}
+                            <textarea name="vote_description"></textarea>
+
+{#                        </div>#}
+
+
                     </div>
-
-                    {#                 这两行不能删#}
-
-                </div>
-                 <div id="education_fields">
                 </div>
 
-            </div>
-        </div>
+                <div id="education_fields"></div>
+
+            </label>
 
         </div>
 
 
-{#        <div class="form-row">#}
-{#            <div class="panel-group" id="accordion">#}
-{#                <div class="panel panel-default">#}
-{#                    <div class="panel-heading">#}
-{#                        <h4 class="panel-title">#}
 
-
-{#                        </h4>#}
-{#                    </div>#}
-
-{#                </div>#}
-
-{#            </div>#}
-
-{#        </div>#}
 
 
 
@@ -192,7 +191,7 @@
         <div class="form-row">
             <label>
                 <span>投票类型</span>
-                <select name="vote_type" style="margin-top: 12px">
+                <select name="vote_type" class="adjust2">
                     <option>单选</option>
                     <option>多选</option>
 
@@ -202,7 +201,7 @@
         <div class="form-row">
             <label>
                 <span>投票权限</span>
-                <select name="is_checkable" style="margin-top: 12px">
+                <select name="is_checkable"class="adjust2" >
                     <option>任何人</option>
                     <option>须权限认证</option>
 
@@ -212,7 +211,7 @@
         <div class="form-row">
             <label>
                 <span>公开结果</span>
-                <select name="is_opened" style="margin-top: 12px">
+                <select name="is_opened" class="adjust2">
                     <option>yes</option>
                     <option>no</option>
 
@@ -233,15 +232,31 @@
 
 
 
-<div class="card" style="width: 20rem;margin-top: 300px">
-    <div class="card-body">
-        <h4 class="card-title"></h4>
-        <p class="card-text">&nbsp</p>
-
-    </div>
 </div>
 
 </body>
 
 </html>
 
+<style>
+    .adjust2{
+        margin-top: 12px;
+    }
+     @media (max-width: 767px) {
+            .adjust2{
+                margin-top: 2px;
+            }
+        }
+    .adjust3{
+        margin-bottom: 50px
+    }
+     @media (max-width: 767px) {
+            .adjust3{
+                margin-bottom: 30px
+            }
+        }
+
+
+
+
+</style>
