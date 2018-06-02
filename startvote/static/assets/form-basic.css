@@ -167,6 +167,11 @@ html{
     .form-basic button{
         margin: 5% 30% 0;
     }
+
+    .form-basic h1{
+        margin-right: 9%;
+    }
+
     .form-basic .form-row > label span{
     padding:0 0 0 0 ;
 }
