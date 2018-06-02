@@ -69,11 +69,11 @@
         .card-img-top {
             display: block;
             width: 100%;
-            height: 50%;
+            height: 100%;
         }
         .card-img-top-null {
-            display: block;
-            width: 90%;
+            height: 100%;
+            width: auto;
         }
 
         .card-title {
@@ -88,7 +88,11 @@
             margin-top: .5em;
             color: rgba(0, 0, 0, .68);
             height: 70px;
-            overflow: scroll;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+        .card-text::-webkit-scrollbar{
+            display: none;
         }
 
         .card-footer {
@@ -212,22 +216,74 @@
             font-weight: 500;
             color: #4c565e;
         }
-    </style>
+        .cover{
+            height: 170px;
+        }
+
+    .adjustsize {
+		padding-left: 40%;
+	}
+    .adjustsize2{
+        margin-left: 40%;
+    }
+
+    @media (max-width: 767px) {
+
+	.adjustsize {
+		padding-left: 30%;
+	}
+        .myfont{
+            font-size: 34px;
+        }
+        .card{
+            margin-top: 10px;
+        }
+        .mycontainer{
+            margin-top: 20px;
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+        .col-lg-3{
+            width: 50%;
+            padding-right: 7px;
+            padding-left: 7px;
+        }
+        .card-title {
+            font-size: 0.85em;
+            margin-bottom: 0px;
+        }
+        .card-text {
+            font-size: 0.5em;
+            margin-top: 0em;
+            height: 40px;
+        }
+        .cover {
+            height: 100px;
+        }
+        .adjustsize2{
+        margin-left: 35%;
+    }
+
+
+    }
+</style>
 </head>
 
 <body>
 <div class="container">
 <div class="container mycontainer">
-    <div class="row" style="padding-left: 40%">
+    <div class="row adjustsize" >
         <div class="form-title-row">
                 <a href="{% url 'index' %}" ><h1 class="myfont">BlockVote</h1></a>
             </div>
     </div>
     <div class="row" style="padding-top: 15px">
     {%for result in result_list %}
-            <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+            <div class="col-sm-6 col-md-4 col-lg-3 mt-4" style="float: left">
                 <div  class="card card-inverse card-info">
-                    <img class="card-img-top" src="http://success-at-work.com/wp-content/uploads/2015/04/free-stock-photos.gif">
+                <div class="cover">
+                    <img class="card-img-top" src="/static/img/2.png" onerror="this.src='/static/img/2.png'">
+                    </div>
                     <div class="card-block">
 
                         <h4 class="card-title">{{ result.vote.vote_name }}</h4>
@@ -235,14 +291,17 @@
                             {{ result.vote.vote_description }}
                         </div>
                     </div>
-                    <a href="{% url 'vote' target=result.target %}"><button type="button" class="btn btn-danger btn-lg btn-block">
-                        {% if result.vote.vote_state  == 1 %}
-                        未开始({{ result.condition }})
+                    {% if result.vote.vote_state  == 1 %}
+                        <a href="{% url 'vote' target=result.target %}"><button type="button" class="btn btn-danger btn-lg btn-block">
+                    未开始({{ result.condition }})
                         {% elif result.vote.vote_state  == 2 %}
-                        进行中({{ result.condition }})
+                        <a href="{% url 'vote' target=result.target %}"><button type="button" class="btn btn-success btn-lg btn-block">
+                    进行中({{ result.condition }})
                         {% else %}
-                        已结束({{ result.condition }})
+                        <a href="{% url 'vote' target=result.target %}"><button type="button" class="btn btn-primary btn-lg btn-block">
+                    已结束({{ result.condition }})
                         {% endif %}
+
                     </button> </a>
 
                 </div>
@@ -251,14 +310,16 @@
 
 
 
-
 {#        加号#}
 
-        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">
+        <div class="col-sm-6 col-md-4 col-lg-3 mt-4" style="float: left">
             <div class="card card-inverse card-info ">
+                <div class="cover">
                 <img class="card-img-top-null" src="/static/img/null.png">
-                <a href="{% url 'form' %}"><i class="fa fa-plus-circle fa-3x " style="color: #65B0A7;margin-left: 40%"></i></a>
-                <div class="card-block card-block-null">
+               <a  href="{% url 'form' %}"><i class="fa fa-plus-circle fa-3x adjustsize2" style="color: #65B0A7;margin-top: -8%"></i></a>
+                </div>
+
+                    <div class="card-block card-block-null">
 
                     <h4 class="card-title">&nbsp</h4>
                     <div class="card-text">
