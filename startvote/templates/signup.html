@@ -75,15 +75,18 @@
     @media (max-width: 767px) {
 
 	.adjustsize {
-		top:3%;left:1%;
+		top:3%;left:5%;
 	}
+        .login-form{
+            width:90%;
+        }
     }
 </style>
 <body >
 <div class="login-form adjustsize" style="position: absolute;">
     <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
-        <h2 class="text-center">Sign up</h2>
+        <h2 class="text-center">Sign Up</h2>
         <div class="form-group has-error">
         	<input type="text" class="form-control" name="username" placeholder="Username" required="required">
         </div>
