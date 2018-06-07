@@ -129,7 +129,7 @@ def vote(request, target):
         return HttpResponse("Wrong vote target!")
     br = bm.BlockReader()
     on_chain_result = br.getVoteResult(target)
-    print(vote.vote_name)
+    # print(vote.vote_name)
     on_web_list = Selection.objects.filter(vote_id=vote)
     candidate = []
     for option in on_web_list:
@@ -142,8 +142,10 @@ def vote(request, target):
         new_dict["img"] = option.img
         new_dict["voteNum"] = 0
         candidate.append(new_dict)
-        
-    Max = max([result[1] for result in on_chain_result])
+    if not on_chain_result:
+        Max = 0
+    else:
+        Max = max([result[1] for result in on_chain_result])
     for result in on_chain_result:
         candidate[result[0]-1]["voteNum"] = result[1]
         candidate[result[0]-1]["width"] = result[1]*80/float(Max)
@@ -234,6 +236,7 @@ def block_info(request):
     blocks = br.getBlockInfos()
     title = ["Id","hash","prehash","vote_num","generator"]
     format_blocks = []
+    print(blocks[0])
     for b in blocks:
         b = list(b)
         b[1] = b[1][:32]   #截取哈希的前32位
