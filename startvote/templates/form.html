@@ -77,7 +77,7 @@
                  '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
                 '                    <div class="form-group" >\n' +
                 '                        <div class="input-group" >\n' +
-                '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" >\n' +
+                '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >\n' +
                 '\n' +
                 '                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapse'+room+'"> Details</button>\n' +
                 '\n' +
@@ -87,8 +87,8 @@
                 '\n' +
                 '                    </div>' +
                 '                    <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapse'+room+'">' +
-                '\n' +'<textarea name="vote_description"></textarea>' +
-                 ' <input id="input-b2" style="padding: 5px;font-weight: 300;" name="input-b2" type="file" class="file" data-show-preview="false" >\n'
+                '\n' +'<textarea name="vote_details"></textarea>' +
+                 ' <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >\n'
                 '\n' +
                 '\n' +
                 '                    </div>\n' +
@@ -116,7 +116,7 @@
 
     <!-- You only need this form and the form-basic.css -->
 
-    <form class="form-basic" method="post", position = "left", action="{% url 'form' %}">
+    <form class="form-basic" method="post", position = "left", action="{% url 'form' %}"enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="form-title-row">
@@ -141,26 +141,26 @@
                 <span >投票选项</span>
 
 
-                <div class="nopadding"style="width: 240px;display: inline-block">
+                <div class="nopadding" style="width: 240px;display: inline-block">
                     <div class="form-group" >
                         <div class="input-group" >
-                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" >
+                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >
 
-                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne"> Details</button>
+                            <button name="detail" style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne"> Details</button>
 
-                            <button style="margin: 0 0 0 0;padding: 0 0 0 0;display:inline-block;background: lightseagreen" class="btn btn-primary" type="button"  onclick="education_fields();"> <span style="width: auto;padding:  11px 8px 11px 8px;" class="glyphicon glyphicon-plus" aria-hidden="true"></span> </button>
+                            <button name="add" style="margin: 0 0 0 0;padding: 0 0 0 0;display:inline-block;background: lightseagreen" class="btn btn-primary" type="button"  onclick="education_fields();"> <span style="width: auto;padding:  11px 8px 11px 8px;" class="glyphicon glyphicon-plus" aria-hidden="true"></span> </button>
 
                         </div>
 
                     </div>
                     <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapseOne">
 
-{#                        <div class="panel-body" style="color: black" >#}
-                            <textarea name="vote_description"></textarea>
-                        <input id="input-b2" style="padding: 5px;font-weight: 300;" name="input-b2" type="file" class="file" data-show-preview="false" >
+                        <div class="panel-body" style="color: black" >
+                            <textarea name="vote_details"></textarea>
+                        <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >
 
 
-{#                        </div>#}
+                        </div>
 
 
                     </div>

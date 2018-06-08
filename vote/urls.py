@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
-
+from django.conf.urls.static import static
+from django.conf import settings
 import startvote.views as v1
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -37,4 +39,4 @@ urlpatterns = [
     re_path(r'^fold_demo$', v1.fold_demo, name="fold_demo"),
     re_path(r'^block_info$', v1.block_info, name="block_info"),
     re_path(r'^single_block_info$', v1.single_block_info, name="single_block_info"),
-]
+]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
