@@ -23,13 +23,17 @@ class MyTCPHandler(BRH):
         while 1:
             try:
                 data = self.request.recv(1024).strip()
-                print(data)
             except:
                 self.request.close()
+
+
             if not data:
                 break
             if data not in DATA:
+                print("receive", data)
                 DATA.add(data)
+                print("src", self.request.getpeername())
+                print("dst",self.request.getsockname())
                 SocketUtil.broadcast(data, config.CONNECTION_LIST)
 
 
