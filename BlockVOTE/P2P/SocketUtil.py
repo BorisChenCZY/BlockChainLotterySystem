@@ -69,13 +69,7 @@ class SocketUtil(object):
         if type(msg) != bytes:
             raise exception.FormatException
         for addr in connection_list:
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            try:
-                sock.connect(addr)
-                sock.sendall(msg)
-            except:
-                sock.close()
-            sock.close()
+            SocketUtil.send(msg,addr)
 
 
 
