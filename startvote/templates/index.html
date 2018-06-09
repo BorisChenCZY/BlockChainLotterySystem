@@ -7,124 +7,129 @@
 <!--<![endif]-->
 
 <head>
-  <!-- BASICS -->
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Amoeba free one page responsive bootstrap site template</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="/static/css/isotope.css" media="screen" />
-  <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
-  <link rel="stylesheet" href="/static/css/bootstrap.css">
-  <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
-  <link rel="stylesheet" href="/static/css/style.css">
-  <!-- skin -->
-  <link rel="stylesheet" href="/static/skin/default.css">
+    <!-- BASICS -->
+    <meta charset="utf-8">
+{#    以下三行用于禁止缓存#}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>BlockVote</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/isotope.css" media="screen" />
+    <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- skin -->
+    <link rel="stylesheet" href="/static/skin/default.css">
     <style type="text/css">
-    body {font-family:Arial;}
+        body {font-family:Arial;}
     </style>
-  <!-- =======================================================
-    Theme Name: Amoeba
-    Theme URL: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/
-    Author: BootstrapMade
-    Author URL: https://bootstrapmade.com
-  ======================================================= -->
+    <!-- =======================================================
+      Theme Name: Amoeba
+      Theme URL: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/
+      Author: BootstrapMade
+      Author URL: https://bootstrapmade.com
+    ======================================================= -->
 </head>
 
 <body>
-  <section id="header" class="appear"></section>
-  <div class="navbar navbar-fixed-top" role="navigation" style="background-color:rgba(0,0,0,0.3);" data-0="line-height:100px; height:100px; background-color:rgba(0,0,0,0.3);" data-300="line-height:60px; height:60px; background-color:rgba(0,0,0,0.3);">
+<section id="header" class="appear"></section>
+<div class="navbar navbar-fixed-top" role="navigation" style="background-color:rgba(0,0,0,0.3);" data-0="line-height:100px; height:100px; background-color:rgba(0,0,0,0.3);" data-300="line-height:60px; height:60px; background-color:rgba(0,0,0,0.3);">
     <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="fa fa-bars color-white"></span>
-					</button>
-        <h1><a class="navbar-brand" href="" data-0="line-height:90px;" data-300="line-height:50px;">			BlockVote
-					</a></h1>
-      </div>
-      <div class="navbar-collapse collapse">
-        <ul class="nav navbar-nav" data-0="margin-top:20px;" data-300="margin-top:5px;">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="fa fa-bars color-white"></span>
+            </button>
+            <h1><a class="navbar-brand" href="{% url 'index' %}" data-0="line-height:90px;" data-300="line-height:50px;">			BlockVote
+            </a></h1>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav" data-0="margin-top:20px;" data-300="margin-top:5px;">
 
-{#            <li><a href="{% url 'fold_demo' %}">fold_demo</a></li>#}
-            <li class="active"><a href="#header">Home</a></li>
-            <li><a href="#section-about">About</a></li>
-            <li><a href="{% url 'block_info' %}">block_info</a></li>
+                {#            <li><a href="{% url 'fold_demo' %}">fold_demo</a></li>#}
+                <li class="active"><a href="#header">Home</a></li>
+                <li><a href="#section-services">About</a></li>
+                <li><a href="{% url 'block_info' %}">block_info</a></li>
 
-             {% if request.user.is_authenticated %}
-{#                 <li><a href="{% url 'card' %}">Hello! {{ request.user.username }}&nbsp&nbsp</a></li>#}
-                 <li><a href="{% url 'card' %}">My Votes</a></li>
-                 <li><a href="{% url 'logout' %}">Log out&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>
-             {% else %}
-                 <li><a href="{% url 'login' %}">Sign in&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>
-             {% endif %}
+                {% if request.user.is_authenticated %}
+                    {#                 <li><a href="{% url 'card' %}">Hello! {{ request.user.username }}&nbsp&nbsp</a></li>#}
+                    <li><a href="{% url 'card' %}">My Votes</a></li>
+                    <li><a href="{% url 'logout' %}">Log out&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Sign in&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>
+                {% endif %}
 
 
-        </ul>
-      </div>
-      <!--/.navbar-collapse -->
+            </ul>
+        </div>
+        <!--/.navbar-collapse -->
     </div>
-  </div>
+</div>
 
-  <section class="featured">
+<section class="featured">
     <div class="container">
-      <div class="row mar-bot25">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="row mar-bot25">
+            <div class="col-md-6 col-md-offset-3">
 
-          <div class="align-center">
-{#            <i class="fa fa-tasks fa-5x mar-bot20"></i>#}
-{#              <i class="fa fa-file-text-o fa-5x mar-bot20"></i>#}
-              <i class="fa fa- fa-5x mar-bot20"></i>
-{#              <i class="fa fa-chain fa-5x mar-bot20"></i>#}
-            <h2 class="slogan">Welcome to BlockVote</h2>
-            <p>
-            BlockVote is a voting system based on block chain. Providing anonymous and trustworthy voting result for you.
-            </p>
-              <a href="{% url 'form' %}"><button  type="button"  class="btn btn-primary btn-lg" style="margin-top:20px;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
-                  Start a Vote!</button></a>
+                <div class="align-center">
+                    {#            <i class="fa fa-tasks fa-5x mar-bot20"></i>#}
+                    {#              <i class="fa fa-file-text-o fa-5x mar-bot20"></i>#}
+                    <i class="fa fa- fa-5x mar-bot20"></i>
+                    {#              <i class="fa fa-chain fa-5x mar-bot20"></i>#}
+                    <h2 class="slogan">Welcome to BlockVote</h2>
+                    <p>
+                        BlockVote is a voting system based on block chain. Providing anonymous and trustworthy voting result for you.
+                    </p>
+                    <a href="{% url 'form' %}"><button  type="button"  class="btn btn-primary btn-lg" style="margin-top:20px;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
+                        Start a Vote!</button></a>
 
 
-          </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
+</section>
 
-  <!-- services -->
-  <section id="section-services" class="section pad-bot30 bg-white">
+<!-- services -->
+<section id="section-services" class="section pad-bot30 bg-white">
     <div class="container">
 
-      <div class="row mar-bot40">
-        <div class="col-lg-4">
-          <div class="align-center">
-            <i class="fa fa-user fa-5x mar-bot20"></i>
-            <h4 class="text-bold">Anonymous</h4>
-            <p>Voting in blockvote can be absolutely anonymous.
-            </p>
-          </div>
-        </div>
+        <div class="row mar-bot40">
+            <div class="col-lg-4">
+                <div class="align-center">
+                    <i class="fa fa-user fa-5x mar-bot20"></i>
+                    <h4 class="text-bold">Anonymous</h4>
+                    <p>Voting in blockvote can be absolutely anonymous.
+                    </p>
+                </div>
+            </div>
 
-        <div class="col-lg-4">
-          <div class="align-center">
-            <i class="fa fa-spinner fa-5x mar-bot20"></i>
-            <h4 class="text-bold">Decentralized</h4>
-            <p>Decentralized network allow anybody participate in.
-            </p>
-          </div>
-        </div>
+            <div class="col-lg-4">
+                <div class="align-center">
+                    <i class="fa fa-spinner fa-5x mar-bot20"></i>
+                    <h4 class="text-bold">Decentralized</h4>
+                    <p>Decentralized network allow anybody participate in.
+                    </p>
+                </div>
+            </div>
 
-        <div class="col-lg-4">
-          <div class="align-center">
-            <i class="fa fa-thumbs-o-up fa-5x mar-bot20"></i>
-            <h4 class="text-bold">Trustworthiness </h4>
-            <p>Bad guys have no way to tamper the voting result.
-            </p>
-          </div>
-        </div>
+            <div class="col-lg-4">
+                <div class="align-center">
+                    <i class="fa fa-thumbs-o-up fa-5x mar-bot20"></i>
+                    <h4 class="text-bold">Trustworthiness </h4>
+                    <p>Bad guys have no way to tamper the voting result.
+                    </p>
+                </div>
+            </div>
 
-      </div>
+        </div>
 
     </div>
-  </section>
+</section>
 
 {#  <!-- spacer section:testimonial -->#}
 {#  <section id="testimonials" class="section" data-stellar-background-ratio="0.5">#}
@@ -147,70 +152,70 @@
 {#    </div>#}
 {#  </section>#}
 
-  <!-- about -->
-  <section id="section-about" class="section appear clearfix">
+<!-- about -->
+<section id="section-about" class="section appear clearfix">
     <div class="container">
 
-      <div class="row mar-bot40">
-        <div class="col-md-offset-3 col-md-6">
-          <div class="section-header">
-            <h2 class="section-heading animated" data-animation="bounceInUp">Our Team</h2>
-            <p>We are from DBgroup@CES of SUSTech </p>
-          </div>
+        <div class="row mar-bot40">
+            <div class="col-md-offset-3 col-md-6">
+                <div class="section-header">
+                    <h2 class="section-heading animated" data-animation="bounceInUp">Our Team</h2>
+                    <p>We are from DBgroup@CES of SUSTech </p>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="row align-center mar-bot40">
-        <div class="col-md-xinxun-2">
-          <div class="team-member">
-            <figure class="member-photo" ><img src="/static/img/team/member1.jpg" alt="" /></figure>
-            <div class="team-detail">
-              <h4>Boris Chen</h4>
-              <span>Product Manager</span>
+        <div class="row align-center mar-bot40">
+            <div class="col-md-xinxun-2">
+                <div class="team-member">
+                    <figure class="member-photo" ><img src="/static/img/team/member1.jpg" alt="" /></figure>
+                    <div class="team-detail">
+                        <h4>Boris Chen</h4>
+                        <span>Product Manager</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-xinxun-2">
-          <div class="team-member">
-            <figure class="member-photo"><img src="/static/img/team/member2.jpg" alt="" /></figure>
-            <div class="team-detail">
-              <h4>Jeremy Zhang</h4>
-              <span>Background Developer</span>
+            <div class="col-md-xinxun-2">
+                <div class="team-member">
+                    <figure class="member-photo"><img src="/static/img/team/member2.jpg" alt="" /></figure>
+                    <div class="team-detail">
+                        <h4>Jeremy Zhang</h4>
+                        <span>Background Developer</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-xinxun-2">
-          <div class="team-member">
-            <figure class="member-photo"><img src="/static/img/team/member3.jpg" alt="" /></figure>
-            <div class="team-detail">
-              <h4>Yue Leng</h4>
-              <span>Web Designer</span>
+            <div class="col-md-xinxun-2">
+                <div class="team-member">
+                    <figure class="member-photo"><img src="/static/img/team/member3.jpg" alt="" /></figure>
+                    <div class="team-detail">
+                        <h4>Yue Leng</h4>
+                        <span>Web Designer</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="col-md-xinxun-2">
-          <div class="team-member">
-            <figure class="member-photo"><img src="/static/img/team/member4.jpg" alt="" /></figure>
-            <div class="team-detail">
-              <h4>Chuang Yang</h4>
-              <span>Web Developer</span>
+            <div class="col-md-xinxun-2">
+                <div class="team-member">
+                    <figure class="member-photo"><img src="/static/img/team/member4.jpg" alt="" /></figure>
+                    <div class="team-detail">
+                        <h4>Chuang Yang</h4>
+                        <span>Web Developer</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-          <div class="col-md-xinxun-2">
-          <div class="team-member">
-            <figure class="member-photo"><img src="/static/img/team/member5.jpg" alt="" /></figure>
-            <div class="team-detail">
-              <h4>Mark Zeng</h4>
-              <span>Requirement Developer</span>
+            <div class="col-md-xinxun-2">
+                <div class="team-member">
+                    <figure class="member-photo"><img src="/static/img/team/member5.jpg" alt="" /></figure>
+                    <div class="team-detail">
+                        <h4>Mark Zeng</h4>
+                        <span>Requirement Developer</span>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
 
     </div>
-  </section>
-  <!-- /about -->
+</section>
+<!-- /about -->
 {##}
 {#  <!-- spacer section:stats -->#}
 {#  <section id="parallax1" class="section pad-top40 pad-bot40" data-stellar-background-ratio="0.5">#}
@@ -429,54 +434,54 @@
 {#    <div id="google-map" data-latitude="40.713732" data-longitude="-74.0092704"></div>#}
 {#  </section>#}
 
-  <section id="footer" class="section footer">
+<section id="footer" class="section footer">
     <div class="container">
-{#      <div class="row animated opacity mar-bot20" data-andown="fadeIn" data-animation="animation">#}
-{#        <div class="col-sm-12 align-center">#}
-{#          <ul class="social-network social-circle">#}
-{#            <li><a href="#" class="icoRss" title="Rss"><i class="fa fa-rss"></i></a></li>#}
-{#            <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>#}
-{#            <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>#}
-{#            <li><a href="#" class="icoGoogle" title="Google +"><i class="fa fa-google-plus"></i></a></li>#}
-{#            <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>#}
-{#          </ul>#}
-{#        </div>#}
-{#      </div>#}
+        {#      <div class="row animated opacity mar-bot20" data-andown="fadeIn" data-animation="animation">#}
+        {#        <div class="col-sm-12 align-center">#}
+        {#          <ul class="social-network social-circle">#}
+        {#            <li><a href="#" class="icoRss" title="Rss"><i class="fa fa-rss"></i></a></li>#}
+        {#            <li><a href="#" class="icoFacebook" title="Facebook"><i class="fa fa-facebook"></i></a></li>#}
+        {#            <li><a href="#" class="icoTwitter" title="Twitter"><i class="fa fa-twitter"></i></a></li>#}
+        {#            <li><a href="#" class="icoGoogle" title="Google +"><i class="fa fa-google-plus"></i></a></li>#}
+        {#            <li><a href="#" class="icoLinkedin" title="Linkedin"><i class="fa fa-linkedin"></i></a></li>#}
+        {#          </ul>#}
+        {#        </div>#}
+        {#      </div>#}
 
-      <div class="row align-center copyright">
-        <div class="col-sm-12">
-          <p>Copyright &copy; Amoeba</p>
-          <div class="credits">
-            <!--
-              All the links in the footer should remain intact.
-              You can delete the links only if you purchased the pro version.
-              Licensing information: https://bootstrapmade.com/license/
-              Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Amoeba
-            -->
-{#            <a href="https://bootstrapmade.com/">Bootstrap Themes</a> by <a href="https://bootstrapmade.com/">BootstrapMade</a>#}
-          </div>
+        <div class="row align-center copyright">
+            <div class="col-sm-12">
+                <p>Copyright &copy; Amoeba</p>
+                <div class="credits">
+                    <!--
+                      All the links in the footer should remain intact.
+                      You can delete the links only if you purchased the pro version.
+                      Licensing information: https://bootstrapmade.com/license/
+                      Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=Amoeba
+                    -->
+                    {#            <a href="https://bootstrapmade.com/">Bootstrap Themes</a> by <a href="https://bootstrapmade.com/">BootstrapMade</a>#}
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 
-  </section>
-  <a href="#header" class="scrollup"><i class="fa fa-chevron-up"></i></a>
+</section>
+<a href="#header" class="scrollup"><i class="fa fa-chevron-up"></i></a>
 
-  <script src="/static/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
-  <script src="/static/js/jquery.js"></script>
-  <script src="/static/js/jquery.easing.1.3.js"></script>
-  <script src="/static/js/bootstrap.min.js"></script>
-  <script src="/static/js/jquery.isotope.min.js"></script>
-  <script src="/static/js/jquery.nicescroll.min.js"></script>
-  <script src="/static/js/fancybox/jquery.fancybox.pack.js"></script>
-  <script src="/static/js/skrollr.min.js"></script>
-  <script src="/static/js/jquery.scrollTo.js"></script>
-  <script src="/static/js/jquery.localScroll.js"></script>
-  <script src="/static/js/stellar.js"></script>
-  <script src="/static/js/jquery.appear.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8HeI8o-c1NppZA-92oYlXakhDPYR7XMY"></script>
-  <script src="/static/js/main.js"></script>
-  <script src="/static/contactform/contactform.js"></script>
+<script src="/static/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+<script src="/static/js/jquery.js"></script>
+<script src="/static/js/jquery.easing.1.3.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.isotope.min.js"></script>
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+<script src="/static/js/fancybox/jquery.fancybox.pack.js"></script>
+<script src="/static/js/skrollr.min.js"></script>
+<script src="/static/js/jquery.scrollTo.js"></script>
+<script src="/static/js/jquery.localScroll.js"></script>
+<script src="/static/js/stellar.js"></script>
+<script src="/static/js/jquery.appear.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8HeI8o-c1NppZA-92oYlXakhDPYR7XMY"></script>
+<script src="/static/js/main.js"></script>
+<script src="/static/contactform/contactform.js"></script>
 </body>
 
 </html>

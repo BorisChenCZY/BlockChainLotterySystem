@@ -4,6 +4,10 @@
 <head>
 
     <meta charset="utf-8">
+    {#    以下三行用于禁止缓存#}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -73,8 +77,8 @@
             var rdiv = 'removeclass'+room;
 
 
-             divtest.innerHTML =
-                 '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
+            divtest.innerHTML =
+                '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
                 '                    <div class="form-group" >\n' +
                 '                        <div class="input-group" >\n' +
                 '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >\n' +
@@ -88,11 +92,11 @@
                 '                    </div>' +
                 '                    <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapse'+room+'">' +
                 '\n' +'<textarea name="vote_details"></textarea>' +
-                 ' <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >\n'
-                '\n' +
-                '\n' +
-                '                    </div>\n' +
-                '                </div>';
+                ' <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >\n'
+            '\n' +
+            '\n' +
+            '                    </div>\n' +
+            '                </div>';
 
             objTo.appendChild(divtest)
         }
@@ -155,13 +159,8 @@
                     </div>
                     <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapseOne">
 
-                        <div class="panel-body" style="color: black" >
-                            <textarea name="vote_details"></textarea>
+                        <textarea name="vote_details"></textarea>
                         <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >
-
-
-                        </div>
-
 
                     </div>
                 </div>
@@ -245,19 +244,19 @@
     .adjust2{
         margin-top: 12px;
     }
-     @media (max-width: 767px) {
-            .adjust2{
-                margin-top: 2px;
-            }
+    @media (max-width: 767px) {
+        .adjust2{
+            margin-top: 2px;
         }
+    }
     .adjust3{
         margin-bottom: 50px
     }
-     @media (max-width: 767px) {
-            .adjust3{
-                margin-bottom: 30px
-            }
+    @media (max-width: 767px) {
+        .adjust3{
+            margin-bottom: 30px
         }
+    }
 
 
 

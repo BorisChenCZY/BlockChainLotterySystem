@@ -6,6 +6,10 @@
 <head>
 
     <meta charset="utf-8">
+    {#    以下三行用于禁止缓存#}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -29,6 +33,10 @@
         html {
             font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
             font-size: 14px;
+        }
+
+        .float-right{
+            margin-right:-30px;
         }
 
         h5 {
@@ -238,6 +246,9 @@
         .myfont{
             font-size: 34px;
         }
+        .float-right{
+            margin-right:0px;
+        }
         .card{
             margin-top: 10px;
         }
@@ -253,12 +264,13 @@
         }
         .card-title {
             font-size: 0.85em;
-            margin-bottom: 0px;
+            margin-bottom: 5px;
         }
         .card-text {
-            font-size: 0.5em;
+            font-size: 10px;
             margin-top: 0em;
-            height: 40px;
+            height: 36px;
+            line-height: 12px;
         }
         .cover {
             height: 100px;
@@ -289,7 +301,7 @@
                     </div>
                     <div class="card-block">
 
-                        <h4 class="card-title">{{ result.vote.vote_name }}</h4>
+                        <h4 class="card-title" title={{ result.vote.vote_name }}>{{ result.vote.vote_name }}</h4>
                         <div class="card-text">
                             {{ result.vote.vote_description }}
                         </div>
@@ -334,48 +346,6 @@
             </div>
         </div>
 
-{#        空的card 仅仅用于占位#}
-{#        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">#}
-{#            <div class="card card-inverse card-info card-null">#}
-{#                <img class="card-img-top-null" src="/static/img/null.png">#}
-{#                <a href="{% url 'form' %}"><i class="fa fa-plus-circle fa-3x invisible" style="color: #65B0A7;margin-left: 40%"></i></a>#}
-{#                <div class="card-block card-block-null">#}
-{##}
-{#                    <h4 class="card-title">&nbsp</h4>#}
-{#                    <div class="card-text">#}
-{#                        <br/>&nbsp#}
-{#                    </div>#}
-{#                </div>#}
-{#                 <button type="button" class="btn btn-primary btn-lg btn-block invisible">Sposored by Me</button>#}
-{##}
-{#            </div>#}
-{#        </div>#}
-
-
-
-{##}
-{##}
-{##}
-{##}
-{#        <div class="col-sm-6 col-md-4 col-lg-3 mt-4">#}
-{#            <div class="card card-inverse card-info card-null">#}
-{#                <img class="card-img-top-null" src="/static/img/null.png">#}
-{#                <div class="card-block card-block-null">#}
-{##}
-{#                    <h4 class="card-title">&nbsp</h4>#}
-{#                    <div class="card-text">#}
-{#                        <br/>&nbsp#}
-{#                    </div>#}
-{#                </div>#}
-{#                <div class="card-footer-null">#}
-{#                    <small>&nbsp</small>#}
-{#                    <button class="btn btn-info float-right btn-sm btn-null">&nbsp</button>#}
-{#                </div>#}
-{#            </div>#}
-{#        </div>#}
-
-
-
 
     </div>
 
@@ -386,7 +356,7 @@
 {#        <a href="{% url 'index' %}">#}
 {#        <button class="btn btn-info float-right btn-sm btn-lg" style="margin-bottom: 20px">#}
 {#                  Back</button></a>#}
-        <a href="{% url 'index' %}"><button  type="button"  class="btn float-right" style="margin-bottom:30px;margin-right:0px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
+        <a href="{% url 'index' %}"><button  type="button"  class="btn float-right" style="font-weight:600;margin-bottom:30px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
                   &nbsp&nbspBack&nbsp&nbsp</button></a>
     </div>
 
