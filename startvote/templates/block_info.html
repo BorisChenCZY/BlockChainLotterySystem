@@ -1,15 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+
 <head>
+    <!-- BASICS -->
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Simple Login Form with Blue Background</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {#    以下三行用于禁止缓存#}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Block Info</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/static/css/isotope.css" media="screen" />
+    <link rel="stylesheet" href="/static/js/fancybox/jquery.fancybox.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <!-- skin -->
+    <link rel="stylesheet" href="/static/skin/default.css">
     <style type="text/css">
+        body {font-family:Arial;background:#70B9B0; }
         .block_info_card {
             color: #7a7a7a;
             border-radius: 3px;
@@ -18,27 +34,83 @@
             padding: 30px;
             width: 80%;
             margin: 10% auto auto auto;
+            margin-bottom: 0%;
+            overflow-x: auto;
+        }
+
+        .myfont {
+            font: 14px/1.5 Arial, Helvetica, sans-serif;
+            font-size: 36px;
+            line-height: 30px;
+            font-weight: 500;
+            color: #4c565e;
+        }
+        .smallerfont {
+            font-size: 30px;
+        }
+        @media (max-width: 767px) {
+            .block_info_card {
+                width: 90%;
+                margin: 30% auto auto auto;
+                margin-bottom: 10%;
+                overflow-x: auto;
+            }
+            .myfont{
+                font-size: 28px;
+            }
+
+            .modal-content {
+                width: 80%;
+                margin: 10% auto auto auto;
+                overflow-x: auto;
+            }
+            .smallerfont {
+                font-size: 18px;
+                font-weight: 700;
+            }
         }
     </style>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("tr").click(function () {
-                $(".modal-body").load("{% url 'single_block_info' %}", {"id": $(this).attr("id")}, function (response, status) {
-                        $(".modal-body").html($(response).find(".single_block_info").val());
-                });
-            });
-        });
-    </script>
 
 </head>
-{% include "header.html" %}
-<body>
-<!-- Modal -->
+
+<body >
+<section id="header" class="appear"></section>
+<div class="navbar navbar-fixed-top" role="navigation" style="background-color:rgba(0,0,0,0.3);" data-0="line-height:100px; height:100px; background-color:rgba(0,0,0,0.3);" data-300="line-height:60px; height:60px; background-color:rgba(0,0,0,0.3);">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="fa fa-bars color-white"></span>
+            </button>
+            <h1><a class="navbar-brand" href="{% url 'index' %}" data-0="line-height:90px;" data-300="line-height:50px;">			BlockVote
+            </a></h1>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav" data-0="margin-top:20px;" data-300="margin-top:5px;">
+
+                {#            <li><a href="{% url 'fold_demo' %}">fold_demo</a></li>#}
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'index' %}#section-services">About</a></li>
+                <li class="active"><a href="{% url 'block_info' %}">block_info</a></li>
+
+                {% if request.user.is_authenticated %}
+                    {#                 <li><a href="{% url 'card' %}">Hello! {{ request.user.username }}&nbsp&nbsp</a></li>#}
+                    <li><a href="{% url 'card' %}">My Votes</a></li>
+                    <li><a href="{% url 'logout' %}">Log out&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Sign in&nbsp&nbsp<i class="fa fa-sign-in fa-lg"></i></a></li>
+                {% endif %}
+
+
+            </ul>
+        </div>
+        <!--/.navbar-collapse -->
+    </div>
+</div>
 <div class="modal fade bd-example-modal-lg" tabindex="-1"   aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title text-center" id="exampleModalCenterTitle">Block info</h4>
+                <h4 class="modal-title text-center myfont smallerfont" id="exampleModalCenterTitle">Block Info</h4>
             </div>
             <div class="modal-body">
                 ...
@@ -50,7 +122,7 @@
 </div>
 
 <div class="block_info_card">
-    <h2 class="text-center">Block Info</h2>
+    <h2 class="text-center myfont">Block Info</h2>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -72,5 +144,34 @@
         </tbody>
     </table>
 </div>
+
+
+<a href="#header" class="scrollup"><i class="fa fa-chevron-up"></i></a>
+
+<script src="/static/js/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+<script src="/static/js/jquery.js"></script>
+<script src="/static/js/jquery.easing.1.3.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.isotope.min.js"></script>
+<script src="/static/js/jquery.nicescroll.min.js"></script>
+<script src="/static/js/fancybox/jquery.fancybox.pack.js"></script>
+<script src="/static/js/skrollr.min.js"></script>
+<script src="/static/js/jquery.scrollTo.js"></script>
+<script src="/static/js/jquery.localScroll.js"></script>
+<script src="/static/js/stellar.js"></script>
+<script src="/static/js/jquery.appear.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD8HeI8o-c1NppZA-92oYlXakhDPYR7XMY"></script>
+<script src="/static/js/main.js"></script>
+<script src="/static/contactform/contactform.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").click(function () {
+            $(".modal-body").load("{% url 'single_block_info' %}", {"id": $(this).attr("id")}, function (response, status) {
+                $(".modal-body").html($(response).find(".single_block_info").val());
+            });
+        });
+    });
+</script>
 </body>
+
 </html>

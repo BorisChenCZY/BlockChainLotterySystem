@@ -51,7 +51,7 @@ class Selection(models.Model):
     title = models.CharField(max_length=50,null=True)  #候选人标题
     simple_detail = models.TextField(null=True)   #候选人简单描述
     detail = models.TextField(null=True)   #候选人详细描述
-    img = models.ImageField(null=True)
+    img = models.ImageField(null=True,upload_to="pic_folder/")    # houxuanrentupian
 
 
 class local_Key_pool(models.Model):  # 公私钥池

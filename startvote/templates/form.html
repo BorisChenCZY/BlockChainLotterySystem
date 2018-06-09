@@ -4,6 +4,10 @@
 <head>
 
     <meta charset="utf-8">
+    {#    以下三行用于禁止缓存#}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -12,6 +16,7 @@
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
 
     {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>#}
     {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>#}
@@ -28,6 +33,11 @@
             background: #65B0A7;
             height: 100%;
             background-size:100% 100%;
+        }
+        .middle{
+            margin-right: auto;
+            margin-left: auto;
+            width: 256px;
         }
 
     </style>
@@ -73,11 +83,11 @@
             var rdiv = 'removeclass'+room;
 
 
-             divtest.innerHTML =
-                 '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
+            divtest.innerHTML =
+                '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
                 '                    <div class="form-group" >\n' +
                 '                        <div class="input-group" >\n' +
-                '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" >\n' +
+                '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >\n' +
                 '\n' +
                 '                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapse'+room+'"> Details</button>\n' +
                 '\n' +
@@ -87,18 +97,22 @@
                 '\n' +
                 '                    </div>' +
                 '                    <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapse'+room+'">' +
-                '\n' +'<textarea name="vote_description"></textarea>' +
-                 ' <input id="input-b2" style="padding: 5px;font-weight: 300;" name="input-b2" type="file" class="file" data-show-preview="false" >\n'
-                '\n' +
-                '\n' +
-                '                    </div>\n' +
-                '                </div>';
+                '\n' +'<textarea name="vote_details"></textarea>' +
+                ' <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >\n'
+            '\n' +
+            '\n' +
+            '                    </div>\n' +
+            '                </div>';
 
             objTo.appendChild(divtest)
         }
         function remove_education_fields(rid) {
             $('.removeclass'+rid).remove();
         }
+        jQuery(function(){
+            //二维码的跳转网页地址
+            jQuery('#qrcode').qrcode("http://baidu.com");
+        })
     </script>
 
 
@@ -116,7 +130,7 @@
 
     <!-- You only need this form and the form-basic.css -->
 
-    <form class="form-basic" method="post", position = "left", action="{% url 'form' %}">
+    <form class="form-basic" method="post", position = "left", action="{% url 'form' %}"enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="form-title-row">
@@ -141,27 +155,22 @@
                 <span >投票选项</span>
 
 
-                <div class="nopadding"style="width: 240px;display: inline-block">
+                <div class="nopadding" style="width: 240px;display: inline-block">
                     <div class="form-group" >
                         <div class="input-group" >
-                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="Schoolname[]" value="" >
+                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >
 
-                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne"> Details</button>
+                            <button name="detail" style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne"> Details</button>
 
-                            <button style="margin: 0 0 0 0;padding: 0 0 0 0;display:inline-block;background: lightseagreen" class="btn btn-primary" type="button"  onclick="education_fields();"> <span style="width: auto;padding:  11px 8px 11px 8px;" class="glyphicon glyphicon-plus" aria-hidden="true"></span> </button>
+                            <button name="add" style="margin: 0 0 0 0;padding: 0 0 0 0;display:inline-block;background: lightseagreen" class="btn btn-primary" type="button"  onclick="education_fields();"> <span style="width: auto;padding:  11px 8px 11px 8px;" class="glyphicon glyphicon-plus" aria-hidden="true"></span> </button>
 
                         </div>
 
                     </div>
                     <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapseOne">
 
-{#                        <div class="panel-body" style="color: black" >#}
-                            <textarea name="vote_description"></textarea>
-                        <input id="input-b2" style="padding: 5px;font-weight: 300;" name="input-b2" type="file" class="file" data-show-preview="false" >
-
-
-{#                        </div>#}
-
+                        <textarea name="vote_details"></textarea>
+                        <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >
 
                     </div>
                 </div>
@@ -224,18 +233,37 @@
 
 
         <div class="form-row">
-            <button class="button" type="submit">发起投票</button>
+            <button class="button" type="submit" >发起投票</button>
         </div>
-
-
 
     </form>
 
+
+    <div>
+        <button class="button" data-toggle="modal" data-target="#exampleModal" style="color: #7a7a7a;margin-left: 50%">（发起投票成功后显示二维码）</button>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 300px;margin-left: auto;margin-right: auto">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="middle">
+                        <div id="qrcode"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 
 </div>
+
 
 </body>
 
@@ -245,21 +273,22 @@
     .adjust2{
         margin-top: 12px;
     }
-     @media (max-width: 767px) {
-            .adjust2{
-                margin-top: 2px;
-            }
+    @media (max-width: 767px) {
+        .adjust2{
+            margin-top: 2px;
         }
+    }
     .adjust3{
         margin-bottom: 50px
     }
-     @media (max-width: 767px) {
-            .adjust3{
-                margin-bottom: 30px
-            }
+    @media (max-width: 767px) {
+        .adjust3{
+            margin-bottom: 30px
         }
+    }
 
 
 
 
 </style>
+

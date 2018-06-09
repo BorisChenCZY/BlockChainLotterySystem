@@ -91,6 +91,7 @@ def form(request):
             vote.start_time = request.POST.get("start_time")
             vote.end_time = request.POST.get("end_time")
 
+
             if dateutil.parser.parse(request.POST.get("start_time")) > d : # 未开始
                 vote.vote_state = 1
             elif dateutil.parser.parse(request.POST.get("end_time")) > d : # 进行中
@@ -111,9 +112,25 @@ def form(request):
                 vote.vote_type = 1
             else:
                 vote.vote_type = 2
+
             vote_target = block_hashfunc.hash((str(vote.vote_name)+str(d)).encode())
             vote.vote_target = vote_target
             vote.save()
+
+            options_list = request.POST.getlist("options")
+            vote_details = request.POST.getlist("vote_details")
+            attachments = request.FILES.getlist("attachments")
+            for i in range(len(options_list)):
+                seletion = Selection()
+                seletion.vote_id = Vote.objects.get(vote_target=vote_target)
+                seletion.title = options_list[i]
+                seletion.simple_detail = "这个人很懒，什么都没写"
+                seletion.detail = vote_details[i]
+                # path＝default_storage.save（，ContentFile（image.read()））
+                seletion.img = attachments[i]
+                seletion.save()
+
+
             entry.user_id = auth.get_user(request)
             entry.vote_id = Vote.objects.get(vote_target=vote_target)
             entry.identity = 2  # 表示发起人
@@ -152,8 +169,12 @@ def vote(request, target):
     votename = vote.vote_name
     voteLimit = 1
     max_id = len(candidate)
-    t = "多选题"
-    description = "这里是描述"
+    t = None
+    if vote.vote_type == 1:
+        t = "单选"
+    else:
+        t = "多选"
+    description = vote.vote_description
     miner_list = br.getMinerList()
     format_miner_list =[ m[0] for m in miner_list]
     print(format_miner_list)
@@ -181,6 +202,7 @@ def card(request):
         result_list.append(vote_condition)
     return render_to_response('card.html',{"result_list":result_list})
 # def creat_vote(request):
+
 
 def article_page(request,id):
     article = models.Artivle.objects.get(pk=id)
