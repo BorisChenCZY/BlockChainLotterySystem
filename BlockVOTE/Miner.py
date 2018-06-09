@@ -48,42 +48,41 @@ class Miner:
         self.server = threading.Thread(target=self.node.serving)
         self.server.start()
         self.update_chain()
-        # self.__sio = socketio.AsyncServer()
-        # app = web.Application()
-        # self.__sio.attach(app)
-        #
-        #
-        # @self.__sio.on('connect')
-        # def connect(sid, environ):
-        #     print('connect', sid)
-        #
-        # @self.__sio.on("Vote")
-        # def vote(sid, data):
-        #     d = json.loads(data)
-        #     # 对接收到的信息中的投票平台公钥是否在自己公钥池中，在就直接解密，然后得到用户投票信息和用户公钥；
-        #     data = d["data"]
-        #
-        #     sig = d["sign"]
-        #     key_info = data['pubkey']
-        #     target = data['target']
-        #     prob_num = data['prob_num']
-        #     selection = data['selection']
-        #
-        #
-        #     key_info = key_info.encode("utf-8")
-        #
-        #     vote = "{}:{}".format(data['prob_num'], data['selection'])
-        #
-        #     voteInfo = VoteInfo(get_timestamp(), target=target.encode("utf-8"), pubkey=key_info, vote=(prob_num, selection), sign = sig.encode("utf-8"))
-        #     self.__chain.add_vote(voteInfo)
-        #     self.__cnt += 1
-        #     if self.__cnt >= 5:
-        #         self.__cnt = 0
-        #         self.pack_block()
-        #
-        #     return "OK", 123
-        #
-        # web.run_app(app)
+        self.__sio = socketio.AsyncServer()
+        app = web.Application()
+        self.__sio.attach(app)
+
+
+        @self.__sio.on('connect')
+        def connect(sid, environ):
+            print('connect', sid)
+
+        @self.__sio.on("Vote")
+        def vote(sid, data):
+            d = json.loads(data)
+            # 对接收到的信息中的投票平台公钥是否在自己公钥池中，在就直接解密，然后得到用户投票信息和用户公钥；
+            data = d["data"]
+            sig = d["sign"]
+            key_info = data['pubkey']
+            target = data['target']
+            prob_num = data['prob_num']
+            selection = data['selection']
+
+
+            key_info = key_info.encode("utf-8")
+
+            vote = "{}:{}".format(data['prob_num'], data['selection'])
+
+            voteInfo = VoteInfo(get_timestamp(), target=target.encode("utf-8"), pubkey=key_info, vote=(prob_num, selection), sign = sig.encode("utf-8"))
+            self.__chain.add_vote(voteInfo)
+            self.__cnt += 1
+            if self.__cnt >= 5:
+                self.__cnt = 0
+                self.pack_block()
+            self.block_recv(BQUEUE)
+            return "OK", 123
+
+        web.run_app(app, port=addr[1])
 
         # update current chain
 
