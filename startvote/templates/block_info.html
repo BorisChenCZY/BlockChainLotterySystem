@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="/static/skin/default.css">
     <style type="text/css">
         body {font-family:Arial;background:#70B9B0; }
+
         .block_info_card {
             color: #7a7a7a;
             border-radius: 3px;
@@ -36,6 +37,10 @@
             margin: 10% auto auto auto;
             margin-bottom: 0%;
             overflow-x: auto;
+        }
+        td,th{
+            text-align: center;
+            vertical-align: middle;
         }
 
         .myfont {
@@ -48,7 +53,22 @@
         .smallerfont {
             font-size: 30px;
         }
+        .inmobile{
+            display: none;
+        }
         @media (max-width: 767px) {
+            .element-title{
+                font-weight: 700;
+            }
+            .modal-footer{
+                border-top:1px solid #e5e5e5;
+            }
+            .inmobile{
+                padding-left: 5%!important;
+                padding-bottom: 10%;
+                display: block;
+                border-bottom: 1px solid #e5e5e5;
+            }
             .block_info_card {
                 width: 90%;
                 margin: 30% auto auto auto;
@@ -60,7 +80,7 @@
             }
 
             .modal-content {
-                width: 90%;
+                width: 95%;
                 margin: 10% auto auto auto;
                 overflow-x: auto;
             }
@@ -68,6 +88,26 @@
                 font-size: 18px;
                 font-weight: 700;
             }
+            td{
+                padding: 5px!important;
+                max-width: 100px;
+                overflow: hidden;
+                text-overflow:ellipsis;
+                vertical-align: middle;
+            }
+            th{
+                padding: 8px!important;
+            }
+            #th1-5,#th1-3,#th2-2{
+                display: none;
+            }
+            #td1-5,#td1-3,#td2-2{
+                display: none;
+            }
+            #th1-2,#td1-2{
+                padding-left: 20px!important;
+            }
+
         }
     </style>
 
@@ -111,15 +151,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                <h4 class="modal-title text-center myfont smallerfont" id="exampleModalCenterTitle">Block Info</h4>
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title text-center myfont smallerfont" id="exampleModalCenterTitle">Single Block Info</h4>
             </div>
             <div class="modal-body">
                 ...
-            </div>
-            <div class="modal-footer">
-            </div>
+
+        </div>
+
         </div>
     </div>
 </div>
@@ -130,15 +170,15 @@
         <thead>
         <tr>
             {% for t in title %}
-                <th>{{ t }}</th>
+                <th id="th1-{{ forloop.counter }}">{{ t }}</th>
             {% endfor %}
         </tr>
         </thead>
         <tbody>
         {% for b in blocks %}
-            <tr data-toggle="modal" data-target=".modal" id={{ b.0 }}>
+            <tr  data-toggle="modal" data-target=".modal" id={{ b.0 }}>
                 {% for v in b %}
-                    <td>
+                    <td id="td1-{{ forloop.counter }}">
                         {{ v }}
                     </td>
                 {% endfor %}
@@ -171,7 +211,9 @@
         $("tr").click(function () {
             $(".modal-body").load("{% url 'single_block_info' %}", {"id": $(this).attr("id")}, function (response, status) {
                 $(".modal-body").html($(response).find(".single_block_info").val());
+
             });
+
         });
     });
 </script>
