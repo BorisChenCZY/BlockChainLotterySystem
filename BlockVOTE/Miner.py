@@ -99,12 +99,11 @@ class Miner:
         pass
 
     def block_recv(self, queue):
-        while 1:
-            while not queue.empty():
-                block = queue.get()
-                self.chain.add_block(block)
-                print("adding sucess")
-                queue.task_done()
+        while not queue.empty():
+            block = queue.get()
+            self.chain.add_block(block)
+            print("adding sucess")
+            queue.task_done()
 
     def update_chain(self):
 
