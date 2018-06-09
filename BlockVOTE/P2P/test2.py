@@ -1,7 +1,7 @@
 import threading
-import P2P.Node as node
+import BlockVOTE.P2P.Node as node
 import time
-import P2P.SocketUtil as util
+import BlockVOTE.P2P.SocketUtil as util
 if __name__ == "__main__":
     addr = ("localhost", 2222)
     a = node.Node(addr)

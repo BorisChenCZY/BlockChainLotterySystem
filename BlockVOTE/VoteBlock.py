@@ -1,5 +1,5 @@
 from Block import *
-from VoteInfo import *
+from BlockVOTE.VoteInfo import *
 import re
 class VoteBlockError(Exception):
     pass
@@ -25,6 +25,9 @@ class VoteBlock(Block):
 
     def close(self):
         super(VoteBlock, self).close()
+        
+    def check(self):
+        return True
 
     @staticmethod
     def load(block):

@@ -1,5 +1,6 @@
 import sqlite3
-from VoteBlock import *
+from BlockVOTE.VoteBlock import *
+from BlockVOTE.VoteInfo import *
 class ChainError(Exception):
     pass
 
@@ -49,6 +50,7 @@ class Chain:
 
     def create(self):
         n = self.__get_table()
+        print(n)
         if(self.__name + BLOCK_TABLE_OFF in n or self.__name + VOTE_TABLE_OFF in n):
             raise ChainError("The chain already exists")
 
@@ -130,7 +132,7 @@ class Chain:
         self.__c.execute("SELECT * from {} where block_id={}".format(self.__name + VOTE_TABLE_OFF, id))
 
         for args in self.__c.fetchall():
-            Chain.parse_voteInfo(args)
+            voteInfo = Chain.parse_voteInfo(args)
             voteBlock.add_info(voteInfo)
 
         # print(bytes(voteBlock))
@@ -139,6 +141,13 @@ class Chain:
         if not voteBlock.check():
             raise ChainError("block not valid!")
         return voteBlock
+
+    def get_chain(self,lst):
+        maxid = self.get_last_block()[0]
+        blocks = []
+        for each in range(lst+1,maxid+1):
+            blocks.append(self.get_block(each))
+        return blocks
 
     @staticmethod
     def parse_voteInfo(args):
@@ -155,6 +164,7 @@ class Chain:
         if(not block.check()):
             raise ChainError("block not valid (self info check failed)")
         lb = self.get_last_block()
+        print("block id:",block.get_id())
         if(lb[1] != block.get_prehash().decode("utf-8")):
             raise ChainError("block not valid (prehash check failed)")
         if(lb[0] != block.get_id() - 1):
