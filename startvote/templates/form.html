@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
 
     {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>#}
     {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>#}
@@ -32,6 +33,11 @@
             background: #65B0A7;
             height: 100%;
             background-size:100% 100%;
+        }
+        .middle{
+            margin-right: auto;
+            margin-left: auto;
+            width: 256px;
         }
 
     </style>
@@ -103,6 +109,10 @@
         function remove_education_fields(rid) {
             $('.removeclass'+rid).remove();
         }
+        jQuery(function(){
+            //二维码的跳转网页地址
+            jQuery('#qrcode').qrcode("http://baidu.com");
+        })
     </script>
 
 
@@ -223,18 +233,37 @@
 
 
         <div class="form-row">
-            <button class="button" type="submit">发起投票</button>
+            <button class="button" type="submit" >发起投票</button>
         </div>
-
-
 
     </form>
 
+
+    <div>
+        <button class="button" data-toggle="modal" data-target="#exampleModal" style="color: #7a7a7a;margin-left: 50%">（发起投票成功后显示二维码）</button>
+    </div>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 300px;margin-left: auto;margin-right: auto">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="middle">
+                        <div id="qrcode"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 
 </div>
+
 
 </body>
 
@@ -262,3 +291,4 @@
 
 
 </style>
+

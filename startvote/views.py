@@ -203,6 +203,7 @@ def card(request):
     return render_to_response('card.html',{"result_list":result_list})
 # def creat_vote(request):
 
+
 def article_page(request,id):
     article = models.Artivle.objects.get(pk=id)
     return  render(request,'startvote/page.html',{'article':article})
