@@ -63,7 +63,7 @@ class MyTCPHandler(BRH):
                         for ouraddr, ourlst in mylst:
                             lst = int(decod[2])
                             addr = decode_addr(decod[1])
-                            if ourlst < lst:
+                            if ourlst <= lst:
                                 info = bytes('<send block><{}>'.format(ouraddr), encoding='utf-8')
                                 print(info)
                                 SocketUtil.send(info, addr)
