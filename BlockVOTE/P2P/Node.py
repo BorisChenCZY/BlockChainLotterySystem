@@ -1,11 +1,34 @@
 import socketserver
 from socketserver import BaseRequestHandler as BRH
-from P2P.SocketUtil import SocketUtil
-import P2P.NetworkException as exception
+from BlockVOTE.P2P.SocketUtil import SocketUtil
+from BlockVOTE.Chain import Chain
+from BlockVOTE.VoteBlock import VoteBlock
+import BlockVOTE.P2P.NetworkException as exception
+import threading
+from multiprocessing import Process
 import socket
-import P2P.settings as config
+import re
+import BlockVOTE.P2P.settings as config
+import queue
 
+BQUEUE = queue.Queue()
 DATA = set()
+BLOCK = set()
+
+def decode_addr(string):
+    s = re.findall(r'[^(,)]+', string)
+    s[0] = s[0].lstrip("'")
+    s[0] = s[0].rstrip("'")
+    return s[0], int(s[1])
+
+def _queue_conn(queue):
+    lst = []
+    while not queue.empty():
+        lst.append(queue.get())
+        queue.task_done()
+    return lst
+
+
 
 class MyTCPHandler(BRH):
     """
@@ -23,18 +46,63 @@ class MyTCPHandler(BRH):
         while 1:
             try:
                 data = self.request.recv(1024).strip()
-                print(data)
             except:
                 self.request.close()
+
             if not data:
                 break
-            if data not in DATA:
-                DATA.add(data)
-                SocketUtil.broadcast(data, config.CONNECTION_LIST)
+            else:
+                print("receive: ", data)
+                from BlockVOTE.Miner import QUEUE,CQUEUE
+                # data format: <msg type><msg sender><msg content>
+                decod = re.findall(r'[^<>]+', data.decode('utf-8'))
+                if data not in DATA:
+                    DATA.add(data)
+                    if decod[0] == 'request chain':
+                        mylst = _queue_conn(QUEUE)
+                        for ouraddr, ourlst in mylst:
+                            lst = int(decod[2])
+                            addr = decode_addr(decod[1])
+                            if ourlst <= lst:
+                                info = bytes('<send block><{}>'.format(ouraddr), encoding='utf-8')
+                                print(info)
+                                SocketUtil.send(info, addr)
+                            else:
+                                for ouraddr, chain_info in _queue_conn(CQUEUE):
+                                    chain_info = chain_info[lst:]
+                                    # send each block in chain
+                                    print("sending chain...")
+                                    for block in chain_info:
+                                        info = bytes('<send block><{}>'.format(str(self.request.getsockname())), encoding='utf-8') + bytes(block)
+                                        print("block id ",block.get_id())
+                                        SocketUtil.send(info, addr)
+
+                    elif decod[0] == 'send block':
+                        addr = decode_addr(decod[1])
+
+                        if len(decod)>2:
+                            abte = bytes(decod[2],encoding='utf-8')
+                            block = VoteBlock.load(abte)
+                            print("adding block...")
+                            if block.get_hash() not in BLOCK:
+                                BLOCK.add(block.get_hash())
+                                BQUEUE.put(block)
+                                info = bytes('<receive block><{}><{}>'.format(str(self.request.getsockname()),str(block.get_id())),encoding='utf-8')
+                                SocketUtil.send(info, addr)
+                            else:
+                                info = bytes('<receive block><{}><{}>'.format(str(self.request.getsockname()), str(-1)),encoding='utf-8')
+                                SocketUtil.send(info, addr)
+                        else:
+                            print("sender is out of date")
+                    elif decod[0] == 'receive block':
+                        print(decod)
+                        if decod[2] == '-1':
+                            print('{} already has this block'.format(decod[1]))
+                        else:
+                            print('{} receive block{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
 
 
 class Node:
-
 
     def __init__(self, addr):
         self.addr = addr
