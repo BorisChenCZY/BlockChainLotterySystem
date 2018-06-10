@@ -46,7 +46,7 @@ class Block:
     def set_info(self, info):
         if (type(info) != bytes):
             raise BlockInfoError("Info must by bytes")
-        if (len(info) > 1024):
+        if (len(info) > 1024*1024):
             raise BlockInfoError("Info size must under 1M(1024Bytes)")
         self.__info = info
 
@@ -79,9 +79,9 @@ class Block:
             raise BlockInfoError("You need to set the info of the block first")
         if (not self.__hash):
             raise BlockInfoError("You need to set the hash of the block first")
-        return self.__id.to_bytes(4, "little") + b'/' + \
-               self.__prehash + b'/' + \
-               self.__hash + b'/' + \
+        return self.__id.to_bytes(4, "little") + b'//' + \
+               self.__prehash + b'//' + \
+               self.__hash + b'//' + \
                self.__info
 
     def check(self):
@@ -91,7 +91,7 @@ class Block:
     def load(block):
         if(type(block) != bytes):
             raise BlockInfoError("block must be bytes")
-        components = block.split(b"/")
+        components = block.split(b"//")
 
         id = int.from_bytes(components[0], byteorder='little')
         prehash = components[1]

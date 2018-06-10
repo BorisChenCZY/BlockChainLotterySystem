@@ -6,7 +6,7 @@ import asyncio
 import socketio
 import json
 import threading
-
+import multiprocessing
 from BlockVOTE.Chain import Chain, get_timestamp
 from BlockVOTE.P2P import Node
 from BlockVOTE.P2P.SocketUtil import SocketUtil
@@ -57,8 +57,10 @@ class Miner:
         self.server = threading.Thread(target=self.node.serving)
         self.server.start()
         self.update_chain()
-        self.queueinfo = threading.Thread(target=self.get_queue_info())
-        self.server.start()
+        self.queueinfo = threading.Thread(target=self.get_queue_info)
+        self.queueinfo.start()
+        self.votereceiver()
+
         # update current chain
 
     def get_queue_info(self):
@@ -94,7 +96,6 @@ class Miner:
             voteInfo = VoteInfo(get_timestamp(), target=target.encode("utf-8"), pubkey=key_info,
                                 vote=(prob_num, selection), sign=sig.encode("utf-8"))
 
-            print(voteInfo)
             # broadcast to other miner
             header = bytes('<send vote><{}>'.format(self.addr),encoding='utf-8')
             msg = header + bytes(voteInfo)
@@ -103,9 +104,10 @@ class Miner:
             self.__cnt += 1
             if self.__cnt >= 5:
                 self.__cnt = 0
+                print("auto packing...")
                 self.pack_block()
             return "OK", 123
-        web.run_app(app, port=1010)
+        web.run_app(app, port=8080)
 
 
     @classmethod
@@ -126,8 +128,10 @@ class Miner:
             # 判断拿出的元素时block还是vote
             if isinstance(item,VoteBlock):
                 self.__chain.add_block(item)
+                print("block added")
             elif isinstance(item,VoteInfo):
                 self.__chain.add_vote(item,-1)
+                print("vote added")
             queue.task_done()
 
     def update_chain(self):
@@ -141,6 +145,7 @@ class Miner:
         print("initial broadcasting...")
         msg = bytes('<request chain><{}><{}>'.format(str(self.addr),lastid), encoding='utf-8')
         SocketUtil.broadcast(msg, config.CONNECTION_LIST)
+        print("broadcast done")
 
     def add_block(self, block):
         if type(block) is not bytes:

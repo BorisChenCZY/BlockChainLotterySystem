@@ -22,7 +22,7 @@ class Chain:
 
     def __init__(self, name):
         self.__name = name
-        self.__conn = sqlite3.connect(DATABASE_PATH)
+        self.__conn = sqlite3.connect(DATABASE_PATH, check_same_thread=False)
         self.__c = self.__conn.cursor()
 
     def __get_table(self):
@@ -144,10 +144,11 @@ class Chain:
 
     def get_chain(self,lst):
         maxid = self.get_last_block()[0]
-        blocks = []
-        for each in range(lst+1,maxid+1):
-            blocks.append(self.get_block(each))
-        return blocks
+        if maxid:
+            blocks = []
+            for each in range(lst+1,maxid+1):
+                blocks.append(self.get_block(each))
+            return blocks
 
     @staticmethod
     def parse_voteInfo(args):
@@ -194,6 +195,7 @@ class Chain:
             id = "NULL"
         else:
             status = 1
+
         self.__c.execute("""
                          INSERT INTO {} VALUES (NULL, {blockid}, {timestamp}, "{target}", "{pubkey}", "{info}", "{sign}", {status})
                          """.format(self.__name + VOTE_TABLE_OFF, blockid=id, timestamp=timestamp, target=target, pubkey=pubkey, info=info, sign=sign, status = status))
@@ -232,11 +234,11 @@ class Chain:
         pubkey = voteInfo.get_pubkey().decode("utf-8")
         info = voteInfo.get_info().decode("utf-8")
         sign = voteInfo.get_sign().decode("utf-8")
-        self.__c.execute('DELETE FROM {} where block_id={} and timestamp={} and target="{}" and pubkey="{}" and info="{}" and sign="{}"'.
-                         format(self.__name+VOTE_TABLE_OFF, block_id, timestamp, target, pubkey, info, sign))
+        self.__c.execute('DELETE FROM {} where block_id is NULL and timestamp={} and target="{}" and pubkey="{}" and info="{}" and sign="{}"'.
+                         format(self.__name+VOTE_TABLE_OFF, timestamp, target, pubkey, info, sign))
         self.__conn.commit()
-        print('DELETE FROM {} where block_id={} and timestamp={} and target="{}" and pubkey="{}" and info="{}" and sign="{}"'.
-              format(self.__name+VOTE_TABLE_OFF, block_id, timestamp, target, pubkey, info, sign))
+        print('DELETE FROM {} where block_id is NULL and timestamp={} and target="{}" and pubkey="{}" and info="{}" and sign="{}"'.
+              format(self.__name+VOTE_TABLE_OFF, timestamp, target, pubkey, info, sign))
 
 
 

@@ -48,7 +48,7 @@ class MyTCPHandler(BRH):
         # self.request is the TCP socket connected to the client
         while 1:
             try:
-                data = self.request.recv(1024).strip()
+                data = self.request.recv(4096).strip()
             except:
                 self.request.close()
 
@@ -76,7 +76,8 @@ class MyTCPHandler(BRH):
                                     # send each block in chain
                                     print("sending chain...")
                                     for block in chain_info:
-                                        info = bytes('<send block><{}>'.format(str(self.request.getsockname())), encoding='utf-8') + bytes(block)
+                                        a = bytes(block)
+                                        info = bytes('<send block><{}>'.format(str(self.request.getsockname())), encoding='utf-8') + a
                                         print("block id ",block.get_id())
                                         SocketUtil.send(info, addr)
 
