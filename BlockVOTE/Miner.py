@@ -2,15 +2,23 @@ from BlockVOTE.Chain import *
 import datetime
 import sqlite3
 import socketserver
+import asyncio
 import socketio
 import json
 import threading
+
+from BlockVOTE.Chain import Chain, get_timestamp
 from BlockVOTE.P2P import Node
 from BlockVOTE.P2P.SocketUtil import SocketUtil
 import BlockVOTE.P2P.settings as config
+from BlockVOTE.P2P.Node import BQUEUE,VQUEUE
 from aiohttp import web
 from RSA import *
 import queue
+
+from BlockVOTE.VoteBlock import VoteBlock
+from BlockVOTE.VoteInfo import VoteInfo
+
 MINOR_DB = "Miner.sqlite"
 MINOR_TABLE_OFF = "Miner"
 VOTES_IN_A_BLOCK = 10
@@ -20,11 +28,13 @@ CQUEUE = queue.Queue()
 class MinerError(Exception):
     pass
 
+
+
 class Miner:
+    __chain = None
+    _instance_lock = threading.Lock()
     __sio = None
     __cnt = 0
-    _instance_lock = threading.Lock()
-
 
     def __init__(self, addr, chainname, t):
         """
@@ -37,21 +47,30 @@ class Miner:
         if type(t) != int:
             raise MinerError("type must be int, but not {}".format(type(t)))
         self.__chain_name = chainname
-        self.chain = Chain(self.__chain_name)
+        self.__chain = Chain(self.__chain_name)
         if t == 0:
             self.__load_chain()
         else:
-            self.chain.create()
-
+            self.__chain.create()
         self.addr = addr
         self.node = Node.Node(self.addr)
         self.server = threading.Thread(target=self.node.serving)
         self.server.start()
         self.update_chain()
+        self.queueinfo = threading.Thread(target=self.get_queue_info())
+        self.server.start()
+        # update current chain
+
+    def get_queue_info(self):
+        while 1:
+            self.queue_recv(BQUEUE)
+            self.queue_recv(VQUEUE)
+
+    def votereceiver(self):
+        asyncio.set_event_loop(asyncio.new_event_loop())
         self.__sio = socketio.AsyncServer()
         app = web.Application()
         self.__sio.attach(app)
-
 
         @self.__sio.on('connect')
         def connect(sid, environ):
@@ -68,23 +87,26 @@ class Miner:
             prob_num = data['prob_num']
             selection = data['selection']
 
-
             key_info = key_info.encode("utf-8")
 
             vote = "{}:{}".format(data['prob_num'], data['selection'])
 
-            voteInfo = VoteInfo(get_timestamp(), target=target.encode("utf-8"), pubkey=key_info, vote=(prob_num, selection), sign = sig.encode("utf-8"))
-            self.__chain.add_vote(voteInfo)
+            voteInfo = VoteInfo(get_timestamp(), target=target.encode("utf-8"), pubkey=key_info,
+                                vote=(prob_num, selection), sign=sig.encode("utf-8"))
+
+            print(voteInfo)
+            # broadcast to other miner
+            header = bytes('<send vote><{}>'.format(self.addr),encoding='utf-8')
+            msg = header + bytes(voteInfo)
+            SocketUtil.broadcast(msg,config.CONNECTION_LIST)
+            self.__chain.add_vote(voteInfo, -1)
             self.__cnt += 1
             if self.__cnt >= 5:
                 self.__cnt = 0
                 self.pack_block()
-            self.block_recv(BQUEUE)
             return "OK", 123
+        web.run_app(app, port=1010)
 
-        web.run_app(app, port=addr[1])
-
-        # update current chain
 
     @classmethod
     def instance(cls, addr, chain, t):
@@ -95,24 +117,27 @@ class Miner:
 
     def __load_chain(self):
         # todo load chain
-        self.chain.load()
+        self.__chain.load()
         pass
 
-    def block_recv(self, queue):
+    def queue_recv(self, queue):
         while not queue.empty():
-            block = queue.get()
-            self.chain.add_block(block)
-            print("adding sucess")
+            item = queue.get()
+            # 判断拿出的元素时block还是vote
+            if isinstance(item,VoteBlock):
+                self.__chain.add_block(item)
+            elif isinstance(item,VoteInfo):
+                self.__chain.add_vote(item,-1)
             queue.task_done()
 
     def update_chain(self):
 
-        lastid = self.chain.get_last_block()[0]
-        blocks = self.chain.get_chain(0)
+        lastid = self.__chain.get_last_block()[0]
+        blocks = self.__chain.get_chain(0)
         QUEUE.put((self.addr, lastid))
         CQUEUE.put((self.addr, blocks))
         # broadcast for chain info
-        print('max id', self.chain.get_last_block()[0])
+        print('max id', self.__chain.get_last_block()[0])
         print("initial broadcasting...")
         msg = bytes('<request chain><{}><{}>'.format(str(self.addr),lastid), encoding='utf-8')
         SocketUtil.broadcast(msg, config.CONNECTION_LIST)
@@ -123,14 +148,14 @@ class Miner:
         block = VoteBlock.load(block)
         if not block.check():
             raise MinerError("Block not valid")
-        self.chain.add_block(block)
+        self.__chain.add_block(block)
 
     # this function should not belong here
     def add_vote(self, voteInfo):
         if type(voteInfo) is not bytes:
             raise MinerError("voteInfo must be bytes, but not {}".format(type(voteInfo)))
         voteInfo = VoteInfo.load(voteInfo)
-        self.chain.add_vote(voteInfo, -1)
+        self.__chain.add_vote(voteInfo, -1)
 
     def check_vote(self, voteInfo):
         pass
@@ -139,20 +164,20 @@ class Miner:
         pass
 
     def pack_block(self):
-        lid, lhash, lprehash = self.chain.get_last_block()
+        lid, lhash, lprehash = self.__chain.get_last_block()
         voteBlock = VoteBlock(lid + 1, lhash.encode("utf-8"))
 
-        votes = self.chain.get_uncomfirmed_votes()
+        votes = self.__chain.get_uncomfirmed_votes()
         pack = votes[:VOTES_IN_A_BLOCK]
         if(len(pack) == 0):
             return None
 
         for voteInfo in pack:
             voteBlock.add_info(voteInfo)
-            self.chain.remove_vote(voteInfo)
+            self.__chain.remove_vote(voteInfo)
 
         voteBlock.close()
-        self.chain.add_block(voteBlock)
+        self.__chain.add_block(voteBlock)
         return voteBlock
 
     def get_timestamp(self):
