@@ -12,7 +12,12 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+import settings
 
+from ecpy.curves import Curve, Point
+from ecpy.keys import ECPrivateKey, ECPublicKey
+from ecpy.eddsa import EDDSA
+import hashlib
 
 # context = {'isLogin': True,'username':''}
 # Create your views here.
@@ -231,10 +236,32 @@ def edit_action(request):
     return render(request, 'startvote/index.html', {'artilces': articles})
 
 def fold_demo(request):
-    candidate = []
-    candidate.append({"id":1, "title": "Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。\n"*3})
-    candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*3})
-    return render(request, 'fold_demo.html', {'candidate': candidate})
+    if request.method == 'GET':
+        return render(request, 'fold_demo.html')
+    elif request.method == 'POST':
+        msg = request.POST.get('msg')
+        signature = request.POST.get('signature')
+        print("sig:",signature)
+        pub_key = request.POST.get('pub_key')
+        print(pub_key)
+        prv = request.POST.get('pri_key')
+        cv = Curve.get_curve('Ed25519')
+        signer = EDDSA(hashlib.sha512)
+        prv = hashlib.md5(prv.encode()).hexdigest()
+        print("prv:", prv)
+        pub = ECPublicKey(cv.decode_point(bytes.fromhex(pub_key)))
+        prv_key = ECPrivateKey(int(prv, 16), cv)
+        pub_key = EDDSA.get_public_key(prv_key)
+        print("pub:", cv.encode_point(pub_key.W).hex())
+        sig = bytes.fromhex(signature)
+        msg = msg.encode()
+        print(prv_key)
+        print(pub_key)
+        print(pub)
+        print(sig)
+        print(signer.sign(msg, prv_key))
+        veri = signer.verify(msg, sig, pub_key)
+        return HttpResponse(veri)
 
 #获得单个block内的信息
 def single_block_info(request):
@@ -248,7 +275,6 @@ def single_block_info(request):
     format_block = []
     for i,b in enumerate(block):
         format_block.append((title0[i], b))
-
     for i in infos:
         i = list(i)
         i[0] = i[0][:16]
@@ -262,12 +288,16 @@ def single_block_info(request):
 def block_info(request):
     br = bm.BlockReader()
     blocks = br.getBlockInfos()
-    title = ["Id","hash","prehash","vote_num","generator"]
+    title = ["Id", "hash", "prehash", "vote_num", "generator"]
     format_blocks = []
-    print(blocks[0])
+    print(blocks)
     for b in blocks:
         b = list(b)
         b[1] = b[1][:32]   #截取哈希的前32位
         b[2] = b[2][:32]
         format_blocks.append(b)
     return render(request, 'block_info.html', {'blocks': format_blocks, 'title': title})
+
+#获取投票服务器的公钥
+def public_key(request):
+    return HttpResponse(settings.PUBLIC_KEY)

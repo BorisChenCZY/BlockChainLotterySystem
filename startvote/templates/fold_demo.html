@@ -2,10 +2,10 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Bootstrap 实例 - 折叠面板</title>
+	<title>测试椭圆曲线加密</title>
 	<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
-	<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
-	<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="../static/js/jquery.js"></script>
+	<script src="../static/js/bootstrap.min.js"></script>
 
     <style>
     .vote_img
@@ -16,32 +16,63 @@
 </head>
 <body>
 <div class="panel-group" id="accordion">
-    {%for c in candidate %}
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<h4 class="panel-title">
-				<a data-toggle="collapse"
-				   data-target="#{{ c.id }}">
-                {{c.title}}
-				</a>
-			</h4>
-		</div>
-		<div id="{{ c.id }}" class="panel-collapse collapse in">
-            <div class="panel-body">
-			    <div class="media">
-                    <div class="media-left" href="#">
-                        <img class="media-object vote_img media-middle" src={{c.img}}  alt="媒体对象">
-                    </div>
-                    <div class="media-body">
-                        <h4 class="media-heading">{{c.title}}</h4>
-                        <pre>{{c.content}}</pre>
-                    </div>
-                </div>
-		    </div>
+    <form action="{% url 'fold_demo' %}" method="post">
+        {% csrf_token %}
+        <h2 class="text-center">Login</h2>
+        <div class="form-group has-error">
+        	<input type="text" class="form-control" id="prv" value="mark" placeholder="private_key">
         </div>
-	</div>
-    {% endfor %}
+		<div class="form-group">
+            <input type="text" class="form-control" id="msg" value="hello" placeholder="message">
+        </div>
+        <div class="form-group">
+            <button type="button" id="Submit" class="btn btn-primary btn-lg btn-block" >Verify</button>
+        </div>
+{#        <div class="error btns login-form-tips" id="jsLoginTips">{{ msg }}#}
+{#        </div> #}
+{#        <p><a href="{% url 'index' %}">Lost your Password?</a></p>#}
+    </form>
 </div>
-
+<script src="../static/js/elliptic/lib/bundle.js"></script>
+<script src="../static/js/md5.js"></script>
+<script>
+    function str2b(url) {
+    var data = [];
+    for (var i = 0; i < url.length; i++)
+    data.push(url.charCodeAt(i));
+    return data;
+}
+    $("#Submit").on('click', function () {
+        var prv = $("#prv").val();
+        var msg = $("#msg").val();
+        var EdDSA = require('elliptic').eddsa;
+        var utils = require('elliptic').utils;
+        var ec = new EdDSA('ed25519');
+        var key = ec.keyFromSecret(hex_md5(prv));
+        var pub = utils.toHex(key.getPublic());
+        var signature = key.sign(str2b(msg)).toHex();
+        var key_pub = ec.keyFromPublic(pub);
+        $.post(
+           "fold_demo",
+            {
+                msg: msg,
+                signature: signature,
+                pub_key: pub,
+                pri_key: prv
+            },
+            function(data){
+               console.log(data);
+            }
+        );
+        console.log(hex_md5(prv));
+        console.log(ec.decodePoint(pub));
+        console.log(pub);
+        console.log(utils.toHex(key.getSecret()));
+        console.log(key.hash);
+        console.log(signature);
+        {#console.log(ec.verify(msg, signature, key_pub));#}
+        $(this).html("Done");
+    });
+</script>
 </body>
 </html>
