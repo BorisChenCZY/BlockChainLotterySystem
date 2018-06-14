@@ -6,11 +6,21 @@
 </head>
 <body>
 <div class="single_block_info">
+    <div class="inmobile">
+        {% for t,b in block %}
+            <div>
+                <div style="width: 30%;float: left" class="element-title">{{ t }}: </div>
+                <div style="text-overflow: ellipsis;overflow: hidden;width: 70%" >{{ b}}</div>
+            </div>
+
+        {% endfor %}
+    </div>
+
     <table class="table table-hover">
         <thead>
         <tr>
             {% for t in title %}
-                <th>{{ t }}</th>
+                <th id="th2-{{ forloop.counter }}">{{ t }}</th>
             {% endfor %}
         </tr>
         </thead>
@@ -18,7 +28,7 @@
         {% for b in infos %}
             <tr>
                 {% for v in b %}
-                    <td>
+                    <td id="td2-{{ forloop.counter }}" title="{{ v }}">
                         {{ v }}
                     </td>
                 {% endfor %}
@@ -27,5 +37,6 @@
         </tbody>
     </table>
 </div>
+
 </body>
 </html>
