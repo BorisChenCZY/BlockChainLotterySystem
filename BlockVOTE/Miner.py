@@ -149,10 +149,13 @@ class Miner:
                 self.__cnt = 0
                 print("auto packing...")
                 blk = self.pack_block()
-                # broadcast block to other miner
-                info = bytes('<send block><{}>'.format(str(self.addr)), encoding='utf-8') + bytes(blk)
-                print("broadcast new generated block {} ".format(blk.get_id()))
-                SocketUtil.broadcast(config.CONNECTION_LIST, info, self.addr)
+                if blk:
+                    # broadcast block to other miner
+                    info = bytes('<send block><{}>'.format(str(self.addr)), encoding='utf-8') + bytes(blk)
+                    print("broadcast new generated block {} ".format(blk.get_id()))
+                    SocketUtil.broadcast(config.CONNECTION_LIST, info, self.addr)
+                else:
+                    print("no vote to pack: direct pass token")
                 # 将token加一交给config中的下一个人
                 cur_token = self.token
                 if SocketUtil.token_send(self.addr, cur_token):
