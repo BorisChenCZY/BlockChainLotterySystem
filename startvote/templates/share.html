@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    {#    以下三行用于禁止缓存#}
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
+
+    {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-1.2.6.min.js"></script>#}
+    {#    <script language="JavaScript" type="text/javascript" src="/js/jquery-ui-personalized-1.5.2.packed.js"></script>#}
+    {#    <script language="JavaScript" type="text/javascript" src="/js/sprinkle.js"></script>#}
+
+    <title>Basic Form</title>
+
+    <link rel="stylesheet" href="/static/assets/demo.css">
+    <link rel="stylesheet" href="/static/assets/form-basic.css">
+
+    <style type="text/css">
+        body {
+            color: #fff;
+            background: #65B0A7;
+            height: 100%;
+            background-size:100% 100%;
+        }
+        .middle{
+            margin-right: auto;
+            margin-left: auto;
+            width: 256px;
+        }
+
+    </style>
+    <style>
+#all{
+    margin:0px auto;
+    {#width:500px; /* 必须制定宽度 */#}
+    {#height:200px;#}
+    background-color:white;
+     text-align:center; /* 文字居中 */
+    color:black; /* 文字颜色 */
+}
+</style>
+    {#    <style type="text/css">#}
+    {#        myform {#}
+    {#            margin:60%;#}
+    {#        }#}
+    {#    </style>#}
+    <style type="text/css">
+        .entry:not(:first-of-type)
+        {
+            margin-top: 10px;
+        }
+
+        .glyphicon
+        {
+            font-size: 12px;
+        }
+        .nomarginb{
+            margin-bottom: 0px;
+        }
+
+        .adjust{
+            margin-left:4px;
+
+        }
+        @media (max-width: 767px) {
+            .adjust{
+                margin-left: 0px;
+            }
+        }
+
+    </style>
+    <script>
+        var vote_target ="{{ vote_target }}";
+
+        var room = 1;
+        function education_fields() {
+
+            room++;
+            var objTo = document.getElementById('education_fields')
+            var divtest = document.createElement("div");
+            divtest.setAttribute("class", "form-group nomarginb removeclass"+room);
+            var rdiv = 'removeclass'+room;
+
+
+            divtest.innerHTML =
+                '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
+                '                    <div class="form-group" >\n' +
+                '                        <div class="input-group" >\n' +
+                '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >\n' +
+                '\n' +
+                '                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapse'+room+'"> Details</button>\n' +
+                '\n' +
+                '                            <button style="margin: 0 0 0 0;padding: 0 0 0 0;display:inline-block;background: #d9534f;" class="btn btn-danger" type="button"  onclick="remove_education_fields('+room+');"> <span style="width: auto;padding:  11px 8px 11px 8px;" class="glyphicon glyphicon-minus" aria-hidden="true"></span> </button>\n' +
+                '\n' +
+                '                        </div>\n' +
+                '\n' +
+                '                    </div>' +
+                '                    <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapse'+room+'">' +
+                '\n' +'<textarea name="vote_details"></textarea>' +
+                ' <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >\n'
+            '\n' +
+            '\n' +
+            '                    </div>\n' +
+            '                </div>';
+
+            objTo.appendChild(divtest)
+        }
+        function remove_education_fields(rid) {
+            $('.removeclass'+rid).remove();
+        }
+        jQuery(function(){
+            //二维码的跳转网页地址
+
+            var my_host = window.location.host;
+            var url = my_host+"/vote/"+vote_target;
+            console.log(url);
+            jQuery('#qrcode').qrcode(url);
+        })
+    </script>
+
+
+
+</head>
+
+
+
+<body>
+<div class="card adjust3" style="width: 20rem;">
+
+</div>
+
+<div class="main-content">
+
+    <!-- You only need this form and the form-basic.css -->
+
+
+
+
+{#    <div>#}
+{#        <button class="button" data-toggle="modal" data-target="#exampleModal" style="color: #7a7a7a;margin-left: 50%">（）</button>#}
+{#    </div>#}
+{#    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">#}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 300px;margin-left: auto;margin-right: auto;margin-left: auto;margin-top: 180px">
+
+            <div class="modal-header" id="all">
+                <h2>扫一扫，参与投票</h2>
+            </div>
+                <div class="modal-body">
+                    <div class="middle">
+                        <div id="qrcode"></div>
+                    </div>
+                </div>
+                <div class="modal-bottom" id="all">
+                    <a href="{% url 'card' %}"><button  type="button"  class="btn float-right" style="font-weight:600;margin-bottom:30px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
+                    &nbsp&nbspcheck my vote&nbsp&nbsp</button></a>
+            </div>
+
+            </div>
+        </div>
+    <div >
+
+        {#        <a href="{% url 'index' %}">#}
+        {#        <button class="btn btn-info float-right btn-sm btn-lg" style="margin-bottom: 20px">#}
+        {#                  Back</button></a>#}
+
+{#    </div>#}
+</div>
+
+
+
+
+
+
+</body>
+
+</html>
+
+<style>
+    .adjust2{
+        margin-top: 12px;
+    }
+    @media (max-width: 767px) {
+        .adjust2{
+            margin-top: 2px;
+        }
+    }
+    .adjust3{
+        margin-bottom: 50px
+    }
+    @media (max-width: 767px) {
+        .adjust3{
+            margin-bottom: 30px
+        }
+    }
+
+
+
+
+</style>
+
