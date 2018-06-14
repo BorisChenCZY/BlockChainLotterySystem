@@ -440,7 +440,7 @@
                     <div class="panel-collapse ">
                         <div class="panel-body">
                             <div class="media">
-                                <img class="mr-3 vote_img"  src="{{ MEDIA_URL }}{{ c.img }}" alt="媒体对象">
+                                <img class="mr-3 vote_img"  src="{{ MEDIA_URL }}{{ c.img }}" alt="媒体对象" onerror="this.src='{{ MEDIA_URL }}default/头像.jpeg'">
                                 <div class="media-body" style="color: black">
                                     <h5 class="mt-0 myfont smallerfont">{{c.title}}</h5>
                                     {{ c.detail }}<br>
