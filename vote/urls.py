@@ -29,6 +29,7 @@ urlpatterns = [
     re_path(r'^form$', v1.form, name="form"),
     re_path(r'^card$', v1.card, name="card"),
     re_path(r'^vote/(?P<target>.*?)$', v1.vote, name="vote"),
+    re_path(r'^result$', v1.real_time_result, name="realTimeResult"),
 
 
 

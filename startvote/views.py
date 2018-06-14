@@ -12,6 +12,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+import json
 
 
 # context = {'isLogin': True,'username':''}
@@ -47,14 +48,17 @@ def login(request):
         if userform.is_valid():
             username = userform.cleaned_data['username']
             password = userform.cleaned_data['password']
+            print(username, password)
             user = auth.authenticate(username=username, password=password)
 
             if user:
                 auth.login(request,user)
                 request.session['username'] = user.username
+                print("logined in")
                 
                 return render(request, 'index.html')
             else:
+                print("password wrong")
                 return render(request, "login.html")
 
 #注册
@@ -146,6 +150,8 @@ def vote(request, target):
         return HttpResponse("Wrong vote target!")
     br = bm.BlockReader()
     on_chain_result = br.getVoteResult(target)
+    print('vote page', target)
+    print('vote page', on_chain_result)
     # print(vote.vote_name)
     on_web_list = Selection.objects.filter(vote_id=vote)
     candidate = []
@@ -271,3 +277,18 @@ def block_info(request):
         b[2] = b[2][:32]
         format_blocks.append(b)
     return render(request, 'block_info.html', {'blocks': format_blocks, 'title': title})
+
+def real_time_result(request):
+
+    if request.method != "POST":
+        return HttpResponse("404 hhh")
+    else:
+        result= dict(request.POST)
+        # print(result)
+        url = result["url"][0]
+        target = url[url.find("b"):]
+
+        br = bm.BlockReader()
+        on_chain_result = br.getVoteResult(target)
+        response_data = dict(on_chain_result)
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
