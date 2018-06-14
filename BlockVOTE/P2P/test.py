@@ -1,7 +1,10 @@
-import P2P.Node as node
-
-
+import datetime
+import asyncio
+import time
 if __name__ == "__main__":
-    addr = ("localhost", 9999)
-    a = node.Node(addr)
-    a.serving()
+    now = datetime.datetime.timestamp(datetime.datetime.now())
+    time.sleep(1)
+    xixi = datetime.datetime.timestamp(datetime.datetime.now())
+    diff = (datetime.datetime.fromtimestamp(xixi) - datetime.datetime.fromtimestamp(now))
+    print(type(diff.seconds))
+    # print(type(diff))
