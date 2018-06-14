@@ -46,9 +46,9 @@ class SocketUtil(object):
         try:
             # Connect to server and send data
             sock.connect(target)
-            print("connected to {}".format(target))
+            # print("connected to {}".format(target))
             sock.sendall(msg)
-            print("initial request sent")
+            # print("initial request sent")
         except:
             sock.close()
         sock.close()
