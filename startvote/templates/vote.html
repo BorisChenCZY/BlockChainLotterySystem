@@ -642,7 +642,7 @@
             }
         }
         console.log(id);
-        if (id === undefined) {
+        if (cnt===0) {
             alert("You need to select at least one option.");
             return;
         }
@@ -657,20 +657,22 @@
             "prob_num": 1,
             "selection": id
         };
+        test_msg = msg;
         {#var s_d = JSON.stringify(d);#}
         {#console.log(typeof s_d)#}
         {#console.log(s_d);#}
-        s = ec.sign(str2b(JSON.stringify(d))).toHex();
+        s = utils.toHex(ec.sign(str2b(JSON.stringify(msg)), key).toDER());
         console.log(s);
-        console.log(key.verify(str2b(JSON.stringify(d)), s, pub_key));
+
+        console.log(key.verify(str2b(JSON.stringify(msg)), s, pub_key));
         var data = {
-            "msg": d,
+            "msg": msg,
             "sign": s,
             "pubkey": pub_key
         };
         console.log(msg);
-        $(this).html("Done");
-       if (confirm("你确定要提交吗？")){
+       $(this).html("Done");
+       {
         for (var i = 0; i < miner_list.length; i++) {
             var address = miner_list[i];
             console.log(address);
@@ -680,9 +682,11 @@
             console.log("good");
            }
            {#window.location.href="logout.asp?act=logout"#}
-            window.history.back(-1);
+
         }
 
+        alert("提交成功，即将退出投票页哈哈哈哈哈哈");
+{#       window.history.back(-1);#}
         $(this).html("Done");
 
     })

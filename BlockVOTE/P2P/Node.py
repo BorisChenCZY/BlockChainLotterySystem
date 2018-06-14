@@ -129,7 +129,6 @@ class Node:
     def __init__(self, addr):
         self.addr = addr
 
-
     def serving(self):
         server = socketserver.TCPServer(self.addr, MyTCPHandler)
         # Activate the server; this will keep running until you

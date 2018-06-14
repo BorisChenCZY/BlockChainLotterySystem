@@ -49,6 +49,8 @@ class Chain:
         # todo check the chain is valid
         self.__loaded = True
         blocks = self.get_chain(0)
+        if blocks == None:
+            return
         pre_hash = b"0"
         for block in blocks:
             # print(pre_hash, block.get_prehash())
