@@ -16,7 +16,6 @@ BQUEUE = queue.Queue()
 VQUEUE = queue.Queue()
 TQUEUE = queue.Queue()
 BLOCK = set()
-VOTE = set()
 
 def decode_addr(string):
     s = re.findall(r'[^(,)]+', string)
@@ -93,6 +92,7 @@ class MyTCPHandler(BRH):
                             info = bytes('<receive block><{}><{}>'.format(str(self.request.getsockname()),str(block.get_id())),encoding='utf-8')
                             SocketUtil.send(info, addr)
                         else:
+                            print("block existed")
                             info = bytes('<receive block><{}><{}>'.format(str(self.request.getsockname()), str(-1)),encoding='utf-8')
                             SocketUtil.send(info, addr)
                     else:
@@ -103,16 +103,10 @@ class MyTCPHandler(BRH):
                     abte = bytes(decod[2], encoding='utf-8')
                     vote = VoteInfo.load(abte)
                     print("adding vote...")
-                    if vote.get_info() not in VOTE:
-                        VOTE.add(vote.get_info())
-                        VQUEUE.put(vote)
-                        info = bytes('<receive vote><{}><{}>'.format(str(self.request.getsockname()), str(vote.get_info())), encoding='utf-8')
-                        SocketUtil.send(info, addr)
-                    else:
-                        print("vote existed")
-                        info = bytes('<receive vote><{}><{}>'.format(str(self.request.getsockname()), str(-1)),
-                                     encoding='utf-8')
-                        SocketUtil.send(info, addr)
+                    VOTE.add(vote.get_info())
+                    VQUEUE.put(vote)
+                    info = bytes('<receive vote><{}><{}>'.format(str(self.request.getsockname()), str(vote.get_info())), encoding='utf-8')
+                    SocketUtil.send(info, addr)
 
                 elif decod[0] == 'receive block':
                     print(decod)
@@ -123,10 +117,7 @@ class MyTCPHandler(BRH):
 
                 elif decod[0] == 'receive vote':
                     print(decod)
-                    if decod[2] == '-1':
-                        print('{} already has this vote'.format(decod[1]))
-                    else:
-                        print('{} receive vote{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
+                    print('{} receive vote{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
 
                 elif decod[0] == 'token':
                     token = int(decod[2])

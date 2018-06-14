@@ -59,6 +59,7 @@ class Chain:
 
 
     def duplicate_vote(self, voteInfo):
+        # true for duplicate
         if(type(voteInfo) != VoteInfo):
             raise ChainError("Must input voteInfo")
         timestamp = float(voteInfo.get_timestamp())
@@ -68,7 +69,7 @@ class Chain:
             select vote_id from {} where pubkey = "{pubkey}" and timestamp  =  {timestamp}
             """.format(self.__name + VOTE_TABLE_OFF, pubkey = pubkey, timestamp = timestamp)
         )
-        return len(self.__c.fetchall()) == 0
+        return len(self.__c.fetchall()) != 0
 
 
     def create(self):
