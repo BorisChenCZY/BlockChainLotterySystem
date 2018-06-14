@@ -97,7 +97,8 @@ def form(request):
             entry = Entry()
             vote.creat_time = datetime.datetime.now()
             vote.vote_name = request.POST.get("vote_name")
-            vote.vote_img = request.FILES.get("vote_img")
+            if request.FILES.get("vote_img"):
+                vote.vote_img = request.FILES.get("vote_img")
             vote.vote_description = request.POST.get("vote_description")
             vote.start_time = request.POST.get("start_time")
             vote.end_time = request.POST.get("end_time")
@@ -113,7 +114,7 @@ def form(request):
                 vote.vote_anonymity = True
             else:
                 vote.vote_anonymity = False
-            if request.POST.get("is_opened") == "无限制":  # 是否是公开投票
+            if int(request.POST.get("is_opened")) == 1:  # 是否是公开投票
                 vote.is_opened = True
             else:
                 vote.is_opened = False
@@ -131,13 +132,16 @@ def form(request):
             vote_details = request.POST.getlist("vote_details")
             attachments = request.FILES.getlist("attachments")
             for i in range(len(options_list)):
+                print(i)
                 seletion = Selection()
                 seletion.vote_id = Vote.objects.get(vote_target=vote_target)
                 seletion.title = options_list[i]
                 seletion.simple_detail = "这个人很懒，什么都没写"
                 seletion.detail = vote_details[i]
                 # path＝default_storage.save（，ContentFile（image.read()））
+                # if attachments:
                 seletion.img = attachments[i]
+
                 seletion.save()
 
 

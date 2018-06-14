@@ -443,7 +443,7 @@
                                 <img class="mr-3 vote_img"  src="{{ MEDIA_URL }}{{ c.img }}" alt="媒体对象">
                                 <div class="media-body" style="color: black">
                                     <h5 class="mt-0 myfont smallerfont">{{c.title}}</h5>
-                                    {{ c.simple }}<br>{{ c.detail }}
+                                    {{ c.detail }}<br>
                                 </div>
                             </div>
                             {##}
@@ -589,6 +589,9 @@
     jQuery(function(){
         //二维码的跳转网页地址
         var test = window.location.href;
+
+            $("#copy").val(test);
+
         jQuery('#qrcode3').qrcode(test);
     });
 
