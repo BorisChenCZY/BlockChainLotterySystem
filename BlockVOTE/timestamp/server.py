@@ -1,6 +1,7 @@
 import socketserver
 from socketserver import BaseRequestHandler as BRH
-import time
+import datetime
+from BlockVOTE.P2P.timeaddr import TIMESTAMP_SERVER_ADDR
 
 class MyTCPHandler(BRH):
     """
@@ -19,14 +20,14 @@ class MyTCPHandler(BRH):
                 self.request.close()
             if not data:
                 break
-            print( "{} wrote:".format(self.client_address[0]))
-            print(data)
-            # just send back the same data, but upper-cased
-            self.request.sendall(bytes(str(time.time()),encoding='utf-8'))
+            else:
+                print("{} request {}".format(str(self.request.getpeername()), str(data, encoding='utf-8')))
+                ts = bytes(str(datetime.datetime.now().timestamp()), encoding='utf-8')
+                self.request.sendall(ts)
 
 
 if __name__ == "__main__":
-    HOST, PORT = "localhost", 9999
+    HOST, PORT = TIMESTAMP_SERVER_ADDR
     # Create the server, binding to localhost on port 9999
     server = socketserver.TCPServer((HOST, PORT), MyTCPHandler)
     # Activate the server; this will keep running until you

@@ -18,7 +18,7 @@ class SocketUtil(object):
     #     return SocketUtil._instance
 
     @staticmethod
-    def request_time_stamp(addr):
+    def get_time_stamp(addr):
         if type(addr[0]) != str or type(addr[1]) != int:
             raise exception.FormatException()
         # Create a socket (SOCK_STREAM means a TCP socket)
@@ -26,13 +26,13 @@ class SocketUtil(object):
         try:
             # Connect to server and send data
             sock.connect(addr)
-            sock.sendall(b'time')
+            sock.sendall(b'timestamp')
             # Receive data from the server and shut down
             received = sock.recv(1024).decode()
             print("Received: {}".format(received))
         finally:
             sock.close()
-        return received
+        return float(received)
 
 
     @staticmethod

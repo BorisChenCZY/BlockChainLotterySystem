@@ -1,6 +1,8 @@
 import sqlite3
 from BlockVOTE.VoteBlock import *
 from BlockVOTE.VoteInfo import *
+from BlockVOTE.P2P.timeaddr import TIMESTAMP_SERVER_ADDR
+from BlockVOTE.P2P.SocketUtil import SocketUtil
 class ChainError(Exception):
     pass
 
@@ -9,10 +11,9 @@ BLOCK_TABLE_OFF = "Block"
 VOTE_TABLE_OFF = "Vote"
 RESULT_TABLE_OFF = "Result"
 
-#temporarily
+#changed: ues timestamp server
 def get_timestamp():
-    import datetime
-    return datetime.datetime.now().timestamp()
+    return SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
 
 class Chain:
     __conn = None
