@@ -4,7 +4,7 @@ from BlockVOTE.VoteInfo import VoteInfo
 import datetime
 if __name__ == '__main__':
 
-    addr = ("10.20.13.49", 3002)
+    addr = ("10.20.111.242", 3003)
 
     miner = Miner.instance(addr, "zsq1", 0)
     # voteInfo = VoteInfo(datetime.datetime.now().timestamp(), b'target', b'pubkey', (2, [3]), b'sign')
