@@ -153,53 +153,6 @@ def form(request):
 def vote(request, target):
     vote = Vote.objects.filter(vote_target=target).get()
 
-    if vote is None:
-        return HttpResponse("Wrong vote target!")
-    br = bm.BlockReader()
-    on_chain_result = br.getVoteResult(target)
-    print('vote page', target)
-    print('vote page', on_chain_result)
-    # print(vote.vote_name)
-    on_web_list = Selection.objects.filter(vote_id=vote)
-    candidate = []
-    for option in on_web_list:
-        id = option.selection_id
-        new_dict = {}
-        new_dict["id"] = option.selection_id
-        new_dict["title"] = option.title
-        new_dict["simple"] = option.simple_detail
-        new_dict["detail"] = option.detail
-        new_dict["img"] = option.img
-        new_dict["voteNum"] = 0
-        candidate.append(new_dict)
-    if not on_chain_result:
-        Max = 0
-    else:
-        Max = max([result[1] for result in on_chain_result])
-    for result in on_chain_result:
-        candidate[result[0]-1]["voteNum"] = result[1]
-        candidate[result[0]-1]["width"] = result[1]*80/float(Max)
-    votename = vote.vote_name
-    voteLimit = 1
-    max_id = len(candidate)
-    t = None
-    if vote.vote_type == 1:
-        t = "单选"
-    else:
-        t = "多选"
-    description = vote.vote_description
-    miner_list = br.getMinerList()
-    format_miner_list =[ m[0] for m in miner_list]
-    print(format_miner_list)
-    return render(request, 'vote.html', {'candidate': candidate
-                                         , "vote": vote
-                                         , "voteLimit":voteLimit
-                                         , "max_id":max_id
-                                         , "type": t
-                                         , "description": description
-                                         , "target": target
-                                         , "miner_list": format_miner_list
-                                         , "Web_pub": settings.PUBLIC_KEY})
     if vote.is_opened or request.user.is_authenticated:
         br = bm.BlockReader()
         on_chain_result = br.getVoteResult(target)
@@ -242,6 +195,48 @@ def vote(request, target):
     else:
 
         return render(request, 'login.html')
+    # if vote.is_opened or request.user.is_authenticated:
+    #     br = bm.BlockReader()
+    #     on_chain_result = br.getVoteResult(target)
+    #     # print(vote.vote_name)
+    #     on_web_list = Selection.objects.filter(vote_id=vote)
+    #     candidate = []
+    #     for option in on_web_list:
+    #         id = option.selection_id
+    #         new_dict = {}
+    #         new_dict["id"] = option.selection_id
+    #         new_dict["title"] = option.title
+    #         new_dict["simple"] = option.simple_detail
+    #         new_dict["detail"] = option.detail
+    #         new_dict["img"] = option.img
+    #         new_dict["voteNum"] = 0
+    #         candidate.append(new_dict)
+    #     if not on_chain_result:
+    #         Max = 0
+    #     else:
+    #         Max = max([result[1] for result in on_chain_result])
+    #     for result in on_chain_result:
+    #         candidate[result[0] - 1]["voteNum"] = result[1]
+    #         candidate[result[0] - 1]["width"] = result[1] * 80 / float(Max)
+    #     votename = vote.vote_name
+    #     voteLimit = vote.vote_optionable_num
+    #     max_id = len(candidate)
+    #     t = str(max_id) + "选" + str(vote.vote_optionable_num)
+    #     description = vote.vote_description
+    #     miner_list = br.getMinerList()
+    #     format_miner_list = [m[0] for m in miner_list]
+    #     print(format_miner_list)
+    #     return render(request, 'vote.html', {'candidate': candidate
+    #         , "vote": vote
+    #         , "voteLimit": voteLimit
+    #         , "max_id": max_id
+    #         , "type": t
+    #         , "description": description
+    #         , "target": target
+    #         , "miner_list": format_miner_list})
+    # else:
+    #
+    #     return render(request, 'login.html')
 
 
 def card(request):
