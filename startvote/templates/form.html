@@ -105,6 +105,53 @@
 
 
         }
+        function check(){
+               var vote_name = document.getElementById("vote_name").value;
+               var vote_description = document.getElementById("vote_description").value;
+               var vote_start_time = document.getElementById("vote_start_time").value;
+               var vote_end_time = document.getElementById("vote_end_time").value;
+                {#var vote_option = document.getElementById("vote_options").value;#}
+               if(vote_name){
+                   if(vote_description){
+                       {#if(vote_options){#}
+                       {#    #}
+                       if(vote_start_time){
+                           if(vote_end_time){
+                               if(totalNum>1){
+
+
+                                   return true;
+                               }
+                               alert("选项数目不能只有一个");
+                               return false;
+                           }
+                           alert("结束时间不能为空");
+                           return false;
+
+                       }
+                        alert("开始时间不能为空");
+                        return false;
+                   }else{
+                       alert("投票描述不能为空");
+                       return false;
+                   }
+
+
+               }else{
+                   alert("投票名不能为空");
+                   return false;
+               }
+               {# alert(val);#}
+               {##}
+               {#if(val == "可以提交"){#}
+               {#     alert("校验成功，之后进行提交");#}
+               {#  return true;#}
+
+               {#else{#}
+               {#     alert("校验失败，不进行提交");#}
+               {#    return false;#}
+               {#  }#}
+        }
 
 
         function education_fields() {
@@ -120,7 +167,7 @@
                 '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
                 '                    <div class="form-group" >\n' +
                 '                        <div class="input-group" >\n' +
-                '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >\n' +
+                '                            <input style="width: 162.5px;" type="text" class="form-control" id="option'+room+'" name="options" value="" onblur="if(this.value.replace(/^ +| +$/g,\'\')==\'\')alert(\'选项名不能为空!\')">\n' +
                 '\n' +
                 '                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapse'+room+'"> Details</button>\n' +
                 '\n' +
@@ -150,7 +197,7 @@
 
             var my_host = window.location.host;
             var url = my_host+"/vote/"+vote_target;
-            console.log(url);
+            $("#copy").val(url);
             jQuery('#qrcode').qrcode(url);
         })
 
@@ -172,7 +219,7 @@
 
     <!-- You only need this form and the form-basic.css -->
 
-    <form class="form-basic" method="post" position = "left" action="{% url 'form' %}" enctype="multipart/form-data">
+    <form class="form-basic" method="post" position = "left" action="{% url 'form' %}" enctype="multipart/form-data" onsubmit="return check()">
         {% csrf_token %}
 
         <div class="form-title-row">
@@ -182,13 +229,13 @@
         <div class="form-row">
             <label>
                 <span>投票名称</span>
-                <input type="text" name="vote_name">
+                <input type="text" name="vote_name" id="vote_name" >
             </label>
         </div>
         <div class="form-row">
             <label>
                 <span>投票介绍</span>
-                <textarea name="vote_description"></textarea>
+                <textarea name="vote_description" id ="vote_description"></textarea>
 
             </label>
         </div> <div class="form-row">
@@ -207,7 +254,7 @@
                 <div class="nopadding" style="width: 240px;display: inline-block">
                     <div class="form-group" >
                         <div class="input-group" >
-                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >
+                            <input style="width: 162.5px;" type="text" class="form-control" id="vote_options" name="option1" value="" onblur="if(this.value.replace(/^ +| +$/g,'')=='')alert('选项名不能为空!')" >
 
                             <button name="detail" style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne"> Details</button>
 
@@ -239,13 +286,13 @@
         <div class="form-row">
             <label>
                 <span>开始时间</span>
-                <input type="datetime-local" name="start_time">
+                <input type="datetime-local" name="start_time" id="vote_start_time">
             </label>
         </div>
         <div class="form-row">
             <label>
                 <span>结束时间</span>
-                <input type="datetime-local" name="end_time">
+                <input type="datetime-local" name="end_time" id="vote_end_time">
             </label>
         </div>
 
@@ -298,31 +345,7 @@
     </div>
 
 
-    <div>
-        <button class="button" data-toggle="modal" data-target="#exampleModal" style="color: #7a7a7a;margin-left: 50%">（发起投票成功后显示二维码）</button>
-    </div>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width: 300px;margin-left: auto;margin-right: auto">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="middle">
-                        <div id="qrcode"></div>
-                        <div style="margin-top: 10px">
-                            <textarea id="copy" style="color: black;width: 77%;height:34px;float: left;overflow-x: auto">对应的网址</textarea>
 
-                            <a><button type="button"  class="btn btn-primary"  onclick="copyLink();">Copy</button>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </div>
 

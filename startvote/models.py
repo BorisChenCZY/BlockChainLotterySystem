@@ -15,7 +15,7 @@ class Artivle(models.Model):
 class Vote(models.Model):
     vote_id = models.IntegerField(primary_key=True)  # 自增主键
     vote_name = models.CharField(max_length=50)
-    vote_img = models.ImageField(null=True, upload_to="pic_folder/")
+    vote_img = models.ImageField(upload_to="pic_folder/", default='default/2.png')
     vote_anonymity = models.BooleanField(default=True)  # default anonymity
     vote_optionable_num = models.IntegerField(null=True)  # 多选,单选 1:单选 2：多选
     vote_state = models.IntegerField(null=True)  # 投票状态，状态编码，1：未开始 2：进行中 3：已结束
@@ -54,7 +54,7 @@ class Selection(models.Model):
     title = models.CharField(max_length=50,null=True)  #候选人标题
     simple_detail = models.TextField(null=True)   #候选人简单描述
     detail = models.TextField(null=True)   #候选人详细描述
-    img = models.ImageField(null=True,upload_to="pic_folder/")    # houxuanrentupian
+    img = models.ImageField(upload_to="pic_folder/",default='default/头像.jpeg')    # houxuanrentupian
 
 
 class local_Key_pool(models.Model):  # 公私钥池
