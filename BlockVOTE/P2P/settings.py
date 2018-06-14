@@ -1,1 +1,1 @@
-CONNECTION_LIST = [("localhost", 2222),("localhost", 1111),("localhost", 9999),("localhost", 3333)]
+CONNECTION_LIST = [("10.20.126.89", 2222), ("10.20.7.144", 6666)]
