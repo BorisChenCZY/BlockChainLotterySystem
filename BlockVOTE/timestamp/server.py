@@ -21,7 +21,7 @@ class MyTCPHandler(BRH):
             if not data:
                 break
             else:
-                print("{} request {}".format(str(self.request.getpeername()), str(data, encoding='utf-8')))
+                # print("{} request {}".format(str(self.request.getpeername()), str(data, encoding='utf-8')))
                 ts = bytes(str(datetime.datetime.now().timestamp()), encoding='utf-8')
                 self.request.sendall(ts)
 
