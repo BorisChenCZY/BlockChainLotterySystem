@@ -8,3 +8,7 @@ venv1
 ./BlockVOTE/P2P/settings.py
 ./BlockVOTE/test.sqlite
 ./BlockVOTE/miner1.py
+*.sqlite
+*.sqlite3
+BlockVOTE/miner1.py
+*/miner1.py
