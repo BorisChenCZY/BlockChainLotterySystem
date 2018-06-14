@@ -276,3 +276,6 @@ def block_info(request):
         b[2] = b[2][:32]
         format_blocks.append(b)
     return render(request, 'block_info.html', {'blocks': format_blocks, 'title': title})
+
+def page_not_found(request):
+    return  render(request,'startvote/error.html');

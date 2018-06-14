@@ -41,7 +41,6 @@
     <style type="text/css">
 
         .mr-3{
-            color: r;
             margin-right: 1rem!important;
         }
         .media-body{
@@ -79,6 +78,7 @@
 
         .card {
             margin-top: 20px;
+            margin-bottom: 20px;
             font-size: 1em;
             overflow: hidden;
             padding: 0;
@@ -280,6 +280,8 @@
             }
             .card{
                 margin-top: 10px;
+                margin-bottom: 10px;
+
             }
             .mycontainer{
                 margin-top: 20px;
@@ -385,18 +387,19 @@
             <p class="center-block">
                 <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button"
                    aria-expanded="false" aria-controls="multiCollapseExample1">Public Key</a>
-                <button class="btn btn-primary" type="button" data-toggle="collapse"
-                        data-target="#multiCollapseExample2" aria-expanded="false"
-                        aria-controls="multiCollapseExample2">Private Key
-                </button>
+
             </p>
-            <div class="col" style="color: #000000">
+            <div class="col" style="color: #000000 ">
                 <div class="collapse multi-collapse" id="multiCollapseExample1">
                     <div class="card card-body">
                         <span id="pubkey">Generating...</span> <br>
                     </div>
                 </div>
             </div>
+            <button class="btn btn-primary" type="button"  data-toggle="collapse"
+                        data-target="#multiCollapseExample2" aria-expanded="false"
+                        aria-controls="multiCollapseExample2">Private Key
+                </button>
             <div class="col" style="color: #000;">
                 <div class="collapse multi-collapse" id="multiCollapseExample2">
                     <div class="card card-body">
@@ -438,6 +441,12 @@
                 <div class="modal-body">
                     <div class="middle">
                         <div id="qrcode3"></div>
+                        <div style="margin-top: 10px">
+                            <textarea id="copy" style="color: black;width: 77%;height:32px;float: left;overflow-x: auto">对应的网址</textarea>
+
+                            <a><button type="button"  class="btn btn-primary"  onclick="copyLink();">Copy</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
