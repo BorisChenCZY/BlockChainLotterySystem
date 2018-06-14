@@ -39,14 +39,12 @@
             margin-left: auto;
             width: 256px;
         }
-
-    </style>
-    {#    <style type="text/css">#}
-    {#        myform {#}
-    {#            margin:60%;#}
-    {#        }#}
-    {#    </style>#}
-    <style type="text/css">
+        .button-div{
+            width: 640px;
+            margin-top: 10px;
+            margin-left: auto;
+            margin-right: auto;
+        }
         .entry:not(:first-of-type)
         {
             margin-top: 10px;
@@ -68,15 +66,50 @@
             .adjust{
                 margin-left: 0px;
             }
+            .button-div{
+                width: 340px;
+            }
         }
 
     </style>
     <script>
+        function copyLink(){
+            var e = document.getElementById("copy");
+            e.select(); // 选择对象
+            document.execCommand("Copy"); // 执行浏览器复制命令
+        }
+        var vote_target ="{{ vote_target }}";
+        {#var selectionNum =#}
 
         var room = 1;
-        function education_fields() {
+        var totalNum =1;
+        function optionsUpdate(t){
+             var objSelectNow=document.getElementById("select1");
+             console.log("before:",totalNum);
+             objSelectNow.options.length=0;
+            if(t===1){   //add
+                totalNum++;
 
+            }else{   //delete
+                totalNum--;
+            }
+
+            for (i=0;i<totalNum;i++)
+            {
+                var objOption = document.createElement("OPTION");
+              objOption.text= totalNum+"选"+(i+1);
+              objOption.value=i+1;
+              objSelectNow.options.add(objOption);
+            }
+            console.log("after:",totalNum);
+
+
+        }
+
+
+        function education_fields() {
             room++;
+            optionsUpdate(1);
             var objTo = document.getElementById('education_fields')
             var divtest = document.createElement("div");
             divtest.setAttribute("class", "form-group nomarginb removeclass"+room);
@@ -107,12 +140,21 @@
             objTo.appendChild(divtest)
         }
         function remove_education_fields(rid) {
+
             $('.removeclass'+rid).remove();
+            optionsUpdate(2);
+
         }
         jQuery(function(){
             //二维码的跳转网页地址
-            jQuery('#qrcode').qrcode("http://baidu.com");
+
+            var my_host = window.location.host;
+            var url = my_host+"/vote/"+vote_target;
+            console.log(url);
+            jQuery('#qrcode').qrcode(url);
         })
+
+
     </script>
 
 
@@ -130,7 +172,7 @@
 
     <!-- You only need this form and the form-basic.css -->
 
-    <form class="form-basic" method="post", position = "left", action="{% url 'form' %}"enctype="multipart/form-data">
+    <form class="form-basic" method="post" position = "left" action="{% url 'form' %}" enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="form-title-row">
@@ -152,7 +194,7 @@
         </div> <div class="form-row">
         <label>
             <span style="float: left">上传图片</span>
-            <input id="input-b2" class="adjust" style="float: left;padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false">
+            <input id="input-b2" class="" style="float: left;padding: 10px; font-weight: 300;" name="vote_img" type="file" class="file" data-show-preview="false">
 
         </label>
     </div>
@@ -209,10 +251,9 @@
 
         <div class="form-row">
             <label>
-                <span>投票类型</span>
-                <select name="vote_type" class="adjust2">
-                    <option>单选</option>
-                    <option>多选</option>
+                <span>可选数目</span>
+                <select name="vote_optionable_num" class="adjust2" id ="select1">
+                    <option>1选1</option>
 
                 </select>
             </label>
@@ -220,30 +261,41 @@
         <div class="form-row">
             <label>
                 <span>投票权限</span>
-                <select name="is_checkable"class="adjust2" >
-                    <option>任何人</option>
-                    <option>须权限认证</option>
+                <select name="is_opened"class="adjust2" >
+                    <option value ="1">无限制</option>
+                    <option value ="2">需权限认证</option>
 
                 </select>
             </label>
         </div>
+
         <div class="form-row">
             <label>
                 <span>公开结果</span>
-                <select name="is_opened" class="adjust2">
-                    <option>yes</option>
-                    <option>no</option>
+                <select name="is_checkable" class="adjust2">
+                    <option value ="1">yes</option>
+                    <option value ="2">no</option>
 
                 </select>
             </label>
         </div>
-
+         <div class="form-row">
+            <label>
+                <span>匿名投票</span>
+                <input type="checkbox" name="vote_anonymity" value="yes" checked="checked" />
+            </label>
+        </div>
 
         <div class="form-row">
             <button class="button" type="submit" >发起投票</button>
         </div>
 
     </form>
+    <div  class="button-div" >
+
+        <a href="{% url 'index' %}"><button  type="button"  class="btn" style="float:right;font-weight:600;margin-bottom:30px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
+            &nbsp&nbspBack&nbsp&nbsp</button></a>
+    </div>
 
 
     <div>
@@ -260,11 +312,18 @@
                 <div class="modal-body">
                     <div class="middle">
                         <div id="qrcode"></div>
+                        <div style="margin-top: 10px">
+                            <textarea id="copy" style="color: black;width: 77%;height:34px;float: left;overflow-x: auto">对应的网址</textarea>
+
+                            <a><button type="button"  class="btn btn-primary"  onclick="copyLink();">Copy</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 
