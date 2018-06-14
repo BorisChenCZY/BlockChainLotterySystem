@@ -49,6 +49,8 @@ class Chain:
         # todo check the chain is valid
         self.__loaded = True
         blocks = self.get_chain(0)
+        if blocks == None:
+            return
         pre_hash = b"0"
         for block in blocks:
             # print(pre_hash, block.get_prehash())
@@ -59,6 +61,7 @@ class Chain:
 
 
     def duplicate_vote(self, voteInfo):
+        # true for duplicate
         if(type(voteInfo) != VoteInfo):
             raise ChainError("Must input voteInfo")
         timestamp = float(voteInfo.get_timestamp())
@@ -127,7 +130,7 @@ class Chain:
 
         self.__loaded = True
 
-    def add_block(self, block):
+    def add_block(self, block, localMachine):
         self.__verify_block(block)
 
         id = block.get_id()
@@ -137,8 +140,8 @@ class Chain:
         voteInfos = block.get_vote_infos()
 
         self.__c.execute("""
-                        INSERT INTO {} VALUES ({id}, "{hash}", "{prehash}", "localMachine", {timestamp})
-                        """.format(self.__name + BLOCK_TABLE_OFF, id=id, hash=hash, prehash=prehash, timestamp =get_timestamp()))
+                        INSERT INTO {} VALUES ({id}, "{hash}", "{prehash}", "{localMachine}", {timestamp})
+                        """.format(self.__name + BLOCK_TABLE_OFF, id=id, hash=hash, prehash=prehash, timestamp = get_timestamp(), localMachine = localMachine))
         self.__conn.commit()
 
         for voteInfo in voteInfos:
