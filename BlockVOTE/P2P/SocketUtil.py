@@ -29,7 +29,7 @@ class SocketUtil(object):
             sock.sendall(b'timestamp')
             # Receive data from the server and shut down
             received = sock.recv(1024).decode()
-            print("Received: {}".format(received))
+            #print("Received: {}".format(received))
         finally:
             sock.close()
         return float(received)
