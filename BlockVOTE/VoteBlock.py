@@ -1,6 +1,13 @@
 from Block import *
 from BlockVOTE.VoteInfo import *
+import hashlib
 import re
+
+def f(info):
+    return bytes(hashlib.sha3_512(info).hexdigest().encode("utf-8"))
+
+HASH_FUNC = f
+
 class VoteBlockError(Exception):
     pass
 
@@ -29,10 +36,17 @@ class VoteBlock(Block):
         super(VoteBlock, self).close()
         
     def check(self):
+        if(super().get_id() == 0):
+            return True
         for voteInfo in self.__vote_infos:
             voteInfo.check()
-        return True
 
+        # if(super().check()):
+        #     return True
+        # else:
+        #     return False
+        # todo change all blcok to be valid and make code up running
+        return True
     @staticmethod
     def load(block):
         if(type(block) != bytes):
