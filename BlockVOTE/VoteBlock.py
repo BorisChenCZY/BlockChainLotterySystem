@@ -29,6 +29,8 @@ class VoteBlock(Block):
         super(VoteBlock, self).close()
         
     def check(self):
+        for voteInfo in self.__vote_infos:
+            voteInfo.check()
         return True
 
     @staticmethod

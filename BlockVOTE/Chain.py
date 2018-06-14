@@ -48,6 +48,28 @@ class Chain:
     def load(self):
         # todo check the chain is valid
         self.__loaded = True
+        blocks = self.get_chain(0)
+        pre_hash = b"0"
+        for block in blocks:
+            # print(pre_hash, block.get_prehash())
+            if(block.get_prehash() != pre_hash):
+                raise ChainError("Invalid Chain Detected!")
+            pre_hash = block.get_hash()
+            block.check()
+
+
+    def duplicate_vote(self, voteInfo):
+        if(type(voteInfo) != VoteInfo):
+            raise ChainError("Must input voteInfo")
+        timestamp = float(voteInfo.get_timestamp())
+        pubkey = voteInfo.get_pubkey()
+        self.__c.execute(
+            """
+            select vote_id from {} where pubkey = "{pubkey}" and timestamp  =  {timestamp}
+            """.format(self.__name + VOTE_TABLE_OFF, pubkey = pubkey, timestamp = timestamp)
+        )
+        return len(self.__c.fetchall()) == 0
+
 
     def create(self):
         n = self.__get_table()
@@ -245,8 +267,8 @@ class Chain:
 
 if __name__ == "__main__":
     chain = Chain("")
-    chain.create()
-    # chain.load()
+    # chain.create()
+    chain.load()
     print(chain.test())
 
     timestamp = datetime.datetime.now().timestamp() # current time
@@ -263,6 +285,8 @@ if __name__ == "__main__":
     print(bytes(voteBlock))
     print(voteBlock.check())
 
-    chain.add_block(voteBlock)
+    # chain.add_block(voteBlock)
 
     chain.get_block(1)
+
+    print(123, chain.duplicate_vote(voteInfo))
