@@ -130,7 +130,7 @@ class Chain:
 
         self.__loaded = True
 
-    def add_block(self, block):
+    def add_block(self, block, localMachine):
         self.__verify_block(block)
 
         id = block.get_id()
@@ -140,8 +140,8 @@ class Chain:
         voteInfos = block.get_vote_infos()
 
         self.__c.execute("""
-                        INSERT INTO {} VALUES ({id}, "{hash}", "{prehash}", "localMachine", {timestamp})
-                        """.format(self.__name + BLOCK_TABLE_OFF, id=id, hash=hash, prehash=prehash, timestamp =get_timestamp()))
+                        INSERT INTO {} VALUES ({id}, "{hash}", "{prehash}", "{localMachine}", {timestamp})
+                        """.format(self.__name + BLOCK_TABLE_OFF, id=id, hash=hash, prehash=prehash, timestamp = get_timestamp(), localMachine = localMachine))
         self.__conn.commit()
 
         for voteInfo in voteInfos:

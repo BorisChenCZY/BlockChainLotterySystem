@@ -88,12 +88,12 @@ class MyTCPHandler(BRH):
                         print("adding block...")
                         if block.get_hash() not in BLOCK:
                             BLOCK.add(block.get_hash())
-                            BQUEUE.put(block)
+                            BQUEUE.put((block,addr))
                             info = bytes('<receive block><{}><{}>'.format(str(self.request.getsockname()),str(block.get_id())),encoding='utf-8')
                             SocketUtil.send(info, addr)
                         else:
                             print("block existed")
-                            info = bytes('<receive block><{}><{}>'.format(str(self.request.getsockname()), str(-1)),encoding='utf-8')
+                            info = bytes('<receive block><{}><{}>'.format(str(self.request.getsockname()), str(-1)), encoding='utf-8')
                             SocketUtil.send(info, addr)
                     else:
                         print("sender is out of date")
@@ -103,7 +103,6 @@ class MyTCPHandler(BRH):
                     abte = bytes(decod[2], encoding='utf-8')
                     vote = VoteInfo.load(abte)
                     print("adding vote...")
-                    VOTE.add(vote.get_info())
                     VQUEUE.put(vote)
                     info = bytes('<receive vote><{}><{}>'.format(str(self.request.getsockname()), str(vote.get_info())), encoding='utf-8')
                     SocketUtil.send(info, addr)
