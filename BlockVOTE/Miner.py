@@ -232,10 +232,15 @@ class Miner:
         if not block.check():
             raise MinerError("Block not valid")
         voteInfos = block.get_vote_infos()
-        for voteInfo in voteInfos:
-            self.__chain.remove_vote(voteInfo)
-        self.__chain.add_block(block, localmachine)
 
+        try:
+            lock.acquire(True)
+
+            for voteInfo in voteInfos:
+                self.__chain.remove_vote(voteInfo)
+            self.__chain.add_block(block, localmachine)
+        finally:
+            lock.release()
 
     # this function should not belong here
     def add_vote(self, voteInfo):
@@ -265,12 +270,16 @@ class Miner:
         if(len(pack) == 0):
             return None
 
-        for voteInfo in pack:
-            voteBlock.add_info(voteInfo)
-            self.__chain.remove_vote(voteInfo)
+        try:
+            lock.acquire(True)
+            for voteInfo in pack:
+                voteBlock.add_info(voteInfo)
+                self.__chain.remove_vote(voteInfo)
 
-        voteBlock.close()
-        self.__chain.add_block(voteBlock,self.addr)
+            voteBlock.close()
+            self.__chain.add_block(voteBlock,self.addr)
+        finally:
+            lock.release()
         return voteBlock
 
     def get_timestamp(self):
