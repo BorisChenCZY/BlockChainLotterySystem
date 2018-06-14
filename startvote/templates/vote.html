@@ -566,6 +566,11 @@
 <script src="/static/js/md5.js"></script>
 
 <script>
+    function copyLink(){
+            var e = document.getElementById("copy");
+            e.select(); // 选择对象
+            document.execCommand("Copy"); // 执行浏览器复制命令
+        }
     String.prototype.replaceAt = function (index, replacement) {
         return this.substr(0, index) + replacement + this.substr(index + replacement.length);
     }
