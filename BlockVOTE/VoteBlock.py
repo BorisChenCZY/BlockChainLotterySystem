@@ -5,16 +5,18 @@ class VoteBlockError(Exception):
     pass
 
 class VoteBlock(Block):
-    __infov = b""
-    __vote_infos = []
 
-    def __init__(self, id=None, prehash=None, hash = None):
+
+    def __init__(self, id=None, prehash=None, hash=None):
         super().__init__(id, prehash, hash)
+        self.__vote_infos = []
+        self.__infov = b""
+        # __vote_infos = []
 
     def add_info(self, voteInfo):
         if(type(voteInfo) != VoteInfo):
             raise VoteInfoError("voteInfo must be VoteInfo object")
-        if(len(self.__infov) + len(bytes(voteInfo)) > 1024):
+        if(len(self.__infov) + len(bytes(voteInfo)) > 1024*1024):
             return False
         self.__infov += b"^" + bytes(voteInfo)
         self.__vote_infos.append(voteInfo)
@@ -33,7 +35,8 @@ class VoteBlock(Block):
     def load(block):
         if(type(block) != bytes):
             raise BlockInfoError("block must be bytes")
-        components = block.split(b"/")
+        components = block.split(b"//")
+
 
         id = int.from_bytes(components[0], byteorder='little')
         prehash = components[1]
@@ -61,13 +64,29 @@ if __name__ == "__main__":
     target = b'target'
     sign = b'sign'
     vote = (1, [1, 2, 3])
-    voteInfo = VoteInfo(timestamp = timestamp, target = target, pubkey=pubkey, vote=vote, sign=sign)
+    voteInfo = VoteInfo(timestamp = datetime.datetime.now().timestamp(), target = target, pubkey=pubkey, vote=vote, sign=sign)
 
     voteBlock = VoteBlock(id=1, prehash=b'prehash', hash=b'hash')
     voteBlock.add_info(voteInfo)
     voteBlock.close()
 
-    bs = bytes(voteBlock)
-    voteBlock1 = VoteBlock.load(bs)
-    print(voteBlock1.check())
+
+    print(voteBlock.get_hash())
+
+    timestamp = datetime.datetime.now().timestamp()  # current time
+    pubkey = b'pubkey'
+    target = b'target'
+    sign = b'sign'
+    vote = (1, [1, 2, 3])
+    voteInfo = VoteInfo(timestamp=datetime.datetime.now().timestamp(), target=target, pubkey=pubkey, vote=vote,
+                        sign=sign)
+
+    voteBlock = VoteBlock(id=1, prehash=b'prehash', hash=b'hash')
+    voteBlock.add_info(voteInfo)
+    voteBlock.close()
+    print(voteBlock.get_hash())
+
+    # bs = bytes(voteBlock)
+    # voteBlock1 = VoteBlock.load(bs)
+    # print(voteBlock1.check())
 

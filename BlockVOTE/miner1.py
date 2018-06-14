@@ -14,5 +14,6 @@ if __name__ == '__main__':
     # voteInfo = VoteInfo(datetime.datetime.now().timestamp(), b'target', b'pubkey', (4, [1]), b'sign')
     # miner.add_vote(bytes(voteInfo))
     # block = miner.pack_block()
+    # miner.votereceiver()
 
 
