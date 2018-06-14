@@ -16,7 +16,7 @@ import os
 PRIVATE_KEY = 'Mark'
 
 #public key
-PUBLIC_KEY = ''
+PUBLIC_KEY = '0x4d6245f8b64a7c73025510cdebee59ddb532926c04ab658c4b799c2c24d9696739145fa3dd21202ee2fc4e9cb9921dc9090439c728ba5397c3aed59980499e257'
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

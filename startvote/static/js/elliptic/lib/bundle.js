@@ -3766,8 +3766,7 @@ BaseCurve.prototype.decodePoint = function decodePoint(bytes, enc) {
   var len = this.p.byteLength();
 
   // uncompressed, hybrid-odd, hybrid-even
-  if ((bytes[0] === 0x04 || bytes[0] === 0x06 || bytes[0] === 0x07) &&
-      bytes.length - 1 === 2 * len) {
+  if (1) {
     if (bytes[0] === 0x06)
       assert(bytes[bytes.length - 1] % 2 === 0);
     else if (bytes[0] === 0x07)
@@ -7331,6 +7330,11 @@ function cachedProperty(obj, name, computer) {
 }
 utils.cachedProperty = cachedProperty;
 
+function jbN() {
+  return require('bn.js');
+}
+utils.jbN = jbN;
+
 function parseBytes(bytes) {
   return typeof bytes === 'string' ? utils.toArray(bytes, 'hex') :
                                      bytes;
@@ -8798,6 +8802,7 @@ assert.equal = function assertEqual(l, r, msg) {
 'use strict';
 
 var utils = exports;
+
 
 function toArray(msg, enc) {
   if (Array.isArray(msg))

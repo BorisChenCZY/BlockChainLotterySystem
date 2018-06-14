@@ -571,15 +571,33 @@
     for (var i = 0; i < url.length; i++)
     data.push(url.charCodeAt(i));
     return data;
-}
+    }
+    function generateFakePublikey() {
+        var gama = Math.ceil(Math.random()*0xFFFFFFFF);
+        var delta = Math.ceil(Math.random()*0xFFFFFFFF);
+        var r = 1;
+        var P = pub;
+        var d = key.getPrivate();
+        var n = ec.n;
+        var G = ec.g;
+        var R = G.mul(r);
+        var A = (R.add(G.mul(gama))).add(P.mul(delta));
+        var t = A.x.mod(n);
+        var Bpub = new BN(pub_key).toString(16);
+        hasher.update(Bpub+t.toString(16));
+        var c = new BN(hasher.digest());
+        var faker = c.umod(n).toString(16);
+        return faker;
+    }
 
-    var EC = require('elliptic').ec;
-    var utils = require('elliptic').utils;
-    var ec = new EC('secp256k1');
-    var pri_key = Math.random().toString(36).substr(2);
-    var key = ec.keyFromPrivate(hex_md5(pri_key));
-    var pub = key.getPublic();
-    var pub_key = utils.toHex([4].concat(pub.x.toArray('big', 32), pub.y.toArray('big', 32)));
+    EC = require('elliptic').ec;
+    utils = require('elliptic').utils;
+    var BN = utils.jbN();
+    ec = new EC('secp256k1');
+    pri_key = Math.random().toString(36).substr(2);
+    key = ec.keyFromPrivate(hex_md5(pri_key));
+    pub = key.getPublic();
+    pub_key = utils.toHex([4].concat(pub.x.toArray('big', 32), pub.y.toArray('big', 32)));
     $("#privkey").text(pri_key);
     $("#pubkey").text(pub_key);
 
