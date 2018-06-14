@@ -12,7 +12,7 @@ from BlockVOTE.P2P.timeaddr import TIMESTAMP_SERVER_ADDR
 from BlockVOTE.P2P import Node
 from BlockVOTE.P2P.SocketUtil import SocketUtil
 import BlockVOTE.P2P.settings as config
-from BlockVOTE.P2P.Node import BQUEUE,VQUEUE
+from BlockVOTE.P2P.Node import BQUEUE,VQUEUE,TQUEUE
 from aiohttp import web
 from RSA import *
 import queue
@@ -54,20 +54,31 @@ class Miner:
         else:
             self.__chain.create()
         self.addr = addr
+        # miner server
         self.node = Node.Node(self.addr)
         self.server = threading.Thread(target=self.node.serving)
         self.server.start()
+        # update current chain
         self.update_chain()
+        # IPC
         self.queueinfo = threading.Thread(target=self.get_queue_info)
         self.queueinfo.start()
+        # 若当前miner为config中的第一个miner那么让他持有token
+        if self.addr == config.CONNECTION_LIST[0]:
+            self.token = 0
+        else:
+            self.token = -1
+
+        # http server
         self.votereceiver()
 
-        # update current chain
+
 
     def get_queue_info(self):
         while 1:
             self.queue_recv(BQUEUE)
             self.queue_recv(VQUEUE)
+            self.queue_recv(TQUEUE)
 
     def votereceiver(self):
         asyncio.set_event_loop(asyncio.new_event_loop())
@@ -101,16 +112,24 @@ class Miner:
             # broadcast to other miner
             header = bytes('<send vote><{}>'.format(self.addr),encoding='utf-8')
             msg = header + bytes(voteInfo)
-            SocketUtil.broadcast(msg,config.CONNECTION_LIST)
+            SocketUtil.broadcast(config.CONNECTION_LIST, msg, self.addr)
             self.__chain.add_vote(voteInfo, -1)
             self.__cnt += 1
+
             # 生成block需要先获得token，两种情况下都可以打包block：
             # 1.将指定时间内vote池中的所有vote加入block中
             # 2.当前接收到五个voteinfo自动打包
-            if self.__cnt >= 5:
-                self.__cnt = 0
-                print("auto packing...")
-                self.pack_block()
+            print(self.token, self.__cnt)
+            if self.token >= 0:
+                if self.__cnt >= 5:
+                    self.__cnt = 0
+                    print("auto packing...")
+                    self.pack_block()
+                    # 将token加一交给config中的下一个人
+                    cur_token = self.token
+                    if SocketUtil.token_send(self.addr, cur_token):
+                        # 如果成功交出token
+                        self.token = -1
             return "OK", 123
         web.run_app(app, port=8080)
 
@@ -131,14 +150,20 @@ class Miner:
         while not queue.empty():
             item = queue.get()
             # 判断拿出的元素时block还是vote
+            # 新miner更新自己的block
             if isinstance(item,VoteBlock):
                 self.__chain.add_block(item)
                 print("block added")
             # 从其他miner那里拿到的vote
             elif isinstance(item,VoteInfo):
-                self.__chain.add_vote(item,-1)
+                self.__chain.add_vote(item, -1)
                 print("vote added")
+            # 从其他miner传过来的token
+            elif isinstance(item,int):
+                print("received token: ", item)
+                self.token = item
             queue.task_done()
+
 
     def update_chain(self):
         lastid = self.__chain.get_last_block()[0]
@@ -149,7 +174,7 @@ class Miner:
         print('max id', self.__chain.get_last_block()[0])
         print("initial broadcasting...")
         msg = bytes('<request chain><{}><{}>'.format(str(self.addr),lastid), encoding='utf-8')
-        SocketUtil.broadcast(msg, config.CONNECTION_LIST)
+        SocketUtil.broadcast(config.CONNECTION_LIST, msg, self.addr)
         print("broadcast done")
 
     def add_block(self, block):
@@ -167,9 +192,11 @@ class Miner:
         voteInfo = VoteInfo.load(voteInfo)
         self.__chain.add_vote(voteInfo, -1)
 
+    # todo
     def check_vote(self, voteInfo):
         pass
 
+    # todo
     def check_block(self, blockInfo):
         pass
 

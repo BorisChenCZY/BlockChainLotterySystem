@@ -1,7 +1,7 @@
 import socket
-
+import BlockVOTE.P2P.settings as config
 import P2P.NetworkException as exception
-
+import traceback
 
 class SocketUtil(object):
 
@@ -48,10 +48,41 @@ class SocketUtil(object):
             sock.connect(target)
             print("connected to {}".format(target))
             sock.sendall(msg)
-            print("initial request sent");
+            print("initial request sent")
         except:
             sock.close()
         sock.close()
+        return True
+
+    @staticmethod
+    def token_send(addr, token):
+        if type(token) != int:
+            raise exception.FormatException
+        if type(addr[0]) != str or type(addr[1]) != int:
+            raise exception.FormatException()
+        # 对config列表内的miner尝试链接，成功则交出对应的id的token
+        cur_token = token
+
+        while 1:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            cur_token += 1
+            token_holder = config.CONNECTION_LIST[cur_token % len(config.CONNECTION_LIST)]
+            try:
+                # Connect to server and send data
+                sock.connect(token_holder)
+                msg = bytes("<token><{}><{}>".format(addr, cur_token), encoding='utf-8')
+                sock.sendall(msg)
+                tag = True
+            except:
+                if token_holder == addr:
+                    return False
+                print("fail to give token {} to {}".format(cur_token, token_holder))
+                sock.close()
+                tag = False
+            sock.close()
+            if tag:
+                print("success to give token {} to {}".format(cur_token, token_holder))
+                break
         return True
 
     @staticmethod
@@ -67,12 +98,15 @@ class SocketUtil(object):
 
 
     @staticmethod
-    def broadcast(msg, connection_list):
+    def broadcast(connection_list, msg, my):
         if type(msg) != bytes:
             raise exception.FormatException
+        if type(my) !=tuple:
+            raise exception.FormatException
         for addr in connection_list:
-            print("broadcasting to {}".format(addr))
-            SocketUtil.send(msg,addr)
+            if addr != my:
+                print("broadcasting to {}".format(addr))
+                SocketUtil.send(msg,addr)
 
 
 
