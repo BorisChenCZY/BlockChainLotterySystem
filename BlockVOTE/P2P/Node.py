@@ -64,6 +64,7 @@ class MyTCPHandler(BRH):
                     DATA.add(data)
                     if decod[0] == 'request chain':
                         mylst = _queue_conn(QUEUE)
+                        print("received initial broadcast request")
                         for ouraddr, ourlst in mylst:
                             lst = int(decod[2])
                             addr = decode_addr(decod[1])
