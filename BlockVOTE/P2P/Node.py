@@ -14,6 +14,7 @@ import queue
 
 BQUEUE = queue.Queue()
 VQUEUE = queue.Queue()
+# TQUEUE = queue.Queue()
 DATA = set()
 BLOCK = set()
 VOTE = set()
@@ -126,6 +127,10 @@ class MyTCPHandler(BRH):
                             print('{} already has this vote'.format(decod[1]))
                         else:
                             print('{} receive vote{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
+
+                    # elif decod[0] == 'timestamp':
+                    #     print('timestamp is ',decod[2])
+                    #     TQUEUE.put(decod[2])
 
 
 class Node:

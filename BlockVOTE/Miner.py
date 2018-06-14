@@ -8,6 +8,7 @@ import json
 import threading
 import multiprocessing
 from BlockVOTE.Chain import Chain, get_timestamp
+from BlockVOTE.P2P.timeaddr import TIMESTAMP_SERVER_ADDR
 from BlockVOTE.P2P import Node
 from BlockVOTE.P2P.SocketUtil import SocketUtil
 import BlockVOTE.P2P.settings as config
@@ -96,12 +97,16 @@ class Miner:
             voteInfo = VoteInfo(get_timestamp(), target=target.encode("utf-8"), pubkey=key_info,
                                 vote=(prob_num, selection), sign=sig.encode("utf-8"))
 
+            now = self.get_timestamp()
             # broadcast to other miner
             header = bytes('<send vote><{}>'.format(self.addr),encoding='utf-8')
             msg = header + bytes(voteInfo)
             SocketUtil.broadcast(msg,config.CONNECTION_LIST)
             self.__chain.add_vote(voteInfo, -1)
             self.__cnt += 1
+            # 生成block需要先获得token，两种情况下都可以打包block：
+            # 1.将指定时间内vote池中的所有vote加入block中
+            # 2.当前接收到五个voteinfo自动打包
             if self.__cnt >= 5:
                 self.__cnt = 0
                 print("auto packing...")
@@ -129,13 +134,13 @@ class Miner:
             if isinstance(item,VoteBlock):
                 self.__chain.add_block(item)
                 print("block added")
+            # 从其他miner那里拿到的vote
             elif isinstance(item,VoteInfo):
                 self.__chain.add_vote(item,-1)
                 print("vote added")
             queue.task_done()
 
     def update_chain(self):
-
         lastid = self.__chain.get_last_block()[0]
         blocks = self.__chain.get_chain(0)
         QUEUE.put((self.addr, lastid))
@@ -186,7 +191,6 @@ class Miner:
         return voteBlock
 
     def get_timestamp(self):
-        #todo zhang
-        pass
-
+        timestamp = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
+        return timestamp
 
