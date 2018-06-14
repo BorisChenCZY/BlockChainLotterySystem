@@ -136,7 +136,11 @@ class Miner:
                 if self.__cnt >= 5:
                     self.__cnt = 0
                     print("auto packing...")
-                    self.pack_block()
+                    blk = self.pack_block()
+                    # broadcast block to other miner
+                    info = bytes('<send block><{}>'.format(str(self.addr)), encoding='utf-8') + bytes(blk)
+                    print("broadcast new generated block {} ".format(blk.get_id()))
+                    SocketUtil.broadcast(config.CONNECTION_LIST,info,self.addr)
                     # 将token加一交给config中的下一个人
                     cur_token = self.token
                     if SocketUtil.token_send(self.addr, cur_token):
@@ -163,15 +167,15 @@ class Miner:
             item = queue.get()
             # 判断拿出的元素时block还是vote
             # 新miner更新自己的block
-            if isinstance(item,VoteBlock):
-                self.__chain.add_block(item)
+            if isinstance(item[0],VoteBlock):
+                self.add_block(item[0],item[1])
                 print("block added")
             # 从其他miner那里拿到的vote
             elif isinstance(item,VoteInfo):
                 if self.__chain.duplicate_vote(item):
                     print("vote existed")
                 else:
-                    self.__chain.add_vote(item, -1)
+                    self.add_vote(item)
                     print("vote added")
             # 从其他miner传过来的token
             elif isinstance(item,int):
@@ -192,13 +196,13 @@ class Miner:
         SocketUtil.broadcast(config.CONNECTION_LIST, msg, self.addr)
         print("broadcast done")
 
-    def add_block(self, block):
+    def add_block(self, block, localmachine):
         if type(block) is not bytes:
             raise MinerError("block must be bytes, but not {}".format(type(block)))
         block = VoteBlock.load(block)
         if not block.check():
             raise MinerError("Block not valid")
-        self.__chain.add_block(block)
+        self.__chain.add_block(block, localmachine)
 
     # this function should not belong here
     def add_vote(self, voteInfo):
@@ -229,7 +233,7 @@ class Miner:
             self.__chain.remove_vote(voteInfo)
 
         voteBlock.close()
-        self.__chain.add_block(voteBlock)
+        self.__chain.add_block(voteBlock,self.addr)
         return voteBlock
 
     def get_timestamp(self):
