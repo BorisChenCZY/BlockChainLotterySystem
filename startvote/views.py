@@ -151,6 +151,15 @@ def form(request):
 
 
 def vote(request, target):
+    if request.method == 'POST':
+        if request.POST.get('pub_key'):
+            print("here")
+            fake_pub = request.POST.get('pub_key')
+            print(fake_pub)
+            fake_sign = blind_signature(fake_pub)
+            print(fake_sign)
+            return HttpResponse(fake_sign)
+    print("here!")
     vote = Vote.objects.filter(vote_target=target).get()
 
     if vote.is_opened or request.user.is_authenticated:
@@ -191,7 +200,8 @@ def vote(request, target):
             , "type": t
             , "description": description
             , "target": target
-            , "miner_list": format_miner_list})
+            , "miner_list": format_miner_list
+            , "Web_pub": settings.PUBLIC_KEY})
     else:
 
         return render(request, 'login.html')
@@ -285,9 +295,9 @@ def edit_action(request):
     return render(request, 'startvote/index.html', {'artilces': articles})
 
 def fold_demo(request):
-    if request.method == 'GET':
-        return render(request, 'fold_demo.html', {"Web_pub": settings.PUBLIC_KEY})
-    elif request.method == 'POST':
+    # if request.method == 'GET':
+    #     return render(request, 'fold_demo.html', {"Web_pub": settings.PUBLIC_KEY})
+    if request.method == 'POST':
         # msg = request.POST.get('msg')
         # print("msg:", msg)
         # signature = request.POST.get('signature')
@@ -310,7 +320,8 @@ def fold_demo(request):
         # print(sig)
         # print(signer.sign(msg, prv_key))
         # veri = signer.verify(msg, sig, pub_key)
-        if(request.POST.get('pub_key')):
+        if request.POST.get('pub_key'):
+            print("here")
             fake_pub = request.POST.get('pub_key')
             print(fake_pub)
             fake_sign = blind_signature(fake_pub)
