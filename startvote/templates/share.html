@@ -82,41 +82,14 @@
 
     </style>
     <script>
+        function copyLink(){
+            var e = document.getElementById("copy");
+            e.select(); // 选择对象
+            document.execCommand("Copy"); // 执行浏览器复制命令
+        }
         var vote_target ="{{ vote_target }}";
 
-        var room = 1;
-        function education_fields() {
 
-            room++;
-            var objTo = document.getElementById('education_fields')
-            var divtest = document.createElement("div");
-            divtest.setAttribute("class", "form-group nomarginb removeclass"+room);
-            var rdiv = 'removeclass'+room;
-
-
-            divtest.innerHTML =
-                '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
-                '                    <div class="form-group" >\n' +
-                '                        <div class="input-group" >\n' +
-                '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >\n' +
-                '\n' +
-                '                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapse'+room+'"> Details</button>\n' +
-                '\n' +
-                '                            <button style="margin: 0 0 0 0;padding: 0 0 0 0;display:inline-block;background: #d9534f;" class="btn btn-danger" type="button"  onclick="remove_education_fields('+room+');"> <span style="width: auto;padding:  11px 8px 11px 8px;" class="glyphicon glyphicon-minus" aria-hidden="true"></span> </button>\n' +
-                '\n' +
-                '                        </div>\n' +
-                '\n' +
-                '                    </div>' +
-                '                    <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapse'+room+'">' +
-                '\n' +'<textarea name="vote_details"></textarea>' +
-                ' <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >\n'
-            '\n' +
-            '\n' +
-            '                    </div>\n' +
-            '                </div>';
-
-            objTo.appendChild(divtest)
-        }
         function remove_education_fields(rid) {
             $('.removeclass'+rid).remove();
         }
@@ -124,8 +97,8 @@
             //二维码的跳转网页地址
 
             var my_host = window.location.host;
-            var url = my_host+"/vote/"+vote_target;
-            console.log(url);
+            var url = "http://"+my_host+"/vote/"+vote_target;
+            $("#copy").val(url);
             jQuery('#qrcode').qrcode(url);
         })
     </script>
@@ -161,11 +134,20 @@
                 <div class="modal-body">
                     <div class="middle">
                         <div id="qrcode"></div>
+                        <div style="margin-top: 10px">
+                            <textarea id="copy" style="color: black;width: 77%;height:34px;float: left;overflow-x: auto" >对应的网址</textarea>
+
+                            <a><button type="button"  class="btn btn-primary"  onclick="copyLink();">Copy</button>
+                            </a>
+                        </div>
                     </div>
+
                 </div>
                 <div class="modal-bottom" id="all">
-                    <a href="{% url 'card' %}"><button  type="button"  class="btn float-right" style="font-weight:600;margin-bottom:30px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
+                    <div class="middle">
+                    <a href="{% url 'card' %}"><button  type="button"  class="btn float-right" style="font-weight:600;margin-bottom:20px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
                     &nbsp&nbspcheck my vote&nbsp&nbsp</button></a>
+                     </div>
             </div>
 
             </div>
