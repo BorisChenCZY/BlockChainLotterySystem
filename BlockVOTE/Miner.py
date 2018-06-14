@@ -142,23 +142,22 @@ class Miner:
     def pass_token(self):
         if self.token >= 0:
             self.__cnt += 1
-            if self.__cnt >= 5:
-                cur_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
-                delta = datetime.datetime.fromtimestamp(cur_time) - datetime.datetime.fromtimestamp(self.start_time)
-                delta = delta.seconds
-                if self.__cnt >= 5 or delta > 10:
-                    self.__cnt = 0
-                    print("auto packing...")
-                    blk = self.pack_block()
-                    # broadcast block to other miner
-                    info = bytes('<send block><{}>'.format(str(self.addr)), encoding='utf-8') + bytes(blk)
-                    print("broadcast new generated block {} ".format(blk.get_id()))
-                    SocketUtil.broadcast(config.CONNECTION_LIST, info, self.addr)
-                    # 将token加一交给config中的下一个人
-                    cur_token = self.token
-                    if SocketUtil.token_send(self.addr, cur_token):
-                        # 如果成功交出token
-                        self.token = -1
+            cur_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
+            delta = datetime.datetime.fromtimestamp(cur_time) - datetime.datetime.fromtimestamp(self.start_time)
+            delta = delta.seconds
+            if self.__cnt >= 5 or delta > 10:
+                self.__cnt = 0
+                print("auto packing...")
+                blk = self.pack_block()
+                # broadcast block to other miner
+                info = bytes('<send block><{}>'.format(str(self.addr)), encoding='utf-8') + bytes(blk)
+                print("broadcast new generated block {} ".format(blk.get_id()))
+                SocketUtil.broadcast(config.CONNECTION_LIST, info, self.addr)
+                # 将token加一交给config中的下一个人
+                cur_token = self.token
+                if SocketUtil.token_send(self.addr, cur_token):
+                    # 如果成功交出token
+                    self.token = -1
 
     @classmethod
     def instance(cls, addr, chain, t):
