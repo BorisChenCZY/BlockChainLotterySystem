@@ -97,7 +97,7 @@
             //二维码的跳转网页地址
 
             var my_host = window.location.host;
-            var url = my_host+"/vote/"+vote_target;
+            var url = "http://"+my_host+"/vote/"+vote_target;
             $("#copy").val(url);
             jQuery('#qrcode').qrcode(url);
         })

@@ -121,16 +121,16 @@ def form(request):
             options_list = request.POST.getlist("options")
             vote_details = request.POST.getlist("vote_details")
             attachments = request.FILES.getlist("attachments")
-            print(len(attachments))
             for i in range(len(options_list)):
+                print(i)
                 seletion = Selection()
                 seletion.vote_id = Vote.objects.get(vote_target=vote_target)
                 seletion.title = options_list[i]
                 seletion.simple_detail = "这个人很懒，什么都没写"
                 seletion.detail = vote_details[i]
                 # path＝default_storage.save（，ContentFile（image.read()））
-                if attachments:
-                    seletion.img = attachments[i]
+                # if attachments:
+                seletion.img = attachments[i]
 
                 seletion.save()
 

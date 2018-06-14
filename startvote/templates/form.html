@@ -157,7 +157,7 @@
         function education_fields() {
             room++;
             optionsUpdate(1);
-            var objTo = document.getElementById('education_fields')
+            var objTo = document.getElementById('education_fields');
             var divtest = document.createElement("div");
             divtest.setAttribute("class", "form-group nomarginb removeclass"+room);
             var rdiv = 'removeclass'+room;
@@ -167,7 +167,7 @@
                 '                <span style="padding: 0 0 0 0;"></span>'+'<div class="nopadding adjust"style="width: 240px;display: inline-block">\n' +
                 '                    <div class="form-group" >\n' +
                 '                        <div class="input-group" >\n' +
-                '                            <input style="width: 162.5px;" type="text" class="form-control" id="option'+room+'" name="options" value="" onblur="if(this.value.replace(/^ +| +$/g,\'\')==\'\')alert(\'选项名不能为空!\')">\n' +
+                '                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" onblur="if(this.value.replace(/^ +| +$/g,\'\')==\'\')alert(\'选项名不能为空!\')">\n' +
                 '\n' +
                 '                            <button style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapse'+room+'"> Details</button>\n' +
                 '\n' +
@@ -196,7 +196,7 @@
             //二维码的跳转网页地址
 
             var my_host = window.location.host;
-            var url = my_host+"/vote/"+vote_target;
+            var url = "http://"+my_host+"/vote/"+vote_target;
             $("#copy").val(url);
             jQuery('#qrcode').qrcode(url);
         })
@@ -254,7 +254,7 @@
                 <div class="nopadding" style="width: 240px;display: inline-block">
                     <div class="form-group" >
                         <div class="input-group" >
-                            <input style="width: 162.5px;" type="text" class="form-control" id="vote_options" name="option1" value="" onblur="if(this.value.replace(/^ +| +$/g,'')=='')alert('选项名不能为空!')" >
+                            <input style="width: 162.5px;" type="text" class="form-control" id="options" name="Schoolname" value="" onblur="if(this.value.replace(/^ +| +$/g,'')=='')alert('选项名不能为空!')" >
 
                             <button name="detail" style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne"> Details</button>
 
