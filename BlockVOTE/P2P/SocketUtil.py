@@ -63,7 +63,10 @@ class SocketUtil(object):
         # 对config列表内的miner尝试链接，成功则交出对应的id的token
         cur_token = token
 
+        cnt = 0
+        last_success = None
         while 1:
+
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             cur_token += 1
             token_holder = config.CONNECTION_LIST[cur_token % len(config.CONNECTION_LIST)]
@@ -73,6 +76,8 @@ class SocketUtil(object):
                 msg = bytes("<token><{}><{}>".format(addr, cur_token), encoding='utf-8')
                 sock.sendall(msg)
                 tag = True
+                cnt += 1
+                last_success = token_holder
             except:
                 if token_holder == addr:
                     return False
@@ -83,7 +88,11 @@ class SocketUtil(object):
             if tag:
                 print("success to give token {} to {}".format(cur_token, token_holder))
                 break
-        return True
+
+        if(cnt == 1 and last_success == addr):
+            return False
+        else:
+            return True
 
     @staticmethod
     def get_host_ip():
