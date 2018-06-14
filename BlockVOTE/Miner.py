@@ -66,8 +66,10 @@ class Miner:
         # 若当前miner为config中的第一个miner那么让他持有token
         if self.addr == config.CONNECTION_LIST[0]:
             self.token = 0
+            self.start_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
         else:
             self.token = -1
+            self.start_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
 
         # http server
         self.votereceiver()
@@ -126,7 +128,6 @@ class Miner:
             msg = header + bytes(voteInfo)
             SocketUtil.broadcast(config.CONNECTION_LIST, msg, self.addr)
             self.__chain.add_vote(voteInfo, -1)
-            self.__cnt += 1
 
             # 生成block需要先获得token，两种情况下都可以打包block：
             # 1.将指定时间内vote池中的所有vote加入block中
@@ -140,7 +141,11 @@ class Miner:
 
     def pass_token(self):
         if self.token >= 0:
-            if self.__cnt >= 5:
+            self.__cnt += 1
+            cur_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
+            delta = datetime.datetime.fromtimestamp(cur_time) - datetime.datetime.fromtimestamp(self.start_time)
+            delta = delta.seconds
+            if self.__cnt >= 5 or delta > 10:
                 self.__cnt = 0
                 print("auto packing...")
                 blk = self.pack_block()
@@ -179,7 +184,6 @@ class Miner:
                 if self.__chain.duplicate_vote(item[0]):
                     print("vote existed")
                 else:
-                    self.__cnt+=1
                     self.add_vote(bytes(item[0]))
                     print("vote added")
                     self.pass_token()
@@ -187,6 +191,7 @@ class Miner:
             elif isinstance(item[0],int):
                 print("received token: ", item[0])
                 self.token = item[0]
+                self.start_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
             queue.task_done()
 
 
