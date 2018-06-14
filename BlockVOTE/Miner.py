@@ -129,7 +129,11 @@ class Miner:
             header = bytes('<send vote><{}>'.format(self.addr),encoding='utf-8')
             msg = header + bytes(voteInfo)
             SocketUtil.broadcast(config.CONNECTION_LIST, msg, self.addr)
-            self.__chain.add_vote(voteInfo, -1)
+            try:
+                lock.acquire(True)
+                self.__chain.add_vote(voteInfo, -1)
+            finally:
+                lock.release()
             print("add outside vote {} to pool".format(voteInfo))
             # 生成block需要先获得token，两种情况下都可以打包block：
             # 1.将指定时间内vote池中的所有vote加入block中
