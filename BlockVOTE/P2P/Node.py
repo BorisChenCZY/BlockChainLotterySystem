@@ -119,6 +119,7 @@ class MyTCPHandler(BRH):
                     print('{} receive vote{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
 
                 elif decod[0] == 'token':
+                    addr = decode_addr(decod[1])
                     token = int(decod[2])
                     addr = decode_addr(decod[1])
                     print("Woo! I finally get the token: ",token)
