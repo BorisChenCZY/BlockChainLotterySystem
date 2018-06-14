@@ -29,7 +29,7 @@ CQUEUE = queue.Queue()
 class MinerError(Exception):
     pass
 
-
+lock = threading.Lock()
 
 class Miner:
     __chain = None
@@ -142,11 +142,13 @@ class Miner:
         web.run_app(app, port=8080)
 
     def pass_token(self):
+        # print()
         if self.token >= 0:
             self.__cnt += 1
             cur_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
             delta = datetime.datetime.fromtimestamp(cur_time) - datetime.datetime.fromtimestamp(self.start_time)
             delta = delta.seconds
+            print("we are passing token, the cnt is {} and the delta is {}".format(self.__cnt, delta))
             if self.__cnt >= 5 or delta > 10:
                 self.__cnt = 0
                 # print("auto packing...")
@@ -161,7 +163,7 @@ class Miner:
                     # print("no vote to pack: direct pass token")
                 # 将token加一交给config中的下一个人
                 cur_token = self.token
-                if SocketUtil.token_send(self.addr, cur_token):
+                if SocketUtil.token_send(self.addr, cur_token):# and self.addr != config.CONNECTION_LIST[cur_token%len(config.CONNECTION_LIST)]:
                     # 如果成功交出token
                     self.token = -1
 
@@ -236,7 +238,11 @@ class Miner:
         if type(voteInfo) is not bytes:
             raise MinerError("voteInfo must be bytes, but not {}".format(type(voteInfo)))
         voteInfo = VoteInfo.load(voteInfo)
-        self.__chain.add_vote(voteInfo, -1)
+        try:
+            lock.acquire(True)
+            self.__chain.add_vote(voteInfo, -1)
+        finally:
+            lock.release()
 
     # todo
     def check_vote(self, voteInfo):
