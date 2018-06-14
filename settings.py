@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 
 import os
 
+#private key
+PRIVATE_KEY = 'Mark'
+
+#public key
+PUBLIC_KEY = ''
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -124,7 +130,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT =os.path.join(BASE_DIR,'collectstatic')
-STATICFILES_DIRS=(os.path.join(BASE_DIR, 'startvote/startvote/static'),)
+STATICFILES_DIRS=(os.path.join(BASE_DIR, 'startvote/static'),)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'BlockChainVoteSystem/media')
 

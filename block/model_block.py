@@ -28,7 +28,7 @@ class BlockReader():
         return self.allResult
     
     def getBlockInfos(self):
-        self._getAll("select id,hash,prehash,count(*),generator from Vote LEFT join Block b on b.id = block_id group by block_id",())
+        self._getAll("select id, hash, prehash, count(*), generator from Vote LEFT join Block b on b.id = block_id WHERE block_id is not NULL  group by block_id",())
         return self.allResult
     
     def existTarget(self, target):
