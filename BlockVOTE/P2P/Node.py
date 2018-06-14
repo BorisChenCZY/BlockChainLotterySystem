@@ -121,6 +121,7 @@ class MyTCPHandler(BRH):
                 elif decod[0] == 'token':
                     addr = decode_addr(decod[1])
                     token = int(decod[2])
+                    addr = decode_addr(decod[1])
                     print("Woo! I finally get the token: ",token)
                     TQUEUE.put((token,addr))
 

@@ -132,23 +132,27 @@ class Miner:
             # 1.将指定时间内vote池中的所有vote加入block中
             # 2.当前接收到五个voteinfo自动打包
             print(self.token, self.__cnt)
-            if self.token >= 0:
-                if self.__cnt >= 5:
-                    self.__cnt = 0
-                    print("auto packing...")
-                    blk = self.pack_block()
-                    # broadcast block to other miner
-                    info = bytes('<send block><{}>'.format(str(self.addr)), encoding='utf-8') + bytes(blk)
-                    print("broadcast new generated block {} ".format(blk.get_id()))
-                    SocketUtil.broadcast(config.CONNECTION_LIST,info,self.addr)
-                    # 将token加一交给config中的下一个人
-                    cur_token = self.token
-                    if SocketUtil.token_send(self.addr, cur_token):
-                        # 如果成功交出token
-                        self.token = -1
+            self.pass_token()
             return "OK", 123
+
+
         web.run_app(app, port=8080)
 
+    def pass_token(self):
+        if self.token >= 0:
+            if self.__cnt >= 5:
+                self.__cnt = 0
+                print("auto packing...")
+                blk = self.pack_block()
+                # broadcast block to other miner
+                info = bytes('<send block><{}>'.format(str(self.addr)), encoding='utf-8') + bytes(blk)
+                print("broadcast new generated block {} ".format(blk.get_id()))
+                SocketUtil.broadcast(config.CONNECTION_LIST, info, self.addr)
+                # 将token加一交给config中的下一个人
+                cur_token = self.token
+                if SocketUtil.token_send(self.addr, cur_token):
+                    # 如果成功交出token
+                    self.token = -1
 
     @classmethod
     def instance(cls, addr, chain, t):
@@ -175,8 +179,10 @@ class Miner:
                 if self.__chain.duplicate_vote(item[0]):
                     print("vote existed")
                 else:
+                    self.__cnt+=1
                     self.add_vote(bytes(item[0]))
                     print("vote added")
+                    self.pass_token()
             # 从其他miner传过来的token
             elif isinstance(item[0],int):
                 print("received token: ", item[0])
