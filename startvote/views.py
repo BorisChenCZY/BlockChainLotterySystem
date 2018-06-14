@@ -14,12 +14,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 import json
 import settings
-
-from ecpy.curves import Curve, Point
-from ecpy.keys import ECPrivateKey, ECPublicKey
-from ecpy.eddsa import EDDSA
-from ecpy.ecdsa import ECDSA
-import hashlib
+from startvote.ECDSA import *
 
 # context = {'isLogin': True,'username':''}
 # Create your views here.
@@ -160,6 +155,51 @@ def vote(request, target):
 
     if vote is None:
         return HttpResponse("Wrong vote target!")
+    br = bm.BlockReader()
+    on_chain_result = br.getVoteResult(target)
+    print('vote page', target)
+    print('vote page', on_chain_result)
+    # print(vote.vote_name)
+    on_web_list = Selection.objects.filter(vote_id=vote)
+    candidate = []
+    for option in on_web_list:
+        id = option.selection_id
+        new_dict = {}
+        new_dict["id"] = option.selection_id
+        new_dict["title"] = option.title
+        new_dict["simple"] = option.simple_detail
+        new_dict["detail"] = option.detail
+        new_dict["img"] = option.img
+        new_dict["voteNum"] = 0
+        candidate.append(new_dict)
+    if not on_chain_result:
+        Max = 0
+    else:
+        Max = max([result[1] for result in on_chain_result])
+    for result in on_chain_result:
+        candidate[result[0]-1]["voteNum"] = result[1]
+        candidate[result[0]-1]["width"] = result[1]*80/float(Max)
+    votename = vote.vote_name
+    voteLimit = 1
+    max_id = len(candidate)
+    t = None
+    if vote.vote_type == 1:
+        t = "单选"
+    else:
+        t = "多选"
+    description = vote.vote_description
+    miner_list = br.getMinerList()
+    format_miner_list =[ m[0] for m in miner_list]
+    print(format_miner_list)
+    return render(request, 'vote.html', {'candidate': candidate
+                                         , "vote": vote
+                                         , "voteLimit":voteLimit
+                                         , "max_id":max_id
+                                         , "type": t
+                                         , "description": description
+                                         , "target": target
+                                         , "miner_list": format_miner_list
+                                         , "Web_pub": settings.PUBLIC_KEY})
     if vote.is_opened or request.user.is_authenticated:
         br = bm.BlockReader()
         on_chain_result = br.getVoteResult(target)
@@ -251,31 +291,42 @@ def edit_action(request):
 
 def fold_demo(request):
     if request.method == 'GET':
-        return render(request, 'fold_demo.html')
+        return render(request, 'fold_demo.html', {"Web_pub": settings.PUBLIC_KEY})
     elif request.method == 'POST':
-        msg = request.POST.get('msg')
-        print("msg:", msg)
-        signature = request.POST.get('signature')
-        print("sig:", signature)
-        pub_key = request.POST.get('pub_key')
-        print("pubkey:", pub_key)
-        prv = request.POST.get('pri_key')
-        cv = Curve.get_curve('secp256k1')
-        signer = ECDSA()
-        prv = hashlib.md5(prv.encode()).hexdigest()
-        print("prv:", prv)
-        prv_key = ECPrivateKey(int(prv, 16), cv)
-        pub = ECPublicKey(cv.decode_point(bytes.fromhex(pub_key)))
-        pub_key = prv_key.get_public_key()
-        print("pub_key:", pub_key)
-        print("pub:", pub)
-        sig = bytes.fromhex(signature)
-        msg = msg.encode()
-        print(prv_key)
-        print(sig)
-        print(signer.sign(msg, prv_key))
-        veri = signer.verify(msg, sig, pub_key)
-        return HttpResponse(veri)
+        # msg = request.POST.get('msg')
+        # print("msg:", msg)
+        # signature = request.POST.get('signature')
+        # print("sig:", signature)
+        # pub_key = request.POST.get('pub_key')
+        # print("pubkey:", pub_key)
+        # prv = request.POST.get('pri_key')
+        # cv = Curve.get_curve('secp256k1')
+        # signer = ECDSA()
+        # prv = hashlib.md5(prv.encode()).hexdigest()
+        # print("prv:", prv)
+        # prv_key = ECPrivateKey(int(prv, 16), cv)
+        # pub = ECPublicKey(cv.decode_point(bytes.fromhex(pub_key)))
+        # pub_key = prv_key.get_public_key()
+        # print("pub_key:", pub_key)
+        # print("pub:", pub)
+        # sig = bytes.fromhex(signature)
+        # msg = msg.encode()
+        # print(prv_key)
+        # print(sig)
+        # print(signer.sign(msg, prv_key))
+        # veri = signer.verify(msg, sig, pub_key)
+        if(request.POST.get('pub_key')):
+            fake_pub = request.POST.get('pub_key')
+            print(fake_pub)
+            fake_sign = blind_signature(fake_pub)
+            print(fake_sign)
+            return HttpResponse(fake_sign)
+        else:
+            m = request.POST.get('m')
+            c = request.POST.get('c')
+            s = request.POST.get('s')
+            print(blind_verify(m, c, s))
+            return HttpResponse(1)
 
 #获得单个block内的信息
 def single_block_info(request):
@@ -325,6 +376,7 @@ def real_time_result(request):
         on_chain_result = br.getVoteResult(target)
         response_data = dict(on_chain_result)
         return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 #获取投票服务器的公钥
 def public_key(request):
     return HttpResponse(settings.PUBLIC_KEY)
@@ -333,6 +385,8 @@ def public_key(request):
 def signature(request):
     #TODO 判断是否有资格签名
     if request.method == 'POST':
+        fake_pubkey = request.POST.get('fake_pubkey')
+        
         pass
 
 

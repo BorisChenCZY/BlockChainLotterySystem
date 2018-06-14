@@ -15,6 +15,7 @@ function sign(msg){
 
 function generate_pair(){
 	rsaKeypair = KEYUTIL.generateKeypair("RSA", 512);
+
 	return rsaKeypair;
 }
 
