@@ -389,6 +389,10 @@
                         data-target="#multiCollapseExample2" aria-expanded="false"
                         aria-controls="multiCollapseExample2">Private Key
                 </button>
+                <button class="btn btn-primary" type="button" data-toggle="collapse"
+                        data-target="#multiCollapseExample3" aria-expanded="false"
+                        aria-controls="multiCollapseExample3">Fake Public Key
+                </button>
             </p>
             <div class="col" style="color: #000000">
                 <div class="collapse multi-collapse" id="multiCollapseExample1">
@@ -401,6 +405,13 @@
                 <div class="collapse multi-collapse" id="multiCollapseExample2">
                     <div class="card card-body">
                         <span id="privkey">Generating...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="color: #000;">
+                <div class="collapse multi-collapse" id="multiCollapseExample3">
+                    <div class="card card-body">
+                        <span id="fakepubkey">Generating...</span>
                     </div>
                 </div>
             </div>
@@ -465,16 +476,22 @@
 <script src="/static/js/md5.js"></script>
 
 <script>
-    {#var pair = generate_pair();#}
-    {#$("#pubkey").text(toPKCS8(pair.pubKeyObj));#}
-    {#$("#privkey").text(toPCK1(pair.prvKeyObj));#}
-    {#init((toPCK1(pair.prvKeyObj)));#}
-    $("#privkey").text(key.toString());
-    var EdDSA = require('elliptic').eddsa;
-    var ec = new EdDSA('ed25519');
-    var key = ec.keyFromSecret(hex_md5('fff'));
-    $("#pubkey").text(toPKCS8(pair.pubKeyObj));
+    function str2b(url) {
+    var data = [];
+    for (var i = 0; i < url.length; i++)
+    data.push(url.charCodeAt(i));
+    return data;
+}
 
+    var EC = require('elliptic').ec;
+    var utils = require('elliptic').utils;
+    var ec = new EC('secp256k1');
+    var pri_key = Math.random().toString(36).substr(2);
+    var key = ec.keyFromPrivate(hex_md5(pri_key));
+    var pub = key.getPublic();
+    var pub_key = utils.toHex([4].concat(pub.x.toArray('big', 32), pub.y.toArray('big', 32)));
+    $("#privkey").text(pri_key);
+    $("#pubkey").text(pub_key);
 
     jQuery(function(){
         //二维码的跳转网页地址
@@ -537,20 +554,21 @@
         {#$(this).button("loading");#}
         $(this).html("<i class='fa fa-circle-o-notch fa-spin'></i> Submitting...");
         {#$(this).disable = true;#}
-        var d = {
+        var msg = {
             "target": target,
-            "pubkey": toPKCS8(pair.pubKeyObj),
             "prob_num": 1,
-            "selection": id,
-            {#"privkey": toPCK1(pair.privkey)//DANGER!!!#}
+            "selection": id
         };
         {#var s_d = JSON.stringify(d);#}
         {#console.log(typeof s_d)#}
         {#console.log(s_d);#}
-        s = 'sign';
-        var msg = {
-            "data": d,
-            "sign": s
+        s = ec.sign(str2b(JSON.stringify(d))).toHex();
+        console.log(s);
+        console.log(key.verify(str2b(JSON.stringify(d)), s, pub_key));
+        var data = {
+            "msg": d,
+            "sign": s,
+            "pubkey": pub_key
         };
         console.log(msg);
         for (var i = 0; i < miner_list.length; i++) {
@@ -558,7 +576,7 @@
             console.log(address);
             var socket = io(address);
             console.log("hello");
-            socket.emit("Vote", JSON.stringify(msg));
+            socket.emit("Vote", JSON.stringify(data));
             console.log("good");
         }
 

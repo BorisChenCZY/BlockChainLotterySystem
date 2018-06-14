@@ -17,6 +17,7 @@ import settings
 from ecpy.curves import Curve, Point
 from ecpy.keys import ECPrivateKey, ECPublicKey
 from ecpy.eddsa import EDDSA
+from ecpy.ecdsa import ECDSA
 import hashlib
 
 # context = {'isLogin': True,'username':''}
@@ -240,24 +241,24 @@ def fold_demo(request):
         return render(request, 'fold_demo.html')
     elif request.method == 'POST':
         msg = request.POST.get('msg')
+        print("msg:", msg)
         signature = request.POST.get('signature')
-        print("sig:",signature)
+        print("sig:", signature)
         pub_key = request.POST.get('pub_key')
-        print(pub_key)
+        print("pubkey:", pub_key)
         prv = request.POST.get('pri_key')
-        cv = Curve.get_curve('Ed25519')
-        signer = EDDSA(hashlib.sha512)
+        cv = Curve.get_curve('secp256k1')
+        signer = ECDSA()
         prv = hashlib.md5(prv.encode()).hexdigest()
         print("prv:", prv)
-        pub = ECPublicKey(cv.decode_point(bytes.fromhex(pub_key)))
         prv_key = ECPrivateKey(int(prv, 16), cv)
-        pub_key = EDDSA.get_public_key(prv_key)
-        print("pub:", cv.encode_point(pub_key.W).hex())
+        pub = ECPublicKey(cv.decode_point(bytes.fromhex(pub_key)))
+        pub_key = prv_key.get_public_key()
+        print("pub_key:", pub_key)
+        print("pub:", pub)
         sig = bytes.fromhex(signature)
         msg = msg.encode()
         print(prv_key)
-        print(pub_key)
-        print(pub)
         print(sig)
         print(signer.sign(msg, prv_key))
         veri = signer.verify(msg, sig, pub_key)
@@ -301,3 +302,10 @@ def block_info(request):
 #获取投票服务器的公钥
 def public_key(request):
     return HttpResponse(settings.PUBLIC_KEY)
+
+#服务器对公钥签名
+def signature(request):
+    #TODO 判断是否有资格签名
+    if request.method == 'POST':
+        pass
+    

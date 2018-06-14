@@ -45,19 +45,25 @@
     $("#Submit").on('click', function () {
         var prv = $("#prv").val();
         var msg = $("#msg").val();
+        var EC = require('elliptic').ec;
         var EdDSA = require('elliptic').eddsa;
         var utils = require('elliptic').utils;
-        var ec = new EdDSA('ed25519');
-        var key = ec.keyFromSecret(hex_md5(prv));
-        var pub = utils.toHex(key.getPublic());
-        var signature = key.sign(str2b(msg)).toHex();
-        var key_pub = ec.keyFromPublic(pub);
+        var ec = new EC('secp256k1');
+        {#ec.keyFromPrivate(hex_md5(prv));#}
+        var key = ec.keyFromPrivate(hex_md5(prv));
+        var pub = key.getPublic();
+        console.log(pub);
+        var sig = ec.sign(str2b(msg), key);
+        var signature = utils.toHex(sig.toDER());
+        console.log(signature);
+        var key_pub = [4].concat(pub.x.toArray('big', 32), pub.y.toArray('big', 32));
+        console.log(key_pub);
         $.post(
            "fold_demo",
             {
                 msg: msg,
                 signature: signature,
-                pub_key: pub,
+                pub_key: utils.toHex(key_pub),
                 pri_key: prv
             },
             function(data){
@@ -65,12 +71,8 @@
             }
         );
         console.log(hex_md5(prv));
-        console.log(ec.decodePoint(pub));
-        console.log(pub);
-        console.log(utils.toHex(key.getSecret()));
-        console.log(key.hash);
-        console.log(signature);
-        {#console.log(ec.verify(msg, signature, key_pub));#}
+        {#console.log(utils.toHex(key.getPrivate()));#}
+        console.log(ec.verify(str2b(msg), sig, pub));
         $(this).html("Done");
     });
 </script>
