@@ -6,3 +6,4 @@ venv1
 .pyc
 ./db.sqlite3
 ./BlockVOTE/P2P/settings.py
+./BlockVOTE/test.sqlite
