@@ -15,12 +15,14 @@ class Artivle(models.Model):
 class Vote(models.Model):
     vote_id = models.IntegerField(primary_key=True)  # 自增主键
     vote_name = models.CharField(max_length=50)
-    vote_type = models.IntegerField(null=True) # 多选,单选 1:单选 2：多选
+    vote_img = models.ImageField(null=True, upload_to="pic_folder/")
+    vote_anonymity = models.BooleanField(default=True)  # default anonymity
+    vote_optionable_num = models.IntegerField(null=True)  # 多选,单选 1:单选 2：多选
     vote_state = models.IntegerField(null=True)  # 投票状态，状态编码，1：未开始 2：进行中 3：已结束
     vote_target = models.TextField(null=True)  # 一个hash值
     vote_description = models.TextField(null=True)  # 投票描述
     is_checkable = models.BooleanField(default=True)  # 是否可以查看投票结果，默认可以
-    is_opened = models.BooleanField(default=False)  # 是否需要认证，默认不需要
+    is_opened = models.BooleanField(default=True)  # if this vote is opened for all
     creat_time = models.DateTimeField(null=True)  # 创建时间
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
@@ -30,12 +32,13 @@ class Vote(models.Model):
 #     # options_content
 #
 #
-class Entry(models.Model):  # 公钥,投票活动id,将人和投票连接起来,并保持user_id的匿名性
+class Entry(models.Model):  # 公钥,投票活动id,将人和投票连接起+来,并保持user_id的匿名性
 
     # public_key = models.CharField(max_length=300)  # 不能连接到 user_id,单向性保证了安全性
     user_id = models.ForeignKey(User,on_delete=models.CASCADE)  # 用户id
     vote_id = models.ForeignKey('Vote',on_delete=models.CASCADE)  # 外键
     condition = models.BooleanField(default=False)  # 投票状态，状态编码，true：已投 false：未投
+    # if apply a signature
     identity = models.IntegerField(default=1)  # 身份，可能是参与者(1)，也可能是发起者对应我参与的，我发起的(2)
     # option = models.IntegerField()
 #

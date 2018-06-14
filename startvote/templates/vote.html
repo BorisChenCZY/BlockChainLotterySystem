@@ -5,9 +5,9 @@
 
     <meta charset="utf-8">
     {#    以下三行用于禁止缓存#}
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -19,9 +19,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
             integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
             crossorigin="anonymous"></script>
-{#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"#}
-{#            integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"#}
-{#            crossorigin="anonymous"></script>#}
+    {#    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js"#}
+    {#            integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4"#}
+    {#            crossorigin="anonymous"></script>#}
     <script src="/static/js/jsrsasign-all-min.js"></script>
     <script src="/static/js/encryption.js"></script>
     <link rel="stylesheet" href="/static/css/bootstrap.css">
@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="/static/skin/default.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.dev.js"></script>
     <script src="/static/js/jquery-1.10.2.min.js"></script>
-{#        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
+    {#        <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>#}
 
     {#    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">#}
 
@@ -41,7 +41,6 @@
     <style type="text/css">
 
         .mr-3{
-            color: r;
             margin-right: 1rem!important;
         }
         .media-body{
@@ -79,6 +78,7 @@
 
         .card {
             margin-top: 20px;
+            margin-bottom: 20px;
             font-size: 1em;
             overflow: hidden;
             padding: 0;
@@ -280,6 +280,8 @@
             }
             .card{
                 margin-top: 10px;
+                margin-bottom: 10px;
+
             }
             .mycontainer{
                 margin-top: 20px;
@@ -313,6 +315,64 @@
             }
 
 
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        /* Hide default HTML checkbox */
+        .switch input {
+            display: none;
+        }
+
+        /* The slider */
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
         }
 
     </style>
@@ -327,28 +387,41 @@
         <div class="row smallermargin" style="color: #000;">
             <div class="form-title-row">
                 <a><h1 style="float: left;" class="myfont">{{ vote.vote_name }}</h1></a>
-                <i data-toggle="modal" data-target="#exampleModal" class="fa fa-share-square-o" style="margin-left: 10px"></i>
+                <i data-toggle="modal" data-target="#exampleModal" class="fa fa-share-square-o"
+                   style="margin-left: 10px"></i>
             </div>
 
             <div style="margin: 10px"> {{ type }}</div>
             <div style="margin: 10px"> {{ vote.vote_description }}</div>
         </div>
-        <div class="row" >
+        <div class="row">
+            <div style="float:left; margin-top:0.4%; margin-left:0.5%; margin-right:1%;">
+                <span style="color: #000000; vertical-align: top; margin-top: 100%; font-size:110%">Real Time Result</span>
+            </div>
 
-            <button id="showall" style="float: right" type="button" class="btn btn-success" data-toggle="collapse" data-target=".candidates">Show All Details</button>
+            <!-- Rounded switch -->
+            <label class="switch" style="float:left;" id="realTimeResult">
+                <input type="checkbox" id="resultCheckBox">
+                <span class="slider round"></span>
+            </label>
+            <button id="showall" style="float: right" type="button" class="btn btn-success" data-toggle="collapse"
+                    data-target=".candidates" style="float: top">Show All Details
+            </button>
         </div>
 
 
         {% for c in candidate %}
             <div class="row">
                 <div class="progress" style="position: relative;">
-                    <button type="button" class="btn btn-success" data-toggle="collapse" aria-expanded="false" aria-controls="{{ c.id }}"
+                    <button type="button" class="btn btn-success" data-toggle="collapse" aria-expanded="false"
+                            aria-controls="{{ c.id }}"
                             data-target="#{{ c.id }}"> Details
                     </button>
                     <div class="progress" onclick="clicked(this)">
-                        <span style="color:#000000; position:absolute;">{{ c.title}} {{ c.voteNum }}票</span>
+                        <span style="color:#000000; position:absolute;">{{ c.title }} {{ c.voteNum }}票</span>
                         <div class="progress-bar  progress-bar-info" role="progressbar" aria-valuenow="10"
-                             aria-valuemin="0" aria-valuemax="100" style="width: {{ c.width }}%; min-width:{{ c.width }}%"
+                             aria-valuemin="0" aria-valuemax="100"
+                             style="width: {{ c.width }}%; min-width:{{ c.width }}%"
                              id="prog{{ c.id }}">
                         </div>
                     </div>
@@ -358,7 +431,7 @@
                     <div class="panel-collapse ">
                         <div class="panel-body">
                             <div class="media">
-                                <img class="mr-3 vote_img"  src="{{ c.img }}" alt="媒体对象">
+                                <img class="mr-3 vote_img"  src="{{ MEDIA_URL }}{{ c.img }}" alt="媒体对象">
                                 <div class="media-body" style="color: black">
                                     <h5 class="mt-0 myfont smallerfont">{{c.title}}</h5>
                                     {{ c.simple }}<br>{{ c.detail }}
@@ -389,6 +462,10 @@
                         data-target="#multiCollapseExample2" aria-expanded="false"
                         aria-controls="multiCollapseExample2">Private Key
                 </button>
+                <button class="btn btn-primary" type="button" data-toggle="collapse"
+                        data-target="#multiCollapseExample3" aria-expanded="false"
+                        aria-controls="multiCollapseExample3">Fake Public Key
+                </button>
             </p>
             <div class="col" style="color: #000000">
                 <div class="collapse multi-collapse" id="multiCollapseExample1">
@@ -397,10 +474,21 @@
                     </div>
                 </div>
             </div>
+            <button class="btn btn-primary" type="button"  data-toggle="collapse"
+                        data-target="#multiCollapseExample2" aria-expanded="false"
+                        aria-controls="multiCollapseExample2">Private Key
+                </button>
             <div class="col" style="color: #000;">
                 <div class="collapse multi-collapse" id="multiCollapseExample2">
                     <div class="card card-body">
                         <span id="privkey">Generating...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="color: #000;">
+                <div class="collapse multi-collapse" id="multiCollapseExample3">
+                    <div class="card card-body">
+                        <span id="fakepubkey">Generating...</span>
                     </div>
                 </div>
             </div>
@@ -438,6 +526,12 @@
                 <div class="modal-body">
                     <div class="middle">
                         <div id="qrcode3"></div>
+                        <div style="margin-top: 10px">
+                            <textarea id="copy" style="color: black;width: 77%;height:32px;float: left;overflow-x: auto">对应的网址</textarea>
+
+                            <a><button type="button"  class="btn btn-primary"  onclick="copyLink();">Copy</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -461,46 +555,72 @@
 <script src="/static/js/main.js"></script>
 <script src="/static/contactform/contactform.js"></script>
 <script type="text/javascript" src="/static/js/jquery.qrcode.min.js"></script>
-
+<script src="/static/js/elliptic/lib/bundle.js"></script>
+<script src="/static/js/md5.js"></script>
 
 <script>
-    var pair = generate_pair();
-    $("#pubkey").text(toPKCS8(pair.pubKeyObj));
-    $("#privkey").text(toPCK1(pair.prvKeyObj));
-    init((toPCK1(pair.prvKeyObj)));
+    String.prototype.replaceAt = function (index, replacement) {
+        return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+    }
+
+    function str2b(url) {
+        var data = [];
+        for (var i = 0; i < url.length; i++)
+            data.push(url.charCodeAt(i));
+        return data;
+    }
+
+    var EC = require('elliptic').ec;
+    var utils = require('elliptic').utils;
+    var ec = new EC('secp256k1');
+    var pri_key = Math.random().toString(36).substr(2);
+    var key = ec.keyFromPrivate(hex_md5(pri_key));
+    var pub = key.getPublic();
+    var pub_key = utils.toHex([4].concat(pub.x.toArray('big', 32), pub.y.toArray('big', 32)));
+    $("#privkey").text(pri_key);
+    $("#pubkey").text(pub_key);
 
     jQuery(function(){
         //二维码的跳转网页地址
-        jQuery('#qrcode3').qrcode("http://baidu.com");
+        var test = window.location.href;
+        jQuery('#qrcode3').qrcode(test);
     });
 
     var thisobj;
     var voteLimit = {{ voteLimit }};
+    var selected_num = 0;
     var max_id = {{ max_id }};
     var miner_list = {{ miner_list|safe }};
-    console.log(miner_list);
-    var showall=0;
-    var choose_color="linear-gradient(to bottom, rgb(255, 102, 0) 0%, rgb(255, 80, 80) 100%)";
-    var origin_color="linear-gradient(to bottom, #5bc0de 0%, #31b0d5 100%)";
+    var showall = 0;
+    var choose_color = "linear-gradient(to bottom, rgb(255, 102, 0) 0%, rgb(255, 80, 80) 100%)";
+    var origin_color = "linear-gradient(to bottom, #5bc0de 0%, #31b0d5 100%)";
 
     function clicked(obj) {
-        if (voteLimit === 1) {
-            for (var i = 1; i <= max_id; i++) {
-                {#$("#prog" + i)[0].style.width = "0%";#}
-                {#console.log(i)#}
+        if (selected_num< voteLimit) {
+            if (obj.children[1].style.width === "100%"){
+                obj.children[1].style.backgroundImage=origin_color;
+                obj.children[1].style.width=obj.children[1].style.minWidth;
+                selected_num--;
             }
-        }
-        if (obj.children[1].style.width === "100%"){
-            obj.children[1].style.backgroundImage=origin_color;
-            obj.children[1].style.width=obj.children[1].style.minWidth;
+            else {
+                obj.children[1].style.backgroundImage=choose_color;
+                obj.children[1].style.width ="100%";
+                selected_num++;
+            }
+        }else if(selected_num ===voteLimit){
+            if (obj.children[1].style.width === "100%"){
+                obj.children[1].style.backgroundImage=origin_color;
+                obj.children[1].style.width=obj.children[1].style.minWidth;
+                selected_num--;
+            }
+            else {
+                 alert("选项数目达到上线");
+            }
 
-        }else {
-            obj.children[1].style.backgroundImage=choose_color;
-            obj.children[1].style.width ="100%";
         }
     }
     $("#showall").click(function () {
-        if(showall==0){
+        if(showall == 0){
             $(this).html("Hide All Details");
             showall++;
         }
@@ -530,33 +650,96 @@
         {#$(this).button("loading");#}
         $(this).html("<i class='fa fa-circle-o-notch fa-spin'></i> Submitting...");
         {#$(this).disable = true;#}
-        var d = {
+        var msg = {
             "target": target,
-            "pubkey": toPKCS8(pair.pubKeyObj),
             "prob_num": 1,
-            "selection": id,
-            {#"privkey": toPCK1(pair.privkey)//DANGER!!!#}
+            "selection": id
         };
         {#var s_d = JSON.stringify(d);#}
         {#console.log(typeof s_d)#}
         {#console.log(s_d);#}
-        s = 'sign';
-        var msg = {
-            "data": d,
-            "sign": s
+        s = ec.sign(str2b(JSON.stringify(d))).toHex();
+        console.log(s);
+        console.log(key.verify(str2b(JSON.stringify(d)), s, pub_key));
+        var data = {
+            "msg": d,
+            "sign": s,
+            "pubkey": pub_key
         };
         console.log(msg);
+        $(this).html("Done");
+       if (confirm("你确定要提交吗？")){
         for (var i = 0; i < miner_list.length; i++) {
             var address = miner_list[i];
             console.log(address);
             var socket = io(address);
             console.log("hello");
-            socket.emit("Vote", JSON.stringify(msg));
+            socket.emit("Vote", JSON.stringify(data));
             console.log("good");
+           }
+           {#window.location.href="logout.asp?act=logout"#}
+            window.history.back(-1);
         }
 
         $(this).html("Done");
+
     })
+    $("#realTimeResult").on("click", function () {
+        {#timer = setInterval(getRealTimeResult, 1000);#}
+        {#clearInterval(timer);#}
+        if (document.getElementById('resultCheckBox').checked === false) {
+            //pause timer
+            console.log("closed timer");
+            {#window.clearInterval(timer);#}
+            {#window.clearInterval(timer);#}
+            timer = false;
+        } else {
+            //continue timer
+            timer = window.setInterval(getRealTimeResult, 1000);
+            {#console.log("opened timer");#}
+            timer = true;
+        }
+    })
+
+    function getRealTimeResult() {
+        if (!timer)
+            return;
+        console.log("retriving");
+        $.ajax({
+            type: "POST",
+            url: "/result",
+            data: {
+                "url": document.URL,
+            }
+        }).done(function (info) {
+            ans = info; // todo change ans to private
+            total = 0;
+            max = 0
+
+            console.log("retrived");
+
+            for (var key in ans) {
+                // check if the property/key is defined in the object itself, not in parent
+                if (ans.hasOwnProperty(key)) {
+                    total += ans[key];
+                    if (ans[key] > max)
+                        max = ans[key];
+                }
+            }
+
+            for (var key in ans) {
+                // check if the property/key is defined in the object itself, not in parent
+                if (ans.hasOwnProperty(key)) {
+                    if (document.getElementsByClassName("progress-bar")[key - 1].style.width !== "100%")
+                        document.getElementsByClassName("progress-bar")[key - 1].setAttribute("style", "width:" + ans[key] / max * 80 + "%")
+
+                    var text = $("div.progress span")[key - 1].innerHTML;
+                    text = text.replaceAt(text.search(" ") + 1, ans[key] + "票");
+                    $("div.progress span")[key - 1].innerHTML = text;
+                }
+            }
+        })
+    }
 </script>
 
 </body>

@@ -12,7 +12,14 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+import json
+import settings
 
+from ecpy.curves import Curve, Point
+from ecpy.keys import ECPrivateKey, ECPublicKey
+from ecpy.eddsa import EDDSA
+from ecpy.ecdsa import ECDSA
+import hashlib
 
 # context = {'isLogin': True,'username':''}
 # Create your views here.
@@ -47,14 +54,17 @@ def login(request):
         if userform.is_valid():
             username = userform.cleaned_data['username']
             password = userform.cleaned_data['password']
+            print(username, password)
             user = auth.authenticate(username=username, password=password)
 
             if user:
                 auth.login(request,user)
                 request.session['username'] = user.username
-                
+                print("logined in")
+
                 return render(request, 'index.html')
             else:
+                print("password wrong")
                 return render(request, "login.html")
 
 #注册
@@ -87,6 +97,7 @@ def form(request):
             entry = Entry()
             vote.creat_time = datetime.datetime.now()
             vote.vote_name = request.POST.get("vote_name")
+            vote.vote_img = request.FILES.get("vote_img")
             vote.vote_description = request.POST.get("vote_description")
             vote.start_time = request.POST.get("start_time")
             vote.end_time = request.POST.get("end_time")
@@ -98,20 +109,19 @@ def form(request):
                 vote.vote_state = 2
             else: # 已结束
                 vote.vote_state = 3
-
-            if request.POST.get("is_opened") == "yes":  # 是否是公开投票
+            if request.POST.get("vote_anonymity"):
+                vote.vote_anonymity = True
+            else:
+                vote.vote_anonymity = False
+            if request.POST.get("is_opened") == "无限制":  # 是否是公开投票
                 vote.is_opened = True
             else:
                 vote.is_opened = False
-            if request.POST.get("is_checkable") == "须权限认证":  # 是否展示投票结果给参与者
+            if request.POST.get("is_checkable") == "yes":  # 是否展示投票结果给参与者
                 vote.is_checkable = True
             else:
                 vote.is_checkable = False
-
-            if request.POST.get("vote_type") == "单选":
-                vote.vote_type = 1
-            else:
-                vote.vote_type = 2
+            vote.vote_optionable_num = int(request.POST.get("vote_optionable_num"))
 
             vote_target = block_hashfunc.hash((str(vote.vote_name)+str(d)).encode())
             vote.vote_target = vote_target
@@ -136,56 +146,59 @@ def form(request):
             entry.identity = 2  # 表示发起人
             entry.condition = False
             entry.save()
-            return card(request)
+
+            return render_to_response('share.html', {"vote_target": str(vote_target)})
 
 
 
 def vote(request, target):
     vote = Vote.objects.filter(vote_target=target).get()
+
     if vote is None:
         return HttpResponse("Wrong vote target!")
-    br = bm.BlockReader()
-    on_chain_result = br.getVoteResult(target)
-    # print(vote.vote_name)
-    on_web_list = Selection.objects.filter(vote_id=vote)
-    candidate = []
-    for option in on_web_list:
-        id = option.selection_id
-        new_dict = {}
-        new_dict["id"] = option.selection_id
-        new_dict["title"] = option.title
-        new_dict["simple"] = option.simple_detail
-        new_dict["detail"] = option.detail
-        new_dict["img"] = option.img
-        new_dict["voteNum"] = 0
-        candidate.append(new_dict)
-    if not on_chain_result:
-        Max = 0
+    if vote.is_opened or request.user.is_authenticated:
+        br = bm.BlockReader()
+        on_chain_result = br.getVoteResult(target)
+        # print(vote.vote_name)
+        on_web_list = Selection.objects.filter(vote_id=vote)
+        candidate = []
+        for option in on_web_list:
+            id = option.selection_id
+            new_dict = {}
+            new_dict["id"] = option.selection_id
+            new_dict["title"] = option.title
+            new_dict["simple"] = option.simple_detail
+            new_dict["detail"] = option.detail
+            new_dict["img"] = option.img
+            new_dict["voteNum"] = 0
+            candidate.append(new_dict)
+        if not on_chain_result:
+            Max = 0
+        else:
+            Max = max([result[1] for result in on_chain_result])
+        for result in on_chain_result:
+            candidate[result[0] - 1]["voteNum"] = result[1]
+            candidate[result[0] - 1]["width"] = result[1] * 80 / float(Max)
+        votename = vote.vote_name
+        voteLimit = vote.vote_optionable_num
+        max_id = len(candidate)
+        t = str(max_id) + "选" + str(vote.vote_optionable_num)
+        description = vote.vote_description
+        miner_list = br.getMinerList()
+        format_miner_list = [m[0] for m in miner_list]
+        print(format_miner_list)
+        return render(request, 'vote.html', {'candidate': candidate
+            , "vote": vote
+            , "voteLimit": voteLimit
+            , "max_id": max_id
+            , "type": t
+            , "description": description
+            , "target": target
+            , "miner_list": format_miner_list})
     else:
-        Max = max([result[1] for result in on_chain_result])
-    for result in on_chain_result:
-        candidate[result[0]-1]["voteNum"] = result[1]
-        candidate[result[0]-1]["width"] = result[1]*80/float(Max)
-    votename = vote.vote_name
-    voteLimit = 1
-    max_id = len(candidate)
-    t = None
-    if vote.vote_type == 1:
-        t = "单选"
-    else:
-        t = "多选"
-    description = vote.vote_description
-    miner_list = br.getMinerList()
-    format_miner_list =[ m[0] for m in miner_list]
-    print(format_miner_list)
-    return render(request, 'vote.html', {'candidate': candidate
-                                         , "vote": vote
-                                         , "voteLimit":voteLimit
-                                         , "max_id":max_id
-                                         , "type": t
-                                         , "description": description
-                                         , "target": target
-                                         , "miner_list": format_miner_list})
+
+        return render(request, 'login.html')
+
 
 def card(request):
     result_list =[]
@@ -201,8 +214,10 @@ def card(request):
         vote_condition["target"] = item.vote_id.vote_target
         result_list.append(vote_condition)
     return render_to_response('card.html',{"result_list":result_list})
-# def creat_vote(request):
 
+
+def share(request):
+    return  render(request,'startvote/share.html')
 
 def article_page(request,id):
     article = models.Artivle.objects.get(pk=id)
@@ -231,10 +246,32 @@ def edit_action(request):
     return render(request, 'startvote/index.html', {'artilces': articles})
 
 def fold_demo(request):
-    candidate = []
-    candidate.append({"id":1, "title": "Boris.Chen","img": "/static/img/team/member1.jpg", "content": "大家好我是鲍里斯陈，来自db group，我爱麻辣火锅，谢谢大家支持。\n"*3})
-    candidate.append({"id":2, "title": "Mark.Zeng","img": "/static/img/team/member5.jpg","content": "大家好我是马克曾，来自db group，我爱牛肉火锅，谢谢大家支持。\n"*3})
-    return render(request, 'fold_demo.html', {'candidate': candidate})
+    if request.method == 'GET':
+        return render(request, 'fold_demo.html')
+    elif request.method == 'POST':
+        msg = request.POST.get('msg')
+        print("msg:", msg)
+        signature = request.POST.get('signature')
+        print("sig:", signature)
+        pub_key = request.POST.get('pub_key')
+        print("pubkey:", pub_key)
+        prv = request.POST.get('pri_key')
+        cv = Curve.get_curve('secp256k1')
+        signer = ECDSA()
+        prv = hashlib.md5(prv.encode()).hexdigest()
+        print("prv:", prv)
+        prv_key = ECPrivateKey(int(prv, 16), cv)
+        pub = ECPublicKey(cv.decode_point(bytes.fromhex(pub_key)))
+        pub_key = prv_key.get_public_key()
+        print("pub_key:", pub_key)
+        print("pub:", pub)
+        sig = bytes.fromhex(signature)
+        msg = msg.encode()
+        print(prv_key)
+        print(sig)
+        print(signer.sign(msg, prv_key))
+        veri = signer.verify(msg, sig, pub_key)
+        return HttpResponse(veri)
 
 #获得单个block内的信息
 def single_block_info(request):
@@ -248,7 +285,6 @@ def single_block_info(request):
     format_block = []
     for i,b in enumerate(block):
         format_block.append((title0[i], b))
-
     for i in infos:
         i = list(i)
         i[0] = i[0][:16]
@@ -262,12 +298,40 @@ def single_block_info(request):
 def block_info(request):
     br = bm.BlockReader()
     blocks = br.getBlockInfos()
-    title = ["Id","hash","prehash","vote_num","generator"]
+    title = ["Id", "hash", "prehash", "vote_num", "generator"]
     format_blocks = []
-    print(blocks[0])
     for b in blocks:
         b = list(b)
         b[1] = b[1][:32]   #截取哈希的前32位
         b[2] = b[2][:32]
         format_blocks.append(b)
     return render(request, 'block_info.html', {'blocks': format_blocks, 'title': title})
+
+def real_time_result(request):
+
+    if request.method != "POST":
+        return HttpResponse("404 hhh")
+    else:
+        result= dict(request.POST)
+        # print(result)
+        url = result["url"][0]
+        target = url[url.find("b"):]
+
+        br = bm.BlockReader()
+        on_chain_result = br.getVoteResult(target)
+        response_data = dict(on_chain_result)
+        return HttpResponse(json.dumps(response_data), content_type="application/json")
+#获取投票服务器的公钥
+def public_key(request):
+    return HttpResponse(settings.PUBLIC_KEY)
+
+#服务器对公钥签名
+def signature(request):
+    #TODO 判断是否有资格签名
+    if request.method == 'POST':
+        pass
+
+
+
+def page_not_found(request):
+    return  render(request,'startvote/error.html');

@@ -19,6 +19,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 import startvote.views as v1
 
+handler404 = v1.page_not_found
+handler403 = v1.page_not_found
+handler500 = v1.page_not_found
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,7 +31,10 @@ urlpatterns = [
     re_path(r'^logout$', v1.logout, name="logout"),
     re_path(r'^form$', v1.form, name="form"),
     re_path(r'^card$', v1.card, name="card"),
+    re_path(r'^error$', v1.page_not_found, name="error"),
+    re_path(r'^share$', v1.share, name="share"),
     re_path(r'^vote/(?P<target>.*?)$', v1.vote, name="vote"),
+    re_path(r'^result$', v1.real_time_result, name="realTimeResult"),
 
 
 

@@ -96,7 +96,7 @@ class VoteInfo():
         return self.__selections
 
     def check(self):
-        # todo
+        # todo 曾总在这里验证椭圆曲线
         return True
 
     def __bytes__(self):

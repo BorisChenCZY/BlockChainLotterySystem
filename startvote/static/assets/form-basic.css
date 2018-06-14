@@ -14,11 +14,18 @@ html{
     font: bold 14px sans-serif;
     text-align: center;
 }
- @media (max-width: 767px) {
-            .form-basic{
-                width: 340px;
-            }
-        }
+.button-div{
+    width: 640px;
+    margin: 0 auto;
+}
+@media (max-width: 767px) {
+    .form-basic{
+        width: 340px;
+    }
+    .button-div{
+        width: 340px;
+    }
+}
 
 .form-basic .form-row{
     text-align: left;
@@ -173,8 +180,8 @@ html{
     }
 
     .form-basic .form-row > label span{
-    padding:0 0 0 0 ;
-}
+        padding:0 0 0 0 ;
+    }
 
 
 }
