@@ -358,7 +358,7 @@
                     <div class="panel-collapse ">
                         <div class="panel-body">
                             <div class="media">
-                                <img class="mr-3 vote_img"  src="{{ c.img }}" alt="媒体对象">
+                                <img class="mr-3 vote_img"  src="{{ MEDIA_URL }}{{ c.img }}" alt="媒体对象">
                                 <div class="media-body" style="color: black">
                                     <h5 class="mt-0 myfont smallerfont">{{c.title}}</h5>
                                     {{ c.simple }}<br>{{ c.detail }}
@@ -471,11 +471,13 @@
 
     jQuery(function(){
         //二维码的跳转网页地址
-        jQuery('#qrcode3').qrcode("http://baidu.com");
+        var test = window.location.href;
+        jQuery('#qrcode3').qrcode(test);
     });
 
     var thisobj;
     var voteLimit = {{ voteLimit }};
+    var selected_num = 0;
     var max_id = {{ max_id }};
     var miner_list = {{ miner_list|safe }};
     console.log(miner_list);
@@ -484,20 +486,30 @@
     var origin_color="linear-gradient(to bottom, #5bc0de 0%, #31b0d5 100%)";
 
     function clicked(obj) {
-        if (voteLimit === 1) {
-            for (var i = 1; i <= max_id; i++) {
-                {#$("#prog" + i)[0].style.width = "0%";#}
-                {#console.log(i)#}
+        if (selected_num< voteLimit) {
+            if (obj.children[1].style.width === "100%"){
+                obj.children[1].style.backgroundImage=origin_color;
+                obj.children[1].style.width=obj.children[1].style.minWidth;
+                selected_num--;
             }
-        }
-        if (obj.children[1].style.width === "100%"){
-            obj.children[1].style.backgroundImage=origin_color;
-            obj.children[1].style.width=obj.children[1].style.minWidth;
+            else {
+                obj.children[1].style.backgroundImage=choose_color;
+                obj.children[1].style.width ="100%";
+                selected_num++;
+            }
+        }else if(selected_num ===voteLimit){
+            if (obj.children[1].style.width === "100%"){
+                obj.children[1].style.backgroundImage=origin_color;
+                obj.children[1].style.width=obj.children[1].style.minWidth;
+                selected_num--;
+            }
+            else {
+                 alert("选项数目达到上线");
+            }
 
-        }else {
-            obj.children[1].style.backgroundImage=choose_color;
-            obj.children[1].style.width ="100%";
         }
+
+
     }
     $("#showall").click(function () {
         if(showall==0){
@@ -512,6 +524,8 @@
 
 
     $("#Submit").on('click', function () {
+
+
         var id = [];
         var cnt = 0;
         for (var i = 1; i <= max_id; i++) {
@@ -546,6 +560,8 @@
             "sign": s
         };
         console.log(msg);
+        $(this).html("Done");
+       if (confirm("你确定要提交吗？")){
         for (var i = 0; i < miner_list.length; i++) {
             var address = miner_list[i];
             console.log(address);
@@ -553,9 +569,13 @@
             console.log("hello");
             socket.emit("Vote", JSON.stringify(msg));
             console.log("good");
+           }
+           {#window.location.href="logout.asp?act=logout"#}
+            window.history.back(-1);
         }
 
-        $(this).html("Done");
+
+
     })
 </script>
 

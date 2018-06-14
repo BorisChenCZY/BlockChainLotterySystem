@@ -41,6 +41,16 @@
         }
 
     </style>
+    <style>
+#all{
+    margin:0px auto;
+    {#width:500px; /* 必须制定宽度 */#}
+    {#height:200px;#}
+    background-color:white;
+     text-align:center; /* 文字居中 */
+    color:black; /* 文字颜色 */
+}
+</style>
     {#    <style type="text/css">#}
     {#        myform {#}
     {#            margin:60%;#}
@@ -73,37 +83,11 @@
     </style>
     <script>
         var vote_target ="{{ vote_target }}";
-        {#var selectionNum =#}
 
         var room = 1;
-        var totalNum =1;
-        function optionsUpdate(t){
-             var objSelectNow=document.getElementById("select1");
-             console.log("before:",totalNum);
-             objSelectNow.options.length=0;
-            if(t===1){   //add
-                totalNum++;
-
-            }else{   //delete
-                totalNum--;
-            }
-
-            for (i=0;i<totalNum;i++)
-            {
-                var objOption = document.createElement("OPTION");
-              objOption.text= totalNum+"选"+(i+1);
-              objOption.value=i+1;
-              objSelectNow.options.add(objOption);
-            }
-            console.log("after:",totalNum);
-
-
-        }
-
-
         function education_fields() {
+
             room++;
-            optionsUpdate(1);
             var objTo = document.getElementById('education_fields')
             var divtest = document.createElement("div");
             divtest.setAttribute("class", "form-group nomarginb removeclass"+room);
@@ -134,10 +118,7 @@
             objTo.appendChild(divtest)
         }
         function remove_education_fields(rid) {
-
             $('.removeclass'+rid).remove();
-            optionsUpdate(2);
-
         }
         jQuery(function(){
             //二维码的跳转网页地址
@@ -147,8 +128,6 @@
             console.log(url);
             jQuery('#qrcode').qrcode(url);
         })
-
-
     </script>
 
 
@@ -166,128 +145,38 @@
 
     <!-- You only need this form and the form-basic.css -->
 
-    <form class="form-basic" method="post" position = "left" action="{% url 'form' %}" enctype="multipart/form-data">
-        {% csrf_token %}
-
-        <div class="form-title-row">
-            <h1>创建投票</h1>
-        </div>
-
-        <div class="form-row">
-            <label>
-                <span>投票名称</span>
-                <input type="text" name="vote_name">
-            </label>
-        </div>
-        <div class="form-row">
-            <label>
-                <span>投票介绍</span>
-                <textarea name="vote_description"></textarea>
-
-            </label>
-        </div> <div class="form-row">
-        <label>
-            <span style="float: left">上传图片</span>
-            <input id="input-b2" class="" style="float: left;padding: 10px; font-weight: 300;" name="vote_img" type="file" class="file" data-show-preview="false">
-
-        </label>
-    </div>
-
-        <div class="form-row">
-            <label>
-                <span >投票选项</span>
 
 
-                <div class="nopadding" style="width: 240px;display: inline-block">
-                    <div class="form-group" >
-                        <div class="input-group" >
-                            <input style="width: 162.5px;" type="text" class="form-control" id="Schoolname" name="options" value="" >
 
-                            <button name="detail" style="margin: 0 0 0 0;padding: 7px 2px 7px 2px;display:inline-block;font-weight: 400;" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#collapseOne"> Details</button>
+{#    <div>#}
+{#        <button class="button" data-toggle="modal" data-target="#exampleModal" style="color: #7a7a7a;margin-left: 50%">（）</button>#}
+{#    </div>#}
+{#    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">#}
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 300px;margin-left: auto;margin-right: auto;margin-left: auto;margin-top: 180px">
 
-                            <button name="add" style="margin: 0 0 0 0;padding: 0 0 0 0;display:inline-block;background: lightseagreen" class="btn btn-primary" type="button"  onclick="education_fields();"> <span style="width: auto;padding:  11px 8px 11px 8px;" class="glyphicon glyphicon-plus" aria-hidden="true"></span> </button>
-
-                        </div>
-
-                    </div>
-                    <div  class="panel panel-default collapse" style="border-color: transparent;box-shadow:0 0px 0px;" id="collapseOne">
-
-                        <textarea name="vote_details"></textarea>
-                        <input id="input-b2" style="padding: 5px;font-weight: 300;" name="attachments" type="file" class="file" data-show-preview="false" >
-
+            <div class="modal-header" id="all">
+                <h2>扫一扫，参与投票</h2>
+            </div>
+                <div class="modal-body">
+                    <div class="middle">
+                        <div id="qrcode"></div>
                     </div>
                 </div>
+                <div class="modal-bottom" id="all">
+                    <a href="{% url 'card' %}"><button  type="button"  class="btn float-right" style="font-weight:600;margin-bottom:30px;color:white;background:teal;box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)">
+                    &nbsp&nbspcheck my vote&nbsp&nbsp</button></a>
+            </div>
 
-                <div id="education_fields"></div>
-
-            </label>
-
+            </div>
         </div>
+    <div >
 
+        {#        <a href="{% url 'index' %}">#}
+        {#        <button class="btn btn-info float-right btn-sm btn-lg" style="margin-bottom: 20px">#}
+        {#                  Back</button></a>#}
 
-
-
-
-
-
-        <div class="form-row">
-            <label>
-                <span>开始时间</span>
-                <input type="datetime-local" name="start_time">
-            </label>
-        </div>
-        <div class="form-row">
-            <label>
-                <span>结束时间</span>
-                <input type="datetime-local" name="end_time">
-            </label>
-        </div>
-
-        <div class="form-row">
-            <label>
-                <span>可选数目</span>
-                <select name="vote_optionable_num" class="adjust2" id ="select1">
-                    <option>1选1</option>
-
-                </select>
-            </label>
-        </div>
-        <div class="form-row">
-            <label>
-                <span>投票权限</span>
-                <select name="is_opened"class="adjust2" >
-                    <option value ="1">无限制</option>
-                    <option value ="2">需权限认证</option>
-
-                </select>
-            </label>
-        </div>
-
-        <div class="form-row">
-            <label>
-                <span>公开结果</span>
-                <select name="is_checkable" class="adjust2">
-                    <option value ="1">yes</option>
-                    <option value ="2">no</option>
-
-                </select>
-            </label>
-        </div>
-         <div class="form-row">
-            <label>
-                <span>匿名投票</span>
-                <input type="checkbox" name="vote_anonymity" value="yes" checked="checked" />
-            </label>
-        </div>
-
-        <div class="form-row">
-            <button class="button" type="submit" >发起投票</button>
-        </div>
-
-    </form>
-
-
-
+{#    </div>#}
 </div>
 
 
