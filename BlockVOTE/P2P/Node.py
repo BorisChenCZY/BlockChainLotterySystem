@@ -96,6 +96,7 @@ class MyTCPHandler(BRH):
                             info = bytes('<receive block><{}><{}>'.format(str(self.request.getsockname()), str(-1)), encoding='utf-8')
                             SocketUtil.send(info, addr)
                     else:
+                        pass
                         # print("sender is out of date")
 
                 elif decod[0] == 'send vote':
@@ -110,11 +111,14 @@ class MyTCPHandler(BRH):
                 elif decod[0] == 'receive block':
                     # print(decod)
                     if decod[2] == '-1':
+                        pass
                         # print('{} already has this block'.format(decod[1]))
                     else:
+                        pass
                         # print('{} receive block{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
 
                 elif decod[0] == 'receive vote':
+                    pass
                     # print(decod)
                     # print('{} receive vote{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
 

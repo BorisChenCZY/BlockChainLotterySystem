@@ -90,6 +90,7 @@ class Miner:
 
         @self.__sio.on('connect')
         def connect(sid, environ):
+            pass
             # print('connect', sid)
 
         @self.__sio.on("Vote")
@@ -156,6 +157,7 @@ class Miner:
                     # print("broadcast new generated block {} ".format(blk.get_id()))
                     SocketUtil.broadcast(config.CONNECTION_LIST, info, self.addr)
                 else:
+                    pass
                     # print("no vote to pack: direct pass token")
                 # 将token加一交给config中的下一个人
                 cur_token = self.token
@@ -188,6 +190,7 @@ class Miner:
             # 从其他miner那里拿到的vote
             elif isinstance(item[0],VoteInfo):
                 if self.__chain.duplicate_vote(item[0]):
+                    pass
                     # print("vote existed")
                 else:
                     print("receive vote from inside: {}".format(voteInfo))
