@@ -16,7 +16,7 @@ class BlockReader():
         return self.allResult
 
     def getBlock(self, block_id):
-        self._getOne("select * from Block where id=?", (block_id,))
+        self._getOne("select id,hash,prehash,count(*),generator from Block where id=?", (block_id,))
         return self.oneResult
         
     def getBlocks(self):

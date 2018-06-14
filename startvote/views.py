@@ -240,9 +240,15 @@ def fold_demo(request):
 def single_block_info(request):
     block_id = request.POST.get("id", 0)
     br = bm.BlockReader()
+    block = br.getBlock(block_id)
     infos = br.getSingleBlockInfo(block_id)
     title = ["target", "pubkey", "selection", "timestamp"]
+    title0 = ["Id", "hash", "prehash", "vote_num", "generator"]
     format_infos = []
+    format_block = []
+    for i,b in enumerate(block):
+        format_block.append((title0[i], b))
+
     for i in infos:
         i = list(i)
         i[0] = i[0][:16]
@@ -250,7 +256,7 @@ def single_block_info(request):
         dateArray = datetime.datetime.utcfromtimestamp(i[3])
         i[3] = dateArray.strftime("%Y-%m-%d %H:%M:%S")
         format_infos.append(i)
-    return render(request, 'single_block_info.html', {'infos': format_infos, 'title': title})
+    return render(request, 'single_block_info.html', {'block': format_block,'infos': format_infos, 'title': title,'title0': title0})
 
 #获得block chain的信息
 def block_info(request):
