@@ -118,6 +118,7 @@ class MyTCPHandler(BRH):
                         # print('{} receive block{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
 
                 elif decod[0] == 'receive vote':
+
                     pass
                     # print(decod)
                     # print('{} receive vote{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
