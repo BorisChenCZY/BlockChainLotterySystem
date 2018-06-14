@@ -168,19 +168,19 @@ class Miner:
             # 判断拿出的元素时block还是vote
             # 新miner更新自己的block
             if isinstance(item[0],VoteBlock):
-                self.add_block(item[0],item[1])
+                self.add_block(bytes(item[0]),item[1])
                 print("block added")
             # 从其他miner那里拿到的vote
-            elif isinstance(item,VoteInfo):
-                if self.__chain.duplicate_vote(item):
+            elif isinstance(item[0],VoteInfo):
+                if self.__chain.duplicate_vote(item[0]):
                     print("vote existed")
                 else:
-                    self.add_vote(item)
+                    self.add_vote(item[0])
                     print("vote added")
             # 从其他miner传过来的token
-            elif isinstance(item,int):
-                print("received token: ", item)
-                self.token = item
+            elif isinstance(item[0],int):
+                print("received token: ", item[0])
+                self.token = item[0]
             queue.task_done()
 
 
