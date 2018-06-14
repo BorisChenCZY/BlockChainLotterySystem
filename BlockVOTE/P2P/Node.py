@@ -103,7 +103,7 @@ class MyTCPHandler(BRH):
                     abte = bytes(decod[2], encoding='utf-8')
                     vote = VoteInfo.load(abte)
                     print("adding vote...")
-                    VQUEUE.put(vote)
+                    VQUEUE.put((vote,addr))
                     info = bytes('<receive vote><{}><{}>'.format(str(self.request.getsockname()), str(vote.get_info())), encoding='utf-8')
                     SocketUtil.send(info, addr)
 
@@ -119,9 +119,10 @@ class MyTCPHandler(BRH):
                     print('{} receive vote{} from {}'.format(decod[1],decod[2],str(self.request.getsockname())))
 
                 elif decod[0] == 'token':
+                    addr = decode_addr(decod[1])
                     token = int(decod[2])
                     print("Woo! I finally get the token: ",token)
-                    TQUEUE.put(token)
+                    TQUEUE.put((token,addr))
 
 class Node:
 

@@ -175,7 +175,7 @@ class Miner:
                 if self.__chain.duplicate_vote(item[0]):
                     print("vote existed")
                 else:
-                    self.add_vote(item[0])
+                    self.add_vote(bytes(item[0]))
                     print("vote added")
             # 从其他miner传过来的token
             elif isinstance(item[0],int):
