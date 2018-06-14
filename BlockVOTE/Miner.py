@@ -70,7 +70,7 @@ class Miner:
         else:
             self.token = -1
             self.start_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
-
+        print("initilization token: {}".format(self.token))
         # http server
         self.votereceiver()
 
@@ -90,13 +90,13 @@ class Miner:
 
         @self.__sio.on('connect')
         def connect(sid, environ):
-            print('connect', sid)
+            # print('connect', sid)
 
         @self.__sio.on("Vote")
         def vote(sid, data):
             d = json.loads(data)
             # 对接收到的信息中的投票平台公钥是否在自己公钥池中，在就直接解密，然后得到用户投票信息和用户公钥；
-            print(d)
+            # print(d)
             # ----------------- new information
             msg = d['msg']
             sig = d['sign']
@@ -119,20 +119,21 @@ class Miner:
 
             vote = "{}:{}".format(prob_num,selection)
 
+
             voteInfo = VoteInfo(get_timestamp(), target=target.encode("utf-8"), pubkey=key_info,
                                 vote=(prob_num, selection), sign=sig.encode("utf-8"))
-
+            print("receive vote from outside: {}".format(voteInfo))
             now = self.get_timestamp()
             # broadcast to other miner
             header = bytes('<send vote><{}>'.format(self.addr),encoding='utf-8')
             msg = header + bytes(voteInfo)
             SocketUtil.broadcast(config.CONNECTION_LIST, msg, self.addr)
             self.__chain.add_vote(voteInfo, -1)
-
+            print("add outside vote {} to pool".format(voteInfo))
             # 生成block需要先获得token，两种情况下都可以打包block：
             # 1.将指定时间内vote池中的所有vote加入block中
             # 2.当前接收到五个voteinfo自动打包
-            print(self.token, self.__cnt)
+            # print(self.token, self.__cnt)
             self.pass_token()
             return "OK", 123
 
@@ -147,15 +148,15 @@ class Miner:
             delta = delta.seconds
             if self.__cnt >= 5 or delta > 10:
                 self.__cnt = 0
-                print("auto packing...")
+                # print("auto packing...")
                 blk = self.pack_block()
                 if blk:
                     # broadcast block to other miner
                     info = bytes('<send block><{}>'.format(str(self.addr)), encoding='utf-8') + bytes(blk)
-                    print("broadcast new generated block {} ".format(blk.get_id()))
+                    # print("broadcast new generated block {} ".format(blk.get_id()))
                     SocketUtil.broadcast(config.CONNECTION_LIST, info, self.addr)
                 else:
-                    print("no vote to pack: direct pass token")
+                    # print("no vote to pack: direct pass token")
                 # 将token加一交给config中的下一个人
                 cur_token = self.token
                 if SocketUtil.token_send(self.addr, cur_token):
@@ -180,20 +181,25 @@ class Miner:
             # 判断拿出的元素时block还是vote
             # 新miner更新自己的block
             if isinstance(item[0],VoteBlock):
+                print("receive block from other miner:{}".format(item[0]))
                 self.add_block(bytes(item[0]),item[1])
-                print("block added")
+                print("verify and add others' block to chain")
+                # print("block added")
             # 从其他miner那里拿到的vote
             elif isinstance(item[0],VoteInfo):
                 if self.__chain.duplicate_vote(item[0]):
-                    print("vote existed")
+                    # print("vote existed")
                 else:
+                    print("receive vote from inside: {}".format(voteInfo))
                     self.add_vote(bytes(item[0]))
-                    print("vote added")
+                    # print("vote added")
+                    print("add inside vote {} to pool".format(voteInfo))
                     self.pass_token()
             # 从其他miner传过来的token
             elif isinstance(item[0],int):
-                print("received token: ", item[0])
+                # print("received token: ", item[0])
                 self.token = item[0]
+                print("receive token from others: {}".format(self.token))
                 self.start_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
             queue.task_done()
 
@@ -204,11 +210,11 @@ class Miner:
         QUEUE.put((self.addr, lastid))
         CQUEUE.put((self.addr, blocks))
         # broadcast for chain info
-        print('max id', self.__chain.get_last_block()[0])
-        print("initial broadcasting...")
+        # print('max id', self.__chain.get_last_block()[0])
+        # print("initial broadcasting...")
         msg = bytes('<request chain><{}><{}>'.format(str(self.addr),lastid), encoding='utf-8')
         SocketUtil.broadcast(config.CONNECTION_LIST, msg, self.addr)
-        print("broadcast done")
+        # print("broadcast done")
 
     def add_block(self, block, localmachine):
         if type(block) is not bytes:

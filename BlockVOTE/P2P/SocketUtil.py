@@ -105,7 +105,7 @@ class SocketUtil(object):
             raise exception.FormatException
         for addr in connection_list:
             if addr != my:
-                print("broadcasting to {}".format(addr))
+                # print("broadcasting to {}".format(addr))
                 SocketUtil.send(msg,addr)
 
 

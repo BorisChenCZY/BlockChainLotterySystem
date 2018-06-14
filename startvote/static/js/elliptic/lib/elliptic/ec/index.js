@@ -9,6 +9,10 @@ var assert = utils.assert;
 var KeyPair = require('./key');
 var Signature = require('./signature');
 
+function getBN(){
+  return require("bn.js");
+}
+
 function EC(options) {
   if (!(this instanceof EC))
     return new EC(options);
