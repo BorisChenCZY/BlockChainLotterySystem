@@ -193,10 +193,10 @@ class Miner:
                     pass
                     # print("vote existed")
                 else:
-                    print("receive vote from inside: {}".format(voteInfo))
+                    print("receive vote from inside: {}".format(item[0]))
                     self.add_vote(bytes(item[0]))
                     # print("vote added")
-                    print("add inside vote {} to pool".format(voteInfo))
+                    print("add inside vote {} to pool".format(item[0]))
                     self.pass_token()
             # 从其他miner传过来的token
             elif isinstance(item[0],int):
