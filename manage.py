@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+from startvote.init_key import init_key
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
@@ -12,4 +13,5 @@ if __name__ == "__main__":
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+    init_key()
     execute_from_command_line(sys.argv)

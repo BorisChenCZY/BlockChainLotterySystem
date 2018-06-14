@@ -46,7 +46,9 @@ class SocketUtil(object):
         try:
             # Connect to server and send data
             sock.connect(target)
+            print("connected to {}".format(target))
             sock.sendall(msg)
+            print("initial request sent");
         except:
             sock.close()
         sock.close()
@@ -69,6 +71,7 @@ class SocketUtil(object):
         if type(msg) != bytes:
             raise exception.FormatException
         for addr in connection_list:
+            print("broadcasting to {}".format(addr))
             SocketUtil.send(msg,addr)
 
 
