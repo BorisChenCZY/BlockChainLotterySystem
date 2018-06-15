@@ -42,12 +42,15 @@ class SocketUtil(object):
         if type(target[0]) != str or type(target[1]) != int:
             raise exception.FormatException()
         # Create a socket (SOCK_STREAM means a TCP socket)
+        print(msg)
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         try:
             # Connect to server and send data
             sock.connect(target)
             # print("connected to {}".format(target))
+
             sock.sendall(msg)
+            print("sent")
             # print("initial request sent")
         except:
             sock.close()

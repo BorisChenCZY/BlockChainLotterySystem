@@ -193,6 +193,7 @@ class Chain:
         lb = self.get_last_block()
         # print("block id:",block.get_id())
         if(lb[1] != block.get_prehash().decode("utf-8")):
+            print(block.get_prehash().decode("utf-8"), "!=", lb[1])
             raise ChainError("block not valid (prehash check failed)")
         if(lb[0] != block.get_id() - 1):
             raise ChainError("block not valid (id not successive)")

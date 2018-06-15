@@ -77,7 +77,7 @@ class MyTCPHandler(BRH):
                                 for block in chain_info:
                                     a = bytes(block)
                                     info = bytes('<send block><{}>'.format(str(self.request.getsockname())), encoding='utf-8') + a
-                                    # print("block id ",block.get_id())
+                                    print("block id ",block.get_id())
                                     SocketUtil.send(info, addr)
 
                 elif decod[0] == 'send block':
@@ -85,7 +85,8 @@ class MyTCPHandler(BRH):
                     if len(decod)>2:
                         abte = bytes(decod[2],encoding='utf-8')
                         block = VoteBlock.load(abte)
-                        # print("adding block...")
+                        print("adding block...")
+                        print(block.get_id())
                         if block.get_hash() not in BLOCK:
                             BLOCK.add(block.get_hash())
                             BQUEUE.put((block,addr))

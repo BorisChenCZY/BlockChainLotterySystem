@@ -129,11 +129,11 @@ class Miner:
             header = bytes('<send vote><{}>'.format(self.addr),encoding='utf-8')
             msg = header + bytes(voteInfo)
             SocketUtil.broadcast(config.CONNECTION_LIST, msg, self.addr)
-            try:
-                lock.acquire(True)
-                self.__chain.add_vote(voteInfo, -1)
-            finally:
-                lock.release()
+
+            lock.acquire(True)
+            self.__chain.add_vote(voteInfo, -1)
+
+            lock.release()
             print("add outside vote {} to pool".format(voteInfo))
             # 生成block需要先获得token，两种情况下都可以打包block：
             # 1.将指定时间内vote池中的所有vote加入block中
@@ -188,6 +188,8 @@ class Miner:
             item = queue.get()
             # 判断拿出的元素时block还是vote
             # 新miner更新自己的block
+
+            # lock.acquire(True)
             if isinstance(item[0],VoteBlock):
                 print("receive block from other miner:{}".format(item[0]))
                 self.add_block(bytes(item[0]),item[1])
@@ -195,7 +197,10 @@ class Miner:
                 # print("block added")
             # 从其他miner那里拿到的vote
             elif isinstance(item[0],VoteInfo):
-                if self.__chain.duplicate_vote(item[0]):
+                lock.acquire(True)
+                flag = self.__chain.duplicate_vote(item[0])
+                lock.release()
+                if flag:
                     pass
                     # print("vote existed")
                 else:
@@ -210,7 +215,9 @@ class Miner:
                 self.token = item[0]
                 print("receive token from others: {}".format(self.token))
                 self.start_time = SocketUtil.get_time_stamp(TIMESTAMP_SERVER_ADDR)
+            # lock.release()
             queue.task_done()
+
 
 
     def update_chain(self):
@@ -233,25 +240,23 @@ class Miner:
             raise MinerError("Block not valid")
         voteInfos = block.get_vote_infos()
 
-        try:
-            lock.acquire(True)
+        lock.acquire(True)
 
-            for voteInfo in voteInfos:
-                self.__chain.remove_vote(voteInfo)
-            self.__chain.add_block(block, localmachine)
-        finally:
-            lock.release()
+        for voteInfo in voteInfos:
+            self.__chain.remove_vote(voteInfo)
+        self.__chain.add_block(block, localmachine)
+        lock.release()
 
     # this function should not belong here
     def add_vote(self, voteInfo):
         if type(voteInfo) is not bytes:
             raise MinerError("voteInfo must be bytes, but not {}".format(type(voteInfo)))
         voteInfo = VoteInfo.load(voteInfo)
-        try:
-            lock.acquire(True)
-            self.__chain.add_vote(voteInfo, -1)
-        finally:
-            lock.release()
+
+        lock.acquire(True)
+        self.__chain.add_vote(voteInfo, -1)
+
+        lock.release()
 
     # todo
     def check_vote(self, voteInfo):
@@ -270,16 +275,17 @@ class Miner:
         if(len(pack) == 0):
             return None
 
-        try:
-            lock.acquire(True)
-            for voteInfo in pack:
-                voteBlock.add_info(voteInfo)
-                self.__chain.remove_vote(voteInfo)
 
-            voteBlock.close()
-            self.__chain.add_block(voteBlock,self.addr)
-        finally:
-            lock.release()
+        lock.acquire(True)
+
+        for voteInfo in pack:
+            voteBlock.add_info(voteInfo)
+            self.__chain.remove_vote(voteInfo)
+
+        voteBlock.close()
+        self.__chain.add_block(voteBlock,self.addr)
+
+        lock.release()
         return voteBlock
 
     def get_timestamp(self):
