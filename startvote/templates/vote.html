@@ -386,6 +386,7 @@
 </head>
 
 <body>
+<a hidden="hidden" id="Web_pub">{{ Web_pub }}</a>
 <div class="container">
 
     <div class="container mycontainer">
@@ -494,7 +495,7 @@
             <div class="col" style="color: #000;">
                 <div class="collapse multi-collapse" id="multiCollapseExample3">
                     <div class="card card-body">
-                        <span id="fakepubkey">Generating...</span>
+                        <span id="blindpubkey">Generating...</span>
                     </div>
                 </div>
             </div>
@@ -565,6 +566,11 @@
 <script src="/static/js/md5.js"></script>
 
 <script>
+    function copyLink(){
+            var e = document.getElementById("copy");
+            e.select(); // 选择对象
+            document.execCommand("Copy"); // 执行浏览器复制命令
+        }
     String.prototype.replaceAt = function (index, replacement) {
         return this.substr(0, index) + replacement + this.substr(index + replacement.length);
     }
@@ -575,34 +581,56 @@
             data.push(url.charCodeAt(i));
         return data;
     }
-    function generateFakePublikey() {
-        var gama = Math.ceil(Math.random()*0xFFFFFFFF);
-        var delta = Math.ceil(Math.random()*0xFFFFFFFF);
-        var r = 1;
-        var P = pub;
-        var d = key.getPrivate();
-        var n = ec.n;
-        var G = ec.g;
-        var R = G.mul(r);
-        var A = (R.add(G.mul(gama))).add(P.mul(delta));
-        var t = A.x.mod(n);
-        var Bpub = new BN(pub_key).toString(16);
-        hasher.update(Bpub+t.toString(16));
-        var c = new BN(hasher.digest());
-        var faker = c.umod(n).toString(16);
-        return faker;
+    function hexToBytes(hex) {
+    for (var bytes = [], c = 0; c < hex.length; c += 2)
+    bytes.push(parseInt(hex.substr(c, 2), 16));
+    return bytes;
     }
+    function generateFakePublikey(Web_pub, my_pub) {
+    {#gama = Math.ceil(Math.random()*0xFFFFFFFF);#}
+    {#delta = Math.ceil(Math.random()*0xFFFFFFFF);#}
+    gama = 2;
+    delta = 3;
+    r = 1;
+    BNpub = new BN(Web_pub, 16);
+    P = (ec.keyFromPublic(BNpub.toArray())).getPublic();
+    d = key.getPrivate();
+    n = ec.n;
+    G = ec.g;
+    R = G.mul(r);
+    A = (R.add(G.mul(gama))).add(P.mul(delta));
+    t = A.x.mod(n);
+    console.log("t:", t.toString(16));
+    Bpub = new BN(my_pub);
+    console.log("mypub:", Bpub.toString(16));
+    hasher = ec.hash();
+    hasher.update(Bpub.toString(16)+t.toString(16));
+    hashc = hasher.digest();
+    console.log((new BN(hashc)).toString(16));
+    c = (new BN(hashc)).mod(n);
+    console.log(c.toString(16));
+    var faker = (c.sub(new BN(delta))).mod(n).toString(16);
+    console.log(faker);
+    return faker;
+}
+    function getRealSig(fake_sig) {
+    BNfake = new BN(hexToBytes(fake_sig), 16);
+    console.log(BNfake.toString(16));
+    return (BNfake.add(new BN(gama))).mod(n);
+}
 
     EC = require('elliptic').ec;
     utils = require('elliptic').utils;
     var BN = utils.jbN();
     ec = new EC('secp256k1');
+    hasher = ec.hash();
     pri_key = Math.random().toString(36).substr(2);
     key = ec.keyFromPrivate(hex_md5(pri_key));
     pub = key.getPublic();
     pub_key = utils.toHex([4].concat(pub.x.toArray('big', 32), pub.y.toArray('big', 32)));
     $("#privkey").text(pri_key);
     $("#pubkey").text(pub_key);
+
 
     jQuery(function(){
         //二维码的跳转网页地址
@@ -662,7 +690,23 @@
 
     $("#Submit").on('click', function () {
 
+        var fake_pub = generateFakePublikey($("#Web_pub").text(), pub_key);
+        {#var sig = ec.sign(str2b(msg), key);#}
+        {#var signature = utils.toHex(sig.toDER());#}
 
+        $.post(
+           "vote",
+            {
+                pub_key: fake_pub
+            },
+            function(data){
+               console.log("fake:", data);
+               var real_sig = getRealSig(data);
+               console.log("real:", real_sig.toString(16));
+               $("#blindpubkey").text(real_sig.toString(16));
+
+            }
+        );
         var id = [];
         var cnt = 0;
         for (var i = 1; i <= max_id; i++) {
@@ -691,13 +735,15 @@
         {#console.log(typeof s_d)#}
         {#console.log(s_d);#}
         s = utils.toHex(ec.sign(str2b(JSON.stringify(msg)), key).toDER());
-        console.log(s);
+        {#console.log(s);#}
 
-        console.log(key.verify(str2b(JSON.stringify(msg)), s, pub_key));
+        {#console.log(key.verify(str2b(JSON.stringify(msg)), s, pub_key));#}
         var data = {
             "msg": msg,
             "sign": s,
-            "pubkey": pub_key
+            "pubkey": pub_key,
+            "c":c.toString(16)
+            {#"real_sig": real_sig.toString(16)#}
         };
         console.log(msg);
        $(this).html("Done");
@@ -710,8 +756,6 @@
             socket.emit("Vote", JSON.stringify(data));
             console.log("good");
            }
-           {#window.location.href="logout.asp?act=logout"#}
-
         }
 
         alert("提交成功，即将退出投票页哈哈哈哈哈哈");
