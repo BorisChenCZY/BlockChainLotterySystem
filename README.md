@@ -1,1 +1,1 @@
-# BlockChainLotterySystem
+# BlockChainVoteSystem
