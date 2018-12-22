@@ -28,4 +28,7 @@ For achieve a totally anonymous voting, we employ a technique named blind signat
  - [x] Start Vote Page
  - [x] Vote List Page
  - [x] Voting Pages 
+ 
+#### Creat a Vote Demo
+ ![](https://github.com/BorisChenCZY/BlockChainVoteSystem/blob/master/demo/demo.gif)
 
